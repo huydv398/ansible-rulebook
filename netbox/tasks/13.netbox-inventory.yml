@@ -1,0 +1,35 @@
+---
+- name: NetBox
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - netbox.netbox
+  tasks:
+
+    - name: "Get Prefixes"
+      set_fact:
+        prefixes: "{{ query('netbox.netbox.nb_lookup', 'prefixes',
+                  api_endpoint='http://172.16.66.124:8000',
+                  api_filter='role=valid status=active',
+                  validate_certs=False,
+                  token='9d937a873ced4bf232571be636df540facfb23a7') }}"
+
+
+    - name: Teste
+      debug:
+        msg: "{{ prefixes | json_query('[*].value.id') }}"
+
+    - name: Teste 2
+      uri:
+        validate_certs: False
+        url: "http://172.16.66.124:8000/api/ipam/prefixes/{{ prefixes | json_query('[*].value.id') }}/available-ips/"
+        headers:
+          Authorization: "Token 9d937a873ced4bf232571be636df540facfb23a7"
+      register: prefix
+      until: prefix
+
+    - name: Teste
+      debug:
+        msg: "{{ prefix.json[0].address }}"
+

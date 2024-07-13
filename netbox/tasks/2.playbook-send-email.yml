@@ -1,0 +1,38 @@
+---
+- name: Playbook send msg to email
+  hosts: localhost
+  connection: local
+  vars_files:
+  - /root/ansible-rolebook/netbox/inventory/group_vars/all/01-notify.yml
+  vars:
+    user_to: #khai báo các địa chi cần gửi thông tin đến
+      - huydv1@suncloud.vn     
+  tasks:
+    - name: Sending an e-mail using Gmail SMTP servers
+      community.general.mail:
+        host: "{{ mail_host }}"
+        from: "{{ mail_username }}"
+        port: "{{ mail_port }}"
+        username: "{{ mail_username }}"
+        password: "{{ mail_password }}"
+        to: "{{ user_to }}"
+        subject: 'Ansible-report {{ansible_eda.rule}}'
+        body: | 
+          Netbox: {{ansible_eda.event.eda.event}} - {{ansible_eda.event.eda.model}}
+          VM-name: {{ansible_eda.event.eda.data.name}}
+          VM-Status: {{ansible_eda.event.eda.data.status.value}}
+          Khach Hang: {{ansible_eda.event.eda.data.tenant.name}}
+          OS: {{ansible_eda.event.eda.data.platform.name}}
+          Vcpus: {{ansible_eda.event.eda.data.vcpus}}
+          RAM: {{ansible_eda.event.eda.data.memory}}
+          Disk: {{ansible_eda.event.eda.data.disk}}
+          Description: {{ansible_eda.event.eda.data.description}}
+        #IP: {{ansible_eda.event.eda.data.description}}
+      delegate_to: localhost
+    # - debug:
+    #     msg: " Vcpus: {{ansible_eda.event.payload.data.vcpus}}"  
+        # {{ansible_eda.event.payload}}
+    # - debug:
+    #     msg: "Hello, world!"
+    # - debug:
+    #     msg: "Webhook Message: {{ansible_eda.rule}}!"

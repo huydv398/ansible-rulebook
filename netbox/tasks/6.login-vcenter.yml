@@ -1,0 +1,34 @@
+---
+- name: Gather cluster information for vCenter
+  gather_facts: no
+  hosts: localhost
+  vars_files:
+    - /root/ansible-rolebook/netbox/inventory/group_vars/all/02.vcenter.yml
+  vars:
+    ansible_python_interpreter: "/usr/bin/env python3"
+  hosts: localhost
+  tasks:
+    - name: Login into vCenter and get cookies
+      uri:
+        url: https://{{ vcenter_server }}/rest/com/vmware/cis/session
+        force_basic_auth: yes
+        validate_certs: "{{ validate_certs }}"
+        method: POST
+        user: "{{ vcenter_user }}"
+        password: "{{ vcenter_pass }}"
+      # register: login
+
+    - name: Login into vCenter
+      uri:
+        url: https://{{ vcenter_server }}/api/session
+        force_basic_auth: yes
+        validate_certs: "{{ validate_certs }}"
+        method: POST
+        status_code: 201
+        user: "{{ vcenter_user }}"
+        password: "{{ vcenter_pass }}"
+      register: login
+
+    - name: debug message
+      debug:
+        var: login

@@ -1,0 +1,139 @@
+
+---
+- name: webhook Source Netbox
+  hosts: all
+  sources:
+    - name: listen webhook from Netbox
+      ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 5000
+    - name: Are my key web sites operational
+      ansible.eda.url_check:
+        verify_ssl: false
+        delay: 30 # seconds
+        urls:
+          - https://vcenter.addc.local/
+          - https://suncloud.vn
+  rules:
+    # - name: Get push event details
+    #   condition: event.payload.model == "virtualmachine"
+    #   # action:
+    #   #   post_event:
+    #   #     ruleset: Test rules4
+    #   #     event:
+    #   #       data: "eda"
+    #   # # post_event: 
+    #   #   event:
+    #   #     type: "eda"
+    #   action:
+    #     post_events:
+    #       event:
+    #         # data: "{{ event.payload }}"
+    #         # event: "{{ event }}"
+    #         type: "eda-app"      
+    #     # run_playbook: 
+    #     #   name: /root/ansible-rolebook/netbox/tests/test.yml
+    #     #   # var_root: payload
+    #       post_events: true
+    - name: test webhook graylog
+      condition: >
+          event.payload.model == "virtualmachine"
+          and event.payload.event == "updated"
+          and event.payload.snapshots.prechange.status == "decommissioning"
+          and event.payload.snapshots.postchange.status == "active"
+      action:
+        run_playbook:
+          name: /root/ansible-rolebook/netbox/tests/test2.yml
+    - name: run test1
+      condition: event.payload.model == "virtualmachine"
+      action:
+        run_playbook:
+          name: /root/ansible-rolebook/netbox/tests/test.yml
+          # var_root: payload
+          post_events: true
+    - name: print cheeckmk  @@@@@@@@@@@@@@@@@@@@@@@@
+      condition: event.meta.endpoint == 'checkmk'
+      action:
+        run_playbook:
+          name: /root/ansible-rolebook/netbox/tests/3.test.yml
+    - name: print vcenter @@@@@@@@@@@@@@@@@@@@@@@@
+      condition: event.meta.endpoint == 'vcenter'
+      action:
+        run_playbook:
+          name: /root/ansible-rolebook/netbox/tests/4.test.yml
+    # - name: print output @@@@@@@@@@@@@@@@@@@@@@@@
+    #   condition: event.payload is defined
+    #   action:
+    #     debug:
+    #       msg: "{{ event.meta.endpoint }}"
+    # - name: Notify Telegram
+    #   condition: event.output_status is defined
+      # actions:
+      # - run_playbook:
+      #     name: /root/ansible-rolebook/netbox/tasks/3.playbook-send-tele.yml
+      # - run_playbook:
+      #     name: /root/ansible-rolebook/netbox/tasks/2.playbook-send-email.yml
+      # action:
+      #   run_playbook:
+      #     name: /root/ansible-rolebook/netbox/tasks/3.playbook-send-tele.yml
+      # actions:
+      # - name: First action
+      #   ansible.builtin.debug:
+      #     msg: "First action executed"
+        # - name: Second action
+        #   run_playbook:
+        #       name: /root/ansible-rolebook/netbox/tasks/3.playbook-send-tele.yml
+        # - name: Third action
+        #   run_playbook:
+        #     name: /root/ansible-rolebook/netbox/tasks/2.playbook-send-email.yml
+    # - name: Notify email
+    #   condition: event.output_status is defined
+    #   action:
+    #     run_playbook:
+    #       name: /root/ansible-rolebook/netbox/tasks/2.playbook-send-email.yml
+      # action:
+      #   print_event:
+      #     var_root: output
+            
+
+    # - name: Update repo
+    #   condition: fact.type is defined 
+    #   action:
+    #     debug:
+    #       msg:
+    #         - "đường huy"
+
+
+
+
+  # - name: Netbox event Poweroff VM
+  #   condition: >
+  #       event.payload.model == "virtualmachine"
+  #       and event.payload.event == "updated"
+  #       and event.payload.snapshots.prechange.status == "active"
+  #       and event.payload.snapshots.postchange.status == "decommissioning"
+  #   action:
+  #     # run_playbook:
+  #     #   name: /root/ansible-rolebook/netbox/tasks/2.playbook-send-email.yml
+  #     run_playbook: 
+  #       name: /root/ansible-rolebook/netbox/tests/test.yml
+  #       # -  /root/ansible-rolebook/netbox/tasks/3.playbook-send-tele.yml
+  #       # set_facts: true
+  #       post_events: true
+  #       # retry: true
+  #       # retries: 3 #thử lại 3 lần nếu lỗi
+  #       # delay: 15 #thử lại trong 15s
+  #       # verbosity: 1
+  #       # extra_vars:
+  #       #   # foo: "{{ FOO }}"
+  #       #   bar: BAR
+
+  #     # set_facts: 
+  #     #   ruleset: output
+  #     #   fact: "{{ vm_folder }}"
+  # - name: Run application deploy playbook
+  #   condition: event.cloned is defined
+  #   action:
+  #     debug:
+  #       msg:
+  #         - "oK"

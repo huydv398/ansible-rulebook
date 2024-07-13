@@ -1,0 +1,6 @@
+---
+- name: Install Auditbeat
+  hosts: windows
+
+  roles:
+    - auditbeat

@@ -1,0 +1,118 @@
+---
+- hosts: "{{ ansible_eda.event.body.host}}"
+  become: True
+  # collections:
+  #   - netbox.netbox
+  # module_defaults:
+  #   group/netbox.netbox.netbox:
+  #     netbox_url: http://172.16.66.124:8000
+  #     netbox_token: '9d937a873ced4bf232571be636df540facfb23a7'
+  vars:
+    - service_name: 'httpd.service'
+  #   - netbox_url: 'http://172.16.66.124:8000'
+  #   - netbox_token: '9d937a873ced4bf232571be636df540facfb23a7'
+  #   - vm_name: "name={{ ansible_eda.event.payload.Alias }}"
+  #   - message: |
+  #       ```Summary: {{ ansible_eda.event.payload.Summary }}
+  #       Output: {{ ansible_eda.event.payload.Summary }}```
+
+  tasks:
+  - name: Sleep for 600 seconds and continue with play
+    ansible.builtin.wait_for:
+      timeout: 300
+    delegate_to: localhost
+
+  - name: gather service facts
+    ansible.builtin.service_facts:
+  - name: Reload service httpd
+    ansible.builtin.service:
+      name: httpd
+      state: restarted
+    when: ansible_facts.services['httpd.service'] is defined and ansible_facts.services['httpd.service'].state == 'stopped'
+
+#   - name: reload systemd daemons
+#   systemd:
+#     daemon_reload: yes
+
+
+
+  # - name: Get facts
+  #   debug:
+  #     msg: "{{ ansible_facts.services['httpd.service']}}"
+
+
+  # - name: Restart service httpd, in all cases
+  #   ansible.builtin.service:
+  #     name: httpd
+  #     state: started
+
+  # - name: Populate service facts
+  #   ansible.builtin.service_facts:
+
+  # - name: Print service facts
+  #   ansible.builtin.debug:
+  #     var: ansible_facts.services['httpd.service']
+  # - name: Gather service facts
+  #   ansible.builtin.service_facts:
+
+  # - name: Assert httpd service state
+  #   ansible.builtin.assert:
+  #     that:
+  #       - "'httpd' in services"
+  #       - "services['httpd'].status == 'running'"
+  #       - "services['httpd'].source == 'systemd'"
+  #       - "services['httpd'].state == 'enabled'"
+  #     fail_msg: "httpd service is not running and enabled."
+  #     success_msg: "httpd service is running and enabled."
+  # - name: Populate service facts
+  #   ansible.builtin.service_facts:
+
+  # - name: Print service facts
+  #   ansible.builtin.debug:
+  #     var: ansible_facts.services
+
+  # - name: End the play for current host if nginx is not running
+  #   meta: "{{ ansible_eda.event.body.host}}"
+  #   when: ansible_facts['services']['nginx.service']['state'] != 'running'
+  # - name: Define hostname in netbox  
+  #   debug:
+  #     msg: "{{ ansible_eda.event.body.host}}"
+  # - name: Check if mongod is active
+  #   command: systemctl status nginx
+  #   register: deb_check
+  #   ignore_errors: yes
+  #   no_log: True
+  #   failed_when: false
+  # # I ignored all errors when the process is dead
+  # - name: Define deb_check 
+  #   debug:
+  #     msg: "{{ deb_check }}"
+  # - name: Stop mongof if it is active otherwise SKIP
+  #   service:
+  #     name: nginx
+  #     state: stopped
+  #   when: deb_check.stdout.find('dead') == -1
+  # - name: A single condition can be supplied as string instead of list
+  #   ansible.builtin.assert:
+  #     that: "ansible_os_family != 'Ubuntu'"
+  #     fail_msg: "'my_param' must be between 0 and 100"
+  #     success_msg: "'my_param' is between 0 and 100"
+  # - name: Check system information
+  #   shell:
+  #     "service nginx status"
+  #   register: info
+    
+  # - debug:
+  #     msg: "{{info.stdout_lines}}"
+    
+  # - name: Execute the command in remote shell; stdout goes to the specified file on the remote
+  #   ansible.builtin.shell: ip a
+  # - name: restart service 
+  #   ansible.builtin.command: systemctl restart httpd
+  # - name: ensure that the service is running
+  #   service: name={{ service_name }} state=started
+  # - name: print to stdout
+  #   command: ip a
+  #   register: hello
+
+  # - debug: msg="{{ hello.stdout }}"

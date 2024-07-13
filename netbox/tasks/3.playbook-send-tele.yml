@@ -1,0 +1,31 @@
+- hosts: localhost
+  connection: local
+  vars_files:
+  - /root/ansible-rolebook/netbox/inventory/group_vars/all/01-notify.yml
+  vars:
+    user_to: #khai báo các địa chi cần gửi thông tin đến
+      - huydv1@suncloud.vn    
+  tasks:
+    - name: Send notify to Telegram
+      community.general.telegram:
+        token: "{{ api_token }}"
+        api_args:
+          chat_id: "{{ chat_ID }}"
+          parse_mode: "markdown"
+          # text: "Test msg to tele: {{ansible_eda.rule}} \nNetbox: {{ansible_eda.event.eda.event}} - {{ansible_eda.event.eda.model}}"
+          text: |
+            ```Netbox {{ansible_eda.event.eda.event | upper}} {{ansible_eda.event.eda.model | upper}}
+            - VM Name: {{ ansible_eda.event.eda.data.name }}
+            - Khach hang: {{ ansible_eda.event.eda.data.tenant.name }}
+            - Status: {{ ansible_eda.event.eda.data.status.value }}
+            - User_Exec: {{ansible_eda.event.eda.username}}
+            ```
+          disable_web_page_preview: true
+          disable_notification: true
+
+    # - name: Send notify to Telegram
+    #   debug:
+    #     msg: "{{ansible_eda.event.eda.username}}"
+        # msg: "{{Hello, world!}}"
+    # - debug:
+    #     msg: "Webhook Message: {{ansible_eda.rule}}!"

@@ -1,0 +1,71 @@
+- name: Gather cluster information for vCenter
+  gather_facts: 'no'
+  vars_files:
+    - /root/ansible-rolebook/netbox/inventory/group_vars/all/02.vcenter.yml
+  hosts: localhost
+  vars:
+    - template: |-
+        {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
+        temp-centos7
+        {%- elif ansible_eda.event.payload.data.platform.id == 11 -%}
+        TEMP-U22
+        {%- else -%}
+        other_value
+        {%- endif -%}
+    - guest_id: |-
+        {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
+        centos7_64Guest
+        {%- elif ansible_eda.event.payload.data.platform.id == 11 -%}
+        ubuntu64Guest
+        {%- else -%}
+        other_value
+        {%- endif -%}
+    # - template: temp-centos7 
+    - datastore_tmp: data
+    # - guest_id: centos7_64Guest
+    - vm_disk_type: thin
+    - vm_disk_datastore: 'DATA02'
+    - vm_hardware_controller: paravirtual
+  tasks:
+    - name: Create a VM folder on given datacenter
+      # debug:
+      #   msg: "{{ template }} {{ guest_id }}"
+      community.vmware.vcenter_folder:
+        hostname: '{{ vcenter_server }}'
+        username: '{{ vcenter_user }}'
+        password: '{{ vcenter_pass }}'
+        validate_certs: '{{ ova_validate_certs }}'
+        datacenter: "{{ datacenter }}"
+        folder_name: "{{ ansible_eda.event.payload.data.tenant.name }}"
+        folder_type: vm
+        state: present
+    - name: Create a New Virtual Machine
+      vmware_guest:
+        hostname: '{{ vcenter_server }}'
+        username: '{{ vcenter_user }}'
+        password: '{{ vcenter_pass }}'
+        validate_certs: '{{ ova_validate_certs }}'
+        datacenter: '{{ datacenter }}'
+        cluster: "{{ ansible_eda.event.payload.data.cluster.name }}"
+        folder: '{{ ansible_eda.event.payload.data.tenant.name }}'
+        template: '{{ template }}'
+        datastore: '{{ datastore_tmp }}'
+        name: '{{ ansible_eda.event.payload.data.name | upper }}'
+        guest_id: '{{ guest_id }}'
+        disk:
+          - size_gb: '{{ ansible_eda.event.payload.data.disk }}'
+            type: '{{ vm_disk_type }}'
+            datastore: '{{ vm_disk_datastore }}'
+        hardware:
+          memory_mb: '{{ ansible_eda.event.payload.data.memory }}'
+          num_cpus: '{{ ansible_eda.event.payload.snapshots.postchange.vcpus }}'
+          scsi: '{{ vm_hardware_controller }}'
+        state: poweredon
+        # wait_for_customization: yes # tự động bật máy ảo khi hoàn thành
+      register: status
+      delegate_to: localhost
+    - name: Push out event
+      set_fact:
+        cacheable: true #phản hồi lại eda 1 event có value
+        output_status: "{{status}}"
+        eda: "{{ansible_eda.event.payload}}"

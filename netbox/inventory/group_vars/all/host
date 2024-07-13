@@ -1,0 +1,24 @@
+localhost ansible_connection=local ansible_user=root
+[ubuntu]
+kafka-producer  ansible_host=172.16.66.134  ansible_user=root
+ansible_host    ansible_host=172.16.66.3    ansible_user=root
+netbox          ansible_host=172.16.66.54   ansible_user=root
+
+[centos]
+c7              ansible_host=172.16.66.138  ansible_user=root
+
+[windows]
+win-client ansible_host=172.16.66.135 ansible_user=Administrator ansible_password=Suncloud@2024! ansible_python_interpreter="C:\Users\Administrator\AppData\Local\Programs\Python\Python312\python.exe"
+
+[windows:vars]
+ansible_user=Administrator
+ansible_password=Suncloud@2024!
+ansible_connection=winrm
+ansible_winrm_server_cert_validation=ignore
+
+
+OPS-COM01 ansible_host: '172.16.66.114'
+OPS-COM02 ansible_host: '172.16.66.115'
+OPS-COM03 ansible_host: '172.16.66.116'
+CEPH-MON01  ansible_host: '172.16.66.111'
+CEPH-MON02 ansible_host: '172.16.66.111'

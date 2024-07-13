@@ -1,0 +1,59 @@
+
+- hosts: localhost
+  vars:
+  - minio_host: 'http://minio.addc.local:9000' # minio host url
+  - minio_bucket: 'fileshare' # minio bucket
+  - minio_object: '/minio-upload.sh' # file path to download
+  - minio_dest: '/home/minio-upload.sh' # file path to save download to
+  - file_name: "{{ansible_eda.event.body.file.path}}"
+  tasks:
+
+  # - name: include secrets
+  #   include_vars: vault.yml
+  #   no_log: True
+
+  - name: download from minio
+    aws_s3:
+      s3_url: "{{minio_host}}"
+      bucket: "{{minio_bucket}}"
+      object: "{{minio_object}}"
+      dest: "{{minio_dest}}"
+      mode: get
+      aws_access_key: "minio"
+      aws_secret_key: "miniostorage"
+      validate_certs: no # if our url is https, don't validate as we will not provide SSL Cert
+
+
+  # - name: upload minio
+  #   aws_s3:
+  #     s3_url: "{{minio_host}}"
+  #     bucket: "{{minio_bucket}}"
+  #     object: "/minio-upload.sh"
+  #     src: "{{file_name}}"
+  #     mode: put
+  #     aws_access_key: "minio"
+  #     aws_secret_key: "miniostorage"
+  #     validate_certs: no # if our url is https, don't validate as we will not provide SSL Cert
+
+
+  # - name: uploads file to s3
+  #   community.aws.s3_sync:
+  #     bucket: "{{minio_bucket}}"
+  #     file_root: "{{file_name}}"
+  #     s3_url: "{{minio_host}}"
+  #     access_key: "minio"
+  #     aws_secret_key: "miniostorage"
+      # mime_map:
+      #   .yml: application/text
+      #   .json: application/text
+      # key_prefix: config_files/web
+      # file_change_strategy: force
+      # permission: public-read
+      # cache_control: "public, max-age=31536000"
+      # storage_class: "GLACIER"
+      # include: "*"
+      # exclude: "*.txt,.*"
+  # # Create a simple S3 bucket
+  # - amazon.aws.s3_bucket:
+  #     name: mys3bucket
+  #     state: present

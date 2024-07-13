@@ -1,0 +1,69 @@
+# - name: "Test NetBox Module"
+#   hosts: localhost
+#   connection: local
+#   gather_facts: false
+#   module_defaults:
+#     group/netbox.netbox.netbox:
+#       netbox_url: http://172.16.66.124:8000
+#       netbox_token: 9d937a873ced4bf232571be636df540facfb23a7
+#   tasks:
+#     - name: Create an IP Address
+#       netbox.netbox.netbox_ip_address:
+#         data:
+#           address: 192.168.8.14/24
+#       register: ip
+
+#     - name: Create a journal entry
+#       netbox.netbox.netbox_journal_entry:
+#         data:
+#           assigned_object_type: ipam.ipaddress
+#           assigned_object_id: "{{ ip.ip_address.id }}"
+#           kind: success
+#           comments: |
+#             This is a journal entry
+#       when: ip.changed
+
+
+- name: restart service
+  gather_facts: false
+  hosts: "{{ ansible_eda.event.payload.Host }}"
+  module_defaults:
+    group/netbox.netbox.netbox:
+      netbox_url: http://172.16.66.124:8000
+      netbox_token: 9d937a873ced4bf232571be636df540facfb23a7
+  # handlers:
+  # - name: restart httpd
+  #   service: name=httpd state=restarted
+  tasks:
+
+    - name: Create an IP Address
+      netbox.netbox.netbox_ip_address:
+        data:
+          address: 192.168.8.14/24
+      register: ip
+
+    # - name: Create a journal entry
+    #   netbox.netbox.netbox_journal_entry:
+    #     data:
+    #       assigned_object_type: virtualization.virtualmachine
+    #       assigned_object_id: "{{ ip.ip_address.id }}"
+    #       kind: info
+    #       comments: |
+    #         This is a journal entry
+    #   when: ip.changed
+  # - name: Create a journal entry
+  #     netbox.netbox.netbox_journal_entry:
+  #       data:
+  #         assigned_object_type: ipam.ipaddress
+  #         assigned_object_id: "{{ ip.ip_address.id }}"
+  #         kind: success
+  #         comments: |
+  #           This is a journal entry
+      # when: ip.changed
+  # - name: Restart service httpd, in all cases
+  #   ansible.builtin.service:
+  #     name: nginx
+  #     state: restarted
+  # - name: Create a VM folder on given datacenter
+  #   debug:
+  #     msg: "ok"

@@ -1,0 +1,47 @@
+- hosts: localhost
+  gather_facts: False
+  connection: local
+  collections:
+    - netbox.netbox
+  module_defaults:
+    group/netbox.netbox.netbox:
+      netbox_url: http://172.16.66.124:8000
+      netbox_token: '9d937a873ced4bf232571be636df540facfb23a7'
+  vars:
+    - netbox_url: 'http://172.16.66.124:8000'
+    - netbox_token: '9d937a873ced4bf232571be636df540facfb23a7'
+    - vm_name: 'name={{ ansible_eda.event.body.host }}'
+    - message: |
+        ```Notify Login SSH Access Server: {{ansible_eda.event.body.host | upper}}
+        - Info: {{ ansible_eda.event.body.message }}
+        ```
+  vars_files:
+  - /root/ansible-rolebook/netbox/inventory/group_vars/all/01-notify.yml
+  tasks:
+    - name: test
+      debug:
+        msg: "{{ ansible_eda.event.body.host }}"      
+    - name: Send notify to Telegram
+      community.general.telegram:
+        token: "{{ api_token }}"
+        api_args:
+          chat_id: "{{ chat_ID }}"
+          parse_mode: "markdown"
+          text: "{{ message }}"
+          disable_web_page_preview: true
+          disable_notification: true
+
+    - name: Define hostname in netbox  
+      ansible.builtin.set_fact:
+        hostname: "{{ item.value.display }}"
+        id: "{{ item.value.id }}"
+      loop: "{{ query('netbox.netbox.nb_lookup', 'virtual-machines', api_endpoint=netbox_url, api_filter=vm_name, token=netbox_token) }}"
+
+    - name: Create a journal entry 
+      netbox.netbox.netbox_journal_entry:
+        data:
+          assigned_object_type: virtualization.virtualmachine
+          assigned_object_id: "{{id}}"
+          kind: info
+          comments: "{{ message }}"
+      when: hostname is defined 

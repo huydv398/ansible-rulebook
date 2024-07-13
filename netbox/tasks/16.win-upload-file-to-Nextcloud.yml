@@ -1,0 +1,21 @@
+- hosts: "{{ ansible_eda.event.body.host.hostname}}"
+  gather_facts: false
+  vars:
+  - api_url: "nextcloud.addc.local/nextcloud/remote.php/dav/files"
+  - user_nc: ncadmin
+  - passwd_nc: nextcloud
+  - nc_folder: backup
+  - path_file: '{{ ansible_eda.event.body.file.path}}'
+  - x: "\\"
+  tasks:
+  - name: Split string into list
+    set_fact:
+      file: "{{ path_file.split(x) }}"
+
+  - name: Replace spaces
+    set_fact:
+      name_file: "{{ file[-1] | replace(' ', '-') }}"
+
+  - name: Upload files to Nextcloud
+    win_command:
+      curl -u "ncadmin:nextcloud" -T "{{path_file}}" -k "{{ api_url }}/{{ user_nc }}/{{ nc_folder }}/{{ name_file }}"  --insecure

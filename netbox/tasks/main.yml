@@ -1,0 +1,60 @@
+
+---
+- name: webhook Source Netbox
+  hosts: localhost
+  sources:
+    - name: listen webhook from Netbox
+      ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 5000
+    # - name: listen webhook from Netbox2
+    #   ansible.eda.webhook:
+    #     host: 0.0.0.0
+    #     port: 5001
+  rules:
+    - name: Netbox event Create VM
+      condition: event.payload.event == "created" and event.payload.model == "virtualmachine"
+          # - event.payload.model == "virtualmachine"
+          # - event.payload.data.status.value == "active"
+          # - event.payload.data.platform.id == "13"
+          # - event.payload.data.vcpus
+          # - event.payload.data.memory
+          # - event.payload.data.disk
+      action:
+        # run_playbook:
+        #   name: /root/ansible-rolebook/netbox/tasks/2.playbook-send-email.yml
+        run_playbook:
+          name: /root/ansible-rolebook/netbox/tasks/8.create-vm.yml
+          post_events: true
+        # run_playbook:
+        #   name: /root/ansible-rolebook/netbox/tasks/3.playbook.yml
+        # run_playbook:
+        #   name: /root/ansible-rolebook/netbox/tests/test.yml
+    - name: Netbox event PowerOn VM
+      condition: >
+          event.payload.model == "virtualmachine"
+          and event.payload.event == "updated"
+          and event.payload.snapshots.prechange.status == "decommissioning"
+          and event.payload.snapshots.postchange.status == "active"
+      action:
+        run_playbook:
+          name: /root/ansible-rolebook/netbox/tasks/11.poweron-vm.yml
+          post_events: true
+    - name: Netbox event Poweroff VM
+      condition: >
+          event.payload.model == "virtualmachine"
+          and event.payload.event == "updated"
+          and event.payload.snapshots.prechange.status == "active"
+          and event.payload.snapshots.postchange.status == "decommissioning"
+      action:
+        run_playbook:
+          name: /root/ansible-rolebook/netbox/tasks/10.poweroff-vm.yml
+          post_events: true
+          # set_facts: true
+    - name: Print event with linux
+      condition: event.output_status.failed is defined
+      actions:
+      - run_playbook:
+          name: /root/ansible-rolebook/netbox/tasks/3.playbook-send-tele.yml
+      - run_playbook:
+          name: /root/ansible-rolebook/netbox/tasks/2.playbook-send-email.yml
