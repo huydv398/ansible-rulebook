@@ -1,0 +1,65 @@
+
+---
+- name: webhook Example
+  hosts: localhost
+  sources:
+    - name: listen webhook
+      ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 5000
+    - ansible.eda.kafka:
+        host: kafkaAIO.addc.local
+        port: 9092
+        topic: DevopsHint
+        group_id: ansible-eda
+  rules:
+    - name: Netbox event Create
+      condition: event.payload.event == "created"
+      action:
+        run_playbook:
+          name: /root/ansible-rolebook/netbox/tasks/2.playbook-send-email.yml
+        run_playbook:
+          name: /root/ansible-rolebook/netbox/tasks/3.playbook.yml
+    - name: Netbox event Update
+      condition: event.payload.event == "updated"
+      action:
+        # run_playbook:
+        #   name: /root/ansible-rolebook/netbox/tasks/3.playbook.yml
+        run_playbook:
+          name: /root/ansible-rolebook/netbox/tests/3.test.yml
+    - name: Rsyslog - kafka - eda - (tele+juornal) 
+      condition: event.body.message is match ("*Accepted password for*") # event from checkmk - VM
+      action:
+        run_playbook:
+          name: /root/ansible-rolebook/netbox/tasks/15.rsyslog-kafka-eda.yml
+    
+    - name: Auditbeat new file windows - Upload file to Nextcloud 
+      condition: event.body.event.action[0] == "created" 
+      action:
+        run_playbook:
+          name: /root/ansible-rolebook/netbox/tasks/16.win-upload-file-to-Nextcloud.yml
+
+    - name: Auditbeat new file windows - Upload file to S3 - Minio 
+      condition: event.body.event.action[0] == "created" 
+      action:
+        run_playbook:
+          name: /root/ansible-rolebook/netbox/tasks/17.win-upload-file-to-S3.yml
+
+    # - name: Restart service 
+    #   condition: event.body.message is match ("*Stopped*")
+    #   # condition: event.body.facility is match ("local6")
+    #   action:
+    #     run_playbook:
+    #       name: /root/ansible-rolebook/netbox/tests/4.test.yml
+
+    # - name: Netbox event Deletions
+    #   condition: event.payload.message == "???"
+    #   action:
+    #     run_playbook:
+    #       name: ???
+    # - name: Netbox event Create
+    #   condition: event.payload.message == "???"
+    #   action:
+    #     run_playbook:
+    #       name: ???         
+      
