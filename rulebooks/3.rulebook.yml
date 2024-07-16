@@ -1,0 +1,16 @@
+---
+- name: webhook Example
+  hosts: localhost
+  sources:
+    - ansible.eda.kafka:
+        host: kafkaAIO.addc.local
+        port: 9092
+        topic: DevopsHint
+        group_id: ansible-eda
+  rules:
+    - name: Run Demo Job Template
+      condition: event.body.host is defined 
+      action:
+        run_job_template:
+          name: Demo Job Template 3
+          organization: Default
