@@ -9,7 +9,7 @@
         group_id: ansible-eda
   rules:
     - name: Run Demo Job Template
-      condition: event.body.host is defined 
+      condition: event.body.message is match ("*Stopped The Apache*") 
       action:
         run_job_template:
           name: Demo Job Template 3
