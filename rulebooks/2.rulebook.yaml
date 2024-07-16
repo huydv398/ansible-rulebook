@@ -1,0 +1,20 @@
+---
+- name: webhook Example
+  hosts: localhost
+  sources:
+    - name: listen webhook
+      ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 5000
+    - ansible.eda.kafka:
+        host: kafkaAIO.addc.local
+        port: 9092
+        topic: DevopsHint
+        group_id: ansible-eda
+  rules:
+    - name: Run Demo Job Template
+      condition: event.payload.message == "Hello EDA"
+      action:
+        run_job_template:
+          name: Demo Job Template 2
+          organization: Default
