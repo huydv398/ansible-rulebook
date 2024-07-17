@@ -4,4 +4,7 @@
   tasks:
     - name: test
       debug:
-        msg: "{{ noti }}"   
+        msg: "{{ noti }}"       
+    - name: test
+      debug:
+        msg: "{{ ansible_eda }}"   
