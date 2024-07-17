@@ -2,33 +2,33 @@
   gather_facts: False
   connection: local
   hosts: localhost
-  # vars:
-  #   - template: |-
-  #       {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
-  #       temp-centos7
-  #       {%- elif ansible_eda.event.payload.data.platform.id == 11 -%}
-  #       TEMP-U22
-  #       {%- else -%}
-  #       other_value
-  #       {%- endif -%}
-  #   - guest_id: |-
-  #       {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
-  #       centos7_64Guest
-  #       {%- elif ansible_eda.event.payload.data.platform.id == 11 -%}
-  #       ubuntu64Guest
-  #       {%- else -%}
-  #       other_value
-  #       {%- endif -%}
-  #   # - template: temp-centos7 
-  #   - datastore_tmp: data
-  #   # - guest_id: centos7_64Guest
-  #   - vm_disk_type: thin
-  #   - vm_disk_datastore: 'DATA02'
-  #   - vm_hardware_controller: paravirtual
+  vars:
+    - template: |-
+        {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
+        temp-centos7
+        {%- elif ansible_eda.event.payload.data.platform.id == 11 -%}
+        TEMP-U22
+        {%- else -%}
+        other_value
+        {%- endif -%}
+    - guest_id: |-
+        {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
+        centos7_64Guest
+        {%- elif ansible_eda.event.payload.data.platform.id == 11 -%}
+        ubuntu64Guest
+        {%- else -%}
+        other_value
+        {%- endif -%}
+    # - template: temp-centos7 
+    - datastore_tmp: data
+    # - guest_id: centos7_64Guest
+    - vm_disk_type: thin
+    - vm_disk_datastore: 'DATA02'
+    - vm_hardware_controller: paravirtual
   tasks:
     - name: test
       debug:
-        msg: "{{ vcenter_server }} {{ vcenter_user }} {{ vcenter_pass }}"   
+        msg: "{{ ansible_eda.event.payload.data.tenant.name }}"   
     # - name: Create a VM folder on given datacenter
     #   # debug:
     #   #   msg: "{{ template }} {{ guest_id }}"
