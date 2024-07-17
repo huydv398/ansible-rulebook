@@ -8,12 +8,13 @@
         port: 5000
   rules:
     - name: Run Demo Job Template
-      condition: event.payload.model == "virtualmachine"
+      condition: event.payload.model == "virtualmachine" and event.payload.event == "created"
       action:
         run_job_template:
-          name: Demo Job Template 4
+          name: create vm from netbox
           organization: Default
           job_args:
             extra_vars:
               noti: "{{ event.payload }}"
               bar: BAR
+    
