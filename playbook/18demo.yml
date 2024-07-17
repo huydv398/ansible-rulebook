@@ -4,4 +4,4 @@
   tasks:
     - name: test
       debug:
-        msg: "{{ ansible_eda.event.payload.data.tenant.name }}"   
+        msg: "{{ ansible_eda }}"   
