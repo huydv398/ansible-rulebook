@@ -3,4 +3,4 @@
   tasks:
     - name: test
       debug:
-        msg: "{{ payload }}"   
+        msg: "{{ name }}"   

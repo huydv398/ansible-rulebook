@@ -13,3 +13,5 @@
         run_job_template:
           name: Demo Job Template 4
           organization: Default
+          extra_vars: 
+            name: duonghuy
