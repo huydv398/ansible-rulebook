@@ -26,8 +26,8 @@
     - vm_hardware_controller: paravirtual
   tasks:
     - name: test
-    debug:
-      msg: "{{ vcenter_server }} {{ vcenter_user }} {{ vcenter_pass }}"   
+      debug:
+        msg: "{{ vcenter_server }} {{ vcenter_user }} {{ vcenter_pass }}"   
     # - name: Create a VM folder on given datacenter
     #   # debug:
     #   #   msg: "{{ template }} {{ guest_id }}"
