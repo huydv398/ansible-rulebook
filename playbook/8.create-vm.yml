@@ -1,8 +1,6 @@
 - name: Gather cluster information for vCenter
-  gather_facts: 'no'
-  vars_files:
-    - /root/ansible-rolebook/netbox/inventory/group_vars/all/02.vcenter.yml
-  hosts: localhost
+  gather_facts: False
+  connection: local
   vars:
     - template: |-
         {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
@@ -64,8 +62,8 @@
         # wait_for_customization: yes # tự động bật máy ảo khi hoàn thành
       register: status
       delegate_to: localhost
-    - name: Push out event
-      set_fact:
-        cacheable: true #phản hồi lại eda 1 event có value
-        output_status: "{{status}}"
-        eda: "{{ansible_eda.event.payload}}"
+    # - name: Push out event
+    #   set_fact:
+    #     cacheable: true #phản hồi lại eda 1 event có value
+    #     output_status: "{{status}}"
+    #     eda: "{{ansible_eda.event.payload}}"
