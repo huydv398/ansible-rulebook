@@ -31,17 +31,17 @@
             extra_vars:
               noti: "{{ event.payload }}"
             
-    # - name: Run Job Template Power-on VM
-    #   condition: >
-    #       event.payload.model == "virtualmachine"
-    #       and event.payload.event == "updated"
-    #       and event.payload.snapshots.prechange.status == "decommissioning"
-    #       and event.payload.snapshots.postchange.status == "active
-    #   action:
-    #     run_job_template:
-    #       name: poweron vm
-    #       organization: Default
-    #       job_args:
-    #         extra_vars:
-    #           noti: "{{ event.payload }}"
+    - name: Run Job Template Power-on VM
+      condition: >
+          event.payload.model == "virtualmachine"
+          and event.payload.event == "updated"
+          and event.payload.snapshots.prechange.status == "decommissioning"
+          and event.payload.snapshots.postchange.status == "active
+      action:
+        run_job_template:
+          name: poweron vm
+          organization: Default
+          job_args:
+            extra_vars:
+              noti: "{{ event.payload }}"
     
