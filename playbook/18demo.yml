@@ -13,8 +13,7 @@
     - netbox_url: 'http://172.16.66.124:8000'
     - netbox_token: '9d937a873ced4bf232571be636df540facfb23a7'
     - vm_name: "{{ ansible_eda.event.body.host}}"
-    - message: |
-        ```{{ event.body.message }}```
+    - message: "{{ ansible_eda.event.body.message }}"
 
   tasks:
   # - name: Sleep for 600 seconds and continue with play
