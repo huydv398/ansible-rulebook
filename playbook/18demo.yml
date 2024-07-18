@@ -1,8 +1,7 @@
 ---
 - name: Gather cluster information for vCenter
   gather_facts: False
-  connection: local
-  hosts: localhost
+  hosts: "{{ ansible_eda.event.body.host}}"
   vars:
     - service_name: 'httpd.service'
   
@@ -15,10 +14,10 @@
     - name: print host
       debug:
         msg: "{{ ansible_eda.event.body.host}}"
-  # - name: gather service facts
-  #   ansible.builtin.service_facts:
-  # - name: Reload service httpd
-  #   ansible.builtin.service:
-  #     name: httpd
-  #     state: restarted
-  #   when: ansible_facts.services['httpd.service'] is defined and ansible_facts.services['httpd.service'].state == 'stopped'
+    - name: gather service facts
+      ansible.builtin.service_facts:
+    - name: Reload service httpd
+      ansible.builtin.service:
+        name: httpd
+        state: restarted
+      when: ansible_facts.services['httpd.service'] is defined and ansible_facts.services['httpd.service'].state == 'stopped'
