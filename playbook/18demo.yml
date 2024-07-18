@@ -1,10 +1,19 @@
-- hosts: localhost
-  gather_facts: False
-  connection: local
+---
+- hosts: "{{ ansible_eda.event.body.host}}"
+
+  vars:
+    - service_name: 'httpd.service'
+
   tasks:
-    - name: test
-      debug:
-        msg: "{{ noti }}"       
-    - name: test
-      debug:
-        msg: "{{ ansible_eda }}"   
+  # - name: Sleep for 600 seconds and continue with play
+  #   ansible.builtin.wait_for:
+  #     timeout: 300
+  #   delegate_to: localhost
+
+  - name: gather service facts
+    ansible.builtin.service_facts:
+  - name: Reload service httpd
+    ansible.builtin.service:
+      name: httpd
+      state: restarted
+    when: ansible_facts.services['httpd.service'] is defined and ansible_facts.services['httpd.service'].state == 'stopped'
