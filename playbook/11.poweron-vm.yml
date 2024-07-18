@@ -17,8 +17,8 @@
     - debug:
         msg: "Done! Poweron VM: {{ ansible_eda.event.payload.data.name }}"
 
-    - name: Push out event
-      set_fact:
-        cacheable: true
-        output_status: "{{status}}"
-        eda: "{{ansible_eda.event.payload}}"
+    # - name: Push out event
+    #   set_fact:
+    #     cacheable: true
+    #     output_status: "{{status}}"
+    #     eda: "{{ansible_eda.event.payload}}"

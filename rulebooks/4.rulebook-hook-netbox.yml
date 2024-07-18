@@ -17,24 +17,32 @@
             extra_vars:
               noti: "{{ event.payload }}"
               bar: BAR
-    # - name: Run Job Template Power-off VM
-    #   condition: event.payload.model == "virtualmachine" and event.payload.event == "created"
-    #   action:
-    #     run_job_template:
-    #       name: create vm from netbox
-    #       organization: Default
-    #       job_args:
-    #         extra_vars:
-    #           noti: "{{ event.payload }}"
-    #           bar: BAR
-    # - name: Run Job Template Power-on VM
-    #   condition: event.payload.model == "virtualmachine" and event.payload.event == "created"
-    #   action:
-    #     run_job_template:
-    #       name: create vm from netbox
-    #       organization: Default
-    #       job_args:
-    #         extra_vars:
-    #           noti: "{{ event.payload }}"
-    #           bar: BAR
+    - name: Run Job Template Power-off VM
+      condition: >
+          event.payload.model == "virtualmachine"
+          and event.payload.event == "updated"
+          and event.payload.snapshots.prechange.status == "active"
+          and event.payload.snapshots.postchange.status == "decommissioning"
+      action:
+        run_job_template:
+          name: create vm from netbox
+          organization: Default
+          job_args:
+            extra_vars:
+              noti: "{{ event.payload }}"
+              bar: BAR
+    - name: Run Job Template Power-on VM
+      condition: >
+          event.payload.model == "virtualmachine"
+          and event.payload.event == "updated"
+          and event.payload.snapshots.prechange.status == "decommissioning"
+          and event.payload.snapshots.postchange.status == "active
+      action:
+        run_job_template:
+          name: create vm from netbox
+          organization: Default
+          job_args:
+            extra_vars:
+              noti: "{{ event.payload }}"
+              bar: BAR
     
