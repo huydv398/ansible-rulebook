@@ -1,4 +1,3 @@
----
 - name: Gather cluster information for vCenter
   gather_facts: False
   hosts: "{{ ansible_eda.event.body.host}}"
