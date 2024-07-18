@@ -28,7 +28,7 @@
   tasks:
     - name: test
       debug:
-        msg: "{{ ansible_eda.event.payload.data.memory }}"   
+        msg: "{{ ansible_eda.event.payload.data.tenant.name }}"   
     - name: Create a VM folder on given datacenter
       # debug:
       #   msg: "{{ template }} {{ guest_id }}"
