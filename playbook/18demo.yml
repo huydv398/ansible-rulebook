@@ -13,9 +13,7 @@
     - netbox_url: 'http://172.16.66.124:8000'
     - netbox_token: '9d937a873ced4bf232571be636df540facfb23a7'
     - message: |
-        ```Logged in successfully: {{ ansible_eda.event.payload.backlog[0].fields.Domain }}
-        User: {{ ansible_eda.event.payload.backlog[0].fields.Username }}
-        Role: {{ ansible_eda.event.payload.backlog[0].fields.Username }}```
+        ```{{ event.body.message }}```
 
   tasks:
   # - name: Sleep for 600 seconds and continue with play
