@@ -16,7 +16,7 @@
           job_args:
             extra_vars:
               noti: "{{ event.payload }}"
-              bar: BAR
+          
     - name: Run Job Template Power-off VM
       condition: >
           event.payload.model == "virtualmachine"
@@ -25,12 +25,12 @@
           and event.payload.snapshots.postchange.status == "decommissioning"
       action:
         run_job_template:
-          name: create vm from netbox
+          name: poweroff vm
           organization: Default
           job_args:
             extra_vars:
               noti: "{{ event.payload }}"
-              bar: BAR
+            
     - name: Run Job Template Power-on VM
       condition: >
           event.payload.model == "virtualmachine"
@@ -39,10 +39,9 @@
           and event.payload.snapshots.postchange.status == "active
       action:
         run_job_template:
-          name: create vm from netbox
+          name: poweron vm
           organization: Default
           job_args:
             extra_vars:
               noti: "{{ event.payload }}"
-              bar: BAR
     
