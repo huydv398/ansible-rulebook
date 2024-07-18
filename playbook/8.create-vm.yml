@@ -28,44 +28,44 @@
   tasks:
     - name: test
       debug:
-        msg: "{{ ansible_eda.event.payload.data.tenant.name }}"   
-    - name: Create a VM folder on given datacenter
-      # debug:
-      #   msg: "{{ template }} {{ guest_id }}"
-      community.vmware.vcenter_folder:
-        hostname: '{{ vcenter_server }}'
-        username: '{{ vcenter_user }}'
-        password: '{{ vcenter_pass }}'
-        validate_certs: '{{ ova_validate_certs }}'
-        datacenter: "{{ datacenter }}"
-        folder_name: "{{ ansible_eda.event.payload.data.tenant.name }}"
-        folder_type: vm
-        state: present
-    - name: Create a New Virtual Machine
-      vmware_guest:
-        hostname: '{{ vcenter_server }}'
-        username: '{{ vcenter_user }}'
-        password: '{{ vcenter_pass }}'
-        validate_certs: '{{ ova_validate_certs }}'
-        datacenter: '{{ datacenter }}'
-        cluster: "{{ ansible_eda.event.payload.data.cluster.name }}"
-        folder: '{{ ansible_eda.event.payload.data.tenant.name }}'
-        template: '{{ template }}'
-        datastore: '{{ datastore_tmp }}'
-        name: '{{ ansible_eda.event.payload.data.name | upper }}'
-        guest_id: '{{ guest_id }}'
-        disk:
-          - size_gb: '{{ ansible_eda.event.payload.data.disk }}'
-            type: '{{ vm_disk_type }}'
-            datastore: '{{ vm_disk_datastore }}'
-        hardware:
-          memory_mb: '{{ ansible_eda.event.payload.data.memory }}'
-          num_cpus: '{{ ansible_eda.event.payload.snapshots.postchange.vcpus }}'
-          scsi: '{{ vm_hardware_controller }}'
-        state: poweredon
-        # wait_for_customization: yes # tự động bật máy ảo khi hoàn thành
-      register: status
-      delegate_to: localhost
+        msg: "{{ ansible_eda.event.payload.data.memory }}"   
+    # - name: Create a VM folder on given datacenter
+    #   # debug:
+    #   #   msg: "{{ template }} {{ guest_id }}"
+    #   community.vmware.vcenter_folder:
+    #     hostname: '{{ vcenter_server }}'
+    #     username: '{{ vcenter_user }}'
+    #     password: '{{ vcenter_pass }}'
+    #     validate_certs: '{{ ova_validate_certs }}'
+    #     datacenter: "{{ datacenter }}"
+    #     folder_name: "{{ ansible_eda.event.payload.data.tenant.name }}"
+    #     folder_type: vm
+    #     state: present
+    # - name: Create a New Virtual Machine
+    #   vmware_guest:
+    #     hostname: '{{ vcenter_server }}'
+    #     username: '{{ vcenter_user }}'
+    #     password: '{{ vcenter_pass }}'
+    #     validate_certs: '{{ ova_validate_certs }}'
+    #     datacenter: '{{ datacenter }}'
+    #     cluster: "{{ ansible_eda.event.payload.data.cluster.name }}"
+    #     folder: '{{ ansible_eda.event.payload.data.tenant.name }}'
+    #     template: '{{ template }}'
+    #     datastore: '{{ datastore_tmp }}'
+    #     name: '{{ ansible_eda.event.payload.data.name | upper }}'
+    #     guest_id: '{{ guest_id }}'
+    #     disk:
+    #       - size_gb: '{{ ansible_eda.event.payload.data.disk }}'
+    #         type: '{{ vm_disk_type }}'
+    #         datastore: '{{ vm_disk_datastore }}'
+    #     hardware:
+    #       memory_mb: '{{ ansible_eda.event.payload.data.memory }}'
+    #       num_cpus: '{{ ansible_eda.event.payload.snapshots.postchange.vcpus }}'
+    #       scsi: '{{ vm_hardware_controller }}'
+    #     state: poweredon
+    #     # wait_for_customization: yes # tự động bật máy ảo khi hoàn thành
+    #   register: status
+    #   delegate_to: localhost
     # - name: Push out event
     #   set_fact:
     #     cacheable: true #phản hồi lại eda 1 event có value
