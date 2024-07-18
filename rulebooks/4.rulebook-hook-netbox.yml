@@ -19,10 +19,10 @@
           
     - name: Run Job Template Power-off VM
       condition: >
-        event.payload.model == "virtualmachine"
-        and event.payload.event == "updated"
-        and event.payload.snapshots.prechange.status == "active"
-        and event.payload.snapshots.postchange.status == "decommissioning"
+          event.payload.model == "virtualmachine"
+          and event.payload.event == "updated"
+          and event.payload.snapshots.prechange.status == "active"
+          and event.payload.snapshots.postchange.status == "decommissioning"
       action:
         run_job_template:
           name: poweroff vm
@@ -33,10 +33,10 @@
             
     - name: Run Job Template Power-on VM
       condition: >
-        event.payload.model == "virtualmachine"
-        and event.payload.event == "updated"
-        and event.payload.snapshots.prechange.status == "decommissioning"
-        and event.payload.snapshots.postchange.status == "active
+          event.payload.model == "virtualmachine"
+          and event.payload.event == "updated"
+          and event.payload.snapshots.prechange.status == "decommissioning"
+          and event.payload.snapshots.postchange.status == "active"
       action:
         run_job_template:
           name: poweron vm
