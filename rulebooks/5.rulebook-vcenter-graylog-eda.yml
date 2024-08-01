@@ -9,7 +9,7 @@
   rules:
     - name: Run Job Template Create VM
       # condition: event is defined
-      condition: event.payload.model is defined
+      condition: event.payload is defined
       action:
         run_job_template:
           name: entry netbox from vcenter
