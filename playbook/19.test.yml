@@ -1,0 +1,53 @@
+- name: Gather cluster information for vCenter
+  gather_facts: False
+  hosts: "{{ ansible_eda.event.body.host}}"
+  vars:
+    - service_name: 'httpd.service'
+  collections:
+    - netbox.netbox
+  module_defaults:
+    group/netbox.netbox.netbox:
+      netbox_url: http://172.16.66.124:8000
+      netbox_token: '9d937a873ced4bf232571be636df540facfb23a7'
+  vars:
+    - netbox_url: 'http://172.16.66.124:8000'
+    - netbox_token: '9d937a873ced4bf232571be636df540facfb23a7'
+    - vm_name: "{{ ansible_eda.event.body.host}}"
+    - message: "{{ ansible_eda.event.body.message }}"
+
+  tasks:
+  # - name: Sleep for 600 seconds and continue with play
+  #   ansible.builtin.wait_for:
+  #     timeout: 300
+  #   delegate_to: localhost
+    - name: print host
+      debug:
+        # msg: "{{ ansible_eda.event.body.host}}"
+        # msg: "{{ ansible_eda}}"
+        msg: "test project"
+    # - name: Define hostname in netbox  
+    #   # debug:
+    #   #   msg: "{{ item.value.display }}"
+    #   ansible.builtin.set_fact:
+    #     hostname: "{{ item.value.display }}"
+    #     id: "{{ item.value.id }}"
+    #   loop: "{{ query('netbox.netbox.nb_lookup', 'virtual-machines', api_endpoint=netbox_url, api_filter=vm_name, token=netbox_token) }}"
+    # # - name: test
+    # #   debug:
+    # #     msg: "{{ id }}"      
+    # - name: Create a journal entry 
+    #   netbox.netbox.netbox_journal_entry:
+    #     data:
+    #       assigned_object_type: virtualization.virtualmachine
+    #       assigned_object_id: "{{id}}"
+    #       kind: info
+    #       comments: "{{ message }}"
+    #   when: hostname is defined 
+      
+    # - name: gather service facts
+    #   ansible.builtin.service_facts:
+    # - name: Reload service httpd
+    #   ansible.builtin.service:
+    #     name: httpd
+    #     state: restarted
+    #   when: ansible_facts.services['httpd.service'] is defined and ansible_facts.services['httpd.service'].state == 'stopped'
