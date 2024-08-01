@@ -1,0 +1,18 @@
+---
+- name: webhook Example
+  hosts: localhost
+  sources:
+    - name: listen webhook
+      ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 5000
+  rules:
+    - name: Run Job Template Create VM
+      condition: event.payload.model == "virtualmachine" and event.payload.event == "created"
+      action:
+        run_job_template:
+          name: entry netbox from vcenter
+          organization: Default
+          job_args:
+            extra_vars:
+              noti: "{{ event.payload }}"

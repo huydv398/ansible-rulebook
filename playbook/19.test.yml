@@ -1,19 +1,20 @@
 - name: Gather cluster information for vCenter
   gather_facts: False
-  hosts: "{{ ansible_eda.event.body.host}}"
-  vars:
-    - service_name: 'httpd.service'
-  collections:
-    - netbox.netbox
-  module_defaults:
-    group/netbox.netbox.netbox:
-      netbox_url: http://172.16.66.124:8000
-      netbox_token: '9d937a873ced4bf232571be636df540facfb23a7'
-  vars:
-    - netbox_url: 'http://172.16.66.124:8000'
-    - netbox_token: '9d937a873ced4bf232571be636df540facfb23a7'
-    - vm_name: "{{ ansible_eda.event.body.host}}"
-    - message: "{{ ansible_eda.event.body.message }}"
+  # hosts: "{{ ansible_eda.event.body.host}}"
+  hosts: localhost
+  # vars:
+  #   - service_name: 'httpd.service'
+  # collections:
+  #   - netbox.netbox
+  # module_defaults:
+  #   group/netbox.netbox.netbox:
+  #     netbox_url: http://172.16.66.124:8000
+  #     netbox_token: '9d937a873ced4bf232571be636df540facfb23a7'
+  # vars:
+  #   - netbox_url: 'http://172.16.66.124:8000'
+  #   - netbox_token: '9d937a873ced4bf232571be636df540facfb23a7'
+  #   - vm_name: "{{ ansible_eda.event.body.host}}"
+  #   - message: "{{ ansible_eda.event.body.message }}"
 
   tasks:
   # - name: Sleep for 600 seconds and continue with play
