@@ -8,7 +8,8 @@
         port: 5000
   rules:
     - name: Run Job Template Create VM
-      condition: event.payload.model == "virtualmachine" and event.payload.event == "created"
+      condition: event is defined 
+      # condition: event.payload.model == "virtualmachine" and event.payload.event == "created"
       action:
         run_job_template:
           name: entry netbox from vcenter
