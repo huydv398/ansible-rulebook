@@ -25,7 +25,7 @@
       debug:
         # msg: "{{ ansible_eda.event.body.host}}"
         # msg: "{{ ansible_eda}}"
-        msg: " {{ noti.backlog.vmw_username_vc }} "
+        msg: " {{ ansible_eda }} "
         # msg: "test"
     # - name: Define hostname in netbox  
     #   # debug:
