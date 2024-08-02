@@ -1,6 +1,6 @@
 - hosts: localhost
   gather_facts: False
-  connection: local
+  # connection: local
   collections:
     - netbox.netbox
   module_defaults:
