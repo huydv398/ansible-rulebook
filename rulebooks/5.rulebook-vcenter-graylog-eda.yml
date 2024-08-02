@@ -9,11 +9,11 @@
   rules:
     - name: Run Job Template Create VM
       # condition: event is defined
-      condition: event.payload.event.message is match ("*Successful*")
+      condition: event.payload.event.message is match ("*Successful*") or event.payload.backlog[0].fields.action is match ("*Failed*")
       action:
         run_job_template:
           name: entry netbox from vcenter
           organization: Default
           job_args:
             extra_vars:
-              noti: "{{ event.payload }}"
+              noti: "{{ event.payload }}"    
