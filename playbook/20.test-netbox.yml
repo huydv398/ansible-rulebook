@@ -5,10 +5,10 @@
     - netbox.netbox
   module_defaults:
     group/netbox.netbox.netbox:
-      netbox_url: https://10.10.240.142
+      netbox_url: https://10.10.240.240
       netbox_token: 'd4e80be5feffd86bbe85e48a4a0dbde920abc784'
   vars:
-    - netbox_url: 'https://10.10.240.142'
+    - netbox_url: 'https://10.10.240.240'
     - netbox_token: 'd4e80be5feffd86bbe85e48a4a0dbde920abc784'
     - vm_name: "name=VMwarevCenterServer"
     - message: |
