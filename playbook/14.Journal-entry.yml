@@ -5,10 +5,10 @@
     - netbox.netbox
   module_defaults:
     group/netbox.netbox.netbox:
-      netbox_url: http://172.16.66.124:8000
+      netbox_url: https://netbox.labhtv.local
       netbox_token: '9d937a873ced4bf232571be636df540facfb23a7'
   vars:
-    - netbox_url: 'http://172.16.66.124:8000'
+    - netbox_url: 'https://netbox.labhtv.local'
     - netbox_token: '9d937a873ced4bf232571be636df540facfb23a7'
     - vm_name: "name=vcenter"
     - message: |
