@@ -8,10 +8,10 @@
     - netbox.netbox
   module_defaults:
     group/netbox.netbox.netbox:
-      netbox_url: https://netbox.labhtv.local
+      netbox_url: http://netbox.labhtv.local
       netbox_token: 'd4e80be5feffd86bbe85e48a4a0dbde920abc784'
   vars:
-    - netbox_url: 'https://netbox.labhtv.local'
+    - netbox_url: 'http://netbox.labhtv.local'
     - netbox_token: 'd4e80be5feffd86bbe85e48a4a0dbde920abc784'
     - vm_name: "name=VMwarevCenterServer"
     - message: |
