@@ -1,35 +1,42 @@
 - name: Gather cluster information for vCenter
   gather_facts: False
+  connection: local
   # hosts: "{{ ansible_eda.event.body.host}}"
   hosts: localhost
   # vars:
   #   - service_name: 'httpd.service'
-  collections:
-    - netbox.netbox
+  # collections:
+  #   - netbox.netbox
+
+  ### Phần này dùng cho Netbox Entry
   module_defaults:
     group/netbox.netbox.netbox:
-      netbox_url: http://netbox.labhtv.local
-      netbox_token: 'd4e80be5feffd86bbe85e48a4a0dbde920abc784'
+      netbox_url: https://netbox.labhtv.local
+      netbox_token: '935638c87dfbc696536323a99cc72c9f7936aba9'
+
+
   vars:
-    - netbox_url: 'http://netbox.labhtv.local'
-    - netbox_token: 'd4e80be5feffd86bbe85e48a4a0dbde920abc784'
-    - vm_name: "name=VMwarevCenterServer"
-    - message: |
-        ```Logged in successfully: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}
-        User: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}
-        Role: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}```
+    - netbox_url: 'https://netbox.labhtv.local'
+    - netbox_token: '935638c87dfbc696536323a99cc72c9f7936aba9'
+    - vm_name: "name=test-1"
+    # - message: |
+    #     ```Logged in successfully: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}
+    #     User: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}
+    #     Role: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}```
 
   tasks:
   # - name: Sleep for 600 seconds and continue with play
   #   ansible.builtin.wait_for:
   #     timeout: 300
   #   delegate_to: localhost
-    - name: print host
-      debug:
-        # msg: "{{ ansible_eda.event.body.host}}"
-        # msg: "{{ ansible_eda}}"
-        msg: " {{ ansible_eda.event.payload.backlog[0].fields.user_login }} "
-        # msg: "test"
+ 
+    # - name: print host
+    #   debug:
+    #     # msg: "{{ ansible_eda.event.body.host}}"
+    #     # msg: "{{ ansible_eda}}"
+    #     msg: " {{ ansible_eda.event.payload.backlog[0].fields.user_login }} "
+    #     # msg: "test"
+ 
     - name: Define hostname in netbox  
       # debug:
       #   msg: "{{ item.value.display }}"
@@ -37,6 +44,7 @@
         hostname: "{{ item.value.display }}"
         id: "{{ item.value.id }}"
       loop: "{{ query('netbox.netbox.nb_lookup', 'virtual-machines', api_endpoint=netbox_url, api_filter=vm_name, token=netbox_token) }}"
+
     # # - name: test
     # #   debug:
     # #     msg: "{{ id }}"      
@@ -48,7 +56,19 @@
     #       kind: info
     #       comments: "{{ message }}"
     #   when: hostname is defined 
-      
+    
+    # - name: test
+    #   debug:
+    #     msg: "{{ id }}"      
+    # - name: Create a journal entry 
+    #   netbox.netbox.netbox_journal_entry:
+    #     data:
+    #       assigned_object_type: virtualization.virtualmachine
+    #       assigned_object_id: "1"
+    #       kind: info
+    #       comments: "ok"
+    #   when: hostname is defined 
+
     # - name: gather service facts
     #   ansible.builtin.service_facts:
     # - name: Reload service httpd
