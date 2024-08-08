@@ -18,7 +18,7 @@
   vars:
     - netbox_url: 'https://netbox.labhtv.local'
     - netbox_token: '935638c87dfbc696536323a99cc72c9f7936aba9'
-    - vm_name: "name=congto-zabbix6"
+    - vm_name: "name=VMwarevCenterServer"
     # - message: |
     #     ```Logged in successfully: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}
     #     User: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}
@@ -30,20 +30,20 @@
   #     timeout: 300
   #   delegate_to: localhost
  
-    # - name: print host
-    #   debug:
-    #     # msg: "{{ ansible_eda.event.body.host}}"
-    #     # msg: "{{ ansible_eda}}"
-    #     msg: " {{ ansible_eda.event.payload.backlog[0].fields.user_login }} "
-    #     # msg: "test"
+    - name: print host
+      debug:
+        # msg: "{{ ansible_eda.event.body.host}}"
+        # msg: "{{ ansible_eda}}"
+        msg: " {{ ansible_eda.event.payload.backlog[0].fields.user_login }} "
+        # msg: "test"
  
-    - name: Define hostname in netbox  
-      # debug:
-      #   msg: "{{ item.value.display }}"
-      ansible.builtin.set_fact:
-        hostname: "{{ item.value.display }}"
-        id: "{{ item.value.id }}"
-      loop: "{{ query('netbox.netbox.nb_lookup', 'virtual-machines', api_endpoint=netbox_url, api_filter=vm_name, token=netbox_token) }}"
+    # - name: Define hostname in netbox  
+    #   debug:
+    #     msg: "{{ item.value.id }}"
+    #   # ansible.builtin.set_fact:
+    #   #   hostname: "{{ item.value.display }}"
+    #   #   id: "{{ item.value.id }}"
+    #   loop: "{{ query('netbox.netbox.nb_lookup', 'virtual-machines', api_endpoint=netbox_url, api_filter=vm_name, token=netbox_token) }}"
 
     # # - name: test
     # #   debug:
