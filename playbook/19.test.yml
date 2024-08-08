@@ -34,7 +34,7 @@
       debug:
         # msg: "{{ ansible_eda.event.body.host}}"
         # msg: "{{ ansible_eda}}"
-        msg: " {{ ansible_eda.event.payload.backlog[0].fields.user_login }} "
+        msg: " {{ ansible_eda.event.payload.backlog[0].fields.user_login }} {{ ansible_eda.event.payload.backlog[0].fields.action }}"
         # msg: "test"
  
     # - name: Define hostname in netbox  
