@@ -5,8 +5,8 @@
   hosts: localhost
   # vars:
   #   - service_name: 'httpd.service'
-  # collections:
-  #   - netbox.netbox
+  collections:
+    - netbox.netbox
 
   ### Phần này dùng cho Netbox Entry
   module_defaults:
