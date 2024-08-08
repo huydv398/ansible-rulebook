@@ -29,12 +29,12 @@
   #     timeout: 300
   #   delegate_to: localhost
  
-    - name: print host
-      debug:
-        # msg: "{{ ansible_eda.event.body.host}}"
-        # msg: "{{ ansible_eda}}"
-        msg: " {{ ansible_eda.event.payload.backlog[0].fields.user_login }} {{ ansible_eda.event.payload.backlog[0].fields.action }}"
-        # msg: "test"
+    # - name: print host
+    #   debug:
+    #     # msg: "{{ ansible_eda.event.body.host}}"
+    #     # msg: "{{ ansible_eda}}"
+    #     msg: " {{ ansible_eda.event.payload.backlog[0].fields.user_login }} {{ ansible_eda.event.payload.backlog[0].fields.action }}"
+    #     # msg: "test"
  
     - name: Define hostname in netbox  
       # debug:
@@ -42,19 +42,19 @@
       ansible.builtin.set_fact:
         hostname: "{{ item.value.display }}"
         id: "{{ item.value.id }}"
-      loop: "{{ query('netbox.netbox.nb_lookup', 'virtual-machines', api_endpoint=netbox_url, api_filter=vm_name, token=netbox_token) }}"
+      loop: "{{ query('netbox.netbox.nb_lookup', 'virtual-machines', validate_certs=False, api_endpoint=netbox_url, api_filter=vm_name, token=netbox_token) }}"
 
     # # - name: test
     # #   debug:
     # #     msg: "{{ id }}"      
-    - name: Create a journal entry 
-      netbox.netbox.netbox_journal_entry:
-        data:
-          assigned_object_type: virtualization.virtualmachine
-          assigned_object_id: "{{id}}"
-          kind: info
-          comments: "{{ message }}"
-      when: hostname is defined 
+    # - name: Create a journal entry 
+    #   netbox.netbox.netbox_journal_entry:
+    #     data:
+    #       assigned_object_type: virtualization.virtualmachine
+    #       assigned_object_id: "{{id}}"
+    #       kind: info
+    #       comments: "{{ message }}"
+    #   when: hostname is defined 
     
     # - name: test
     #   debug:
