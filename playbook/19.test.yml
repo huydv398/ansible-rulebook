@@ -1,6 +1,6 @@
 - name: Gather cluster information for vCenter
   gather_facts: False
-  connection: local
+  # connection: local
   # hosts: "{{ ansible_eda.event.body.host}}"
   hosts: localhost
   # vars:
