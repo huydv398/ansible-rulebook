@@ -23,7 +23,7 @@
       ansible.builtin.set_fact:
         hostname: "{{ item.value.display }}"
         id: "{{ item.value.id }}"
-      loop: "{{ query('netbox.netbox.nb_lookup', 'virtual-machines', api_endpoint=netbox_url, api_filter=vm_name, token=netbox_token) }}"
+      loop: "{{ query('netbox.netbox.nb_lookup', 'virtual-machines', validate_certs=False, api_endpoint=netbox_url, api_filter=vm_name, token=netbox_token) }}"
     - name: test
       debug:
         msg: "{{ id }}"      
