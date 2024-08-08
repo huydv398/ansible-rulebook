@@ -18,7 +18,7 @@
   vars:
     - netbox_url: 'https://netbox.labhtv.local'
     - netbox_token: '935638c87dfbc696536323a99cc72c9f7936aba9'
-    - vm_name: "name=test-1"
+    - vm_name: "name=congto-zabbix6"
     # - message: |
     #     ```Logged in successfully: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}
     #     User: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}
