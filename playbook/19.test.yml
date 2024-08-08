@@ -19,10 +19,9 @@
     - netbox_url: 'https://netbox.labhtv.local'
     - netbox_token: '935638c87dfbc696536323a99cc72c9f7936aba9'
     - vm_name: "name=VMwarevCenterServer"
-    # - message: |
-    #     ```Logged in successfully: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}
-    #     User: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}
-    #     Role: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}```
+    - message: |
+        ```{{ ansible_eda.event.payload.backlog[0].fields.user_login }} Logged in {{ ansible_eda.event.payload.backlog[0].fields.action }}
+        Create by EDA Server```
 
   tasks:
   # - name: Sleep for 600 seconds and continue with play
@@ -37,25 +36,25 @@
         msg: " {{ ansible_eda.event.payload.backlog[0].fields.user_login }} {{ ansible_eda.event.payload.backlog[0].fields.action }}"
         # msg: "test"
  
-    # - name: Define hostname in netbox  
-    #   debug:
-    #     msg: "{{ item.value.id }}"
-    #   # ansible.builtin.set_fact:
-    #   #   hostname: "{{ item.value.display }}"
-    #   #   id: "{{ item.value.id }}"
-    #   loop: "{{ query('netbox.netbox.nb_lookup', 'virtual-machines', api_endpoint=netbox_url, api_filter=vm_name, token=netbox_token) }}"
+    - name: Define hostname in netbox  
+      # debug:
+      #   msg: "{{ item.value.id }}"
+      ansible.builtin.set_fact:
+        hostname: "{{ item.value.display }}"
+        id: "{{ item.value.id }}"
+      loop: "{{ query('netbox.netbox.nb_lookup', 'virtual-machines', api_endpoint=netbox_url, api_filter=vm_name, token=netbox_token) }}"
 
     # # - name: test
     # #   debug:
     # #     msg: "{{ id }}"      
-    # - name: Create a journal entry 
-    #   netbox.netbox.netbox_journal_entry:
-    #     data:
-    #       assigned_object_type: virtualization.virtualmachine
-    #       assigned_object_id: "{{id}}"
-    #       kind: info
-    #       comments: "{{ message }}"
-    #   when: hostname is defined 
+    - name: Create a journal entry 
+      netbox.netbox.netbox_journal_entry:
+        data:
+          assigned_object_type: virtualization.virtualmachine
+          assigned_object_id: "{{id}}"
+          kind: info
+          comments: "{{ message }}"
+      when: hostname is defined 
     
     # - name: test
     #   debug:
