@@ -12,9 +12,8 @@
     - netbox_token: 'd4e80be5feffd86bbe85e48a4a0dbde920abc784'
     - vm_name: "name=VMwarevCenterServer"
     - message: |
-        ```Logged in successfully: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}
-        User: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}
-        Role: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}```
+        ```{{ ansible_eda.event.payload.backlog[0].fields.user_login }} Logged in {{ ansible_eda.event.payload.backlog[0].fields.action }}
+        Create by EDA Server```
   tasks:
 
     - name: Define hostname in netbox  
@@ -27,6 +26,7 @@
     - name: test
       debug:
         msg: "{{ id }}"      
+
     - name: Create a journal entry 
       netbox.netbox.netbox_journal_entry:
         data:
