@@ -27,11 +27,11 @@
     - name: test
       debug:
         msg: "{{ id }}"      
-    # - name: Create a journal entry 
-    #   netbox.netbox.netbox_journal_entry:
-    #     data:
-    #       assigned_object_type: virtualization.virtualmachine
-    #       assigned_object_id: "{{id}}"
-    #       kind: info
-    #       comments: "{{ message }}"
-    #   when: hostname is defined 
+    - name: Create a journal entry 
+      netbox.netbox.netbox_journal_entry:
+        data:
+          assigned_object_type: virtualization.virtualmachine
+          assigned_object_id: "{{id}}"
+          kind: info
+          comments: "{{ message }}"
+      when: hostname is defined 
