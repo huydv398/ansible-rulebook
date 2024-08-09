@@ -12,7 +12,7 @@
     - netbox_token: 'e4103c8eb5669f06040b01a15a48b2ce9dabadda'
     - vm_name: "name=VMwarevCenterServer"
     - message: |
-        ```{{ ansible_eda.event.payload.backlog[0].fields.user_login }} Logged in {{ ansible_eda.event.payload.backlog[0].fields.action }}
+        ```{{ ansible_eda.event.payload.backlog[0].fields.vmw_username_vc }} Logged in {{ ansible_eda.event.payload.backlog[0].fields.vmw_login_action }}
         Create by EDA Server```
   tasks:
 
