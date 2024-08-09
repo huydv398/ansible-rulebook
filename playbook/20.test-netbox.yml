@@ -16,7 +16,7 @@
         Create by EDA Server```
   tasks:
 
-    - name: Define hostname in netbox  
+    - name: Define vCenter in netbox  
       # debug:
       #   msg: "{{ item.value.display }}"
       ansible.builtin.set_fact:
@@ -36,18 +36,3 @@
           comments: "{{ message }}"
         validate_certs: False
       when: hostname is defined 
-
-    # - name: Create a journal entry 
-    #   netbox.netbox.netbox_journal_entry:
-    #     data:
-    #       assigned_object_type: virtualization.virtualmachine
-    #       assigned_object_id: "23"
-    #       kind: info
-    #       comments: "test"
-    #     validate_certs: False
-    #   # when: hostname is defined 
-
-
-    # - name: Define hostname in netbox  
-    #   debug:
-    #     msg: "{{ ansible_eda.event.payload.backlog[0].fields}}"
