@@ -9,7 +9,7 @@
       netbox_token: '935638c87dfbc696536323a99cc72c9f7936aba9'
   vars:
     - netbox_url: 'https://netbox.labhtv.local'
-    - netbox_token: 'd4e80be5feffd86bbe85e48a4a0dbde920abc784'
+    - netbox_token: 'e4103c8eb5669f06040b01a15a48b2ce9dabadda'
     - vm_name: "name=VMwarevCenterServer"
     - message: |
         ```{{ ansible_eda.event.payload.backlog[0].fields.user_login }} Logged in {{ ansible_eda.event.payload.backlog[0].fields.action }}
