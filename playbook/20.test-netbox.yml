@@ -50,4 +50,4 @@
 
     - name: Define hostname in netbox  
       debug:
-        msg: "{{ ansible_eda.event.payload}}"
+        msg: "{{ ansible_eda.event.payload.backlog[0]}}"
