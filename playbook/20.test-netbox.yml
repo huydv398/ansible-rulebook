@@ -43,4 +43,5 @@
           assigned_object_id: "32"
           kind: info
           comments: "test"
+        validate_certs: False
       # when: hostname is defined 
