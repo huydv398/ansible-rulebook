@@ -11,9 +11,9 @@
     - netbox_url: 'https://netbox.labhtv.local'
     - netbox_token: 'd4e80be5feffd86bbe85e48a4a0dbde920abc784'
     - vm_name: "name=VMwarevCenterServer"
-    - message: |
-        ```{{ ansible_eda.event.payload.backlog[0].fields.user_login }} Logged in {{ ansible_eda.event.payload.backlog[0].fields.action }}
-        Create by EDA Server```
+    # - message: |
+    #     ```{{ ansible_eda.event.payload.backlog[0].fields.user_login }} Logged in {{ ansible_eda.event.payload.backlog[0].fields.action }}
+    #     Create by EDA Server```
   tasks:
 
     # - name: Define hostname in netbox  
