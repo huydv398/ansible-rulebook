@@ -6,7 +6,7 @@
   module_defaults:
     group/netbox.netbox.netbox:
       netbox_url: https://netbox.labhtv.local
-      netbox_token: '935638c87dfbc696536323a99cc72c9f7936aba9'
+      netbox_token: 'e4103c8eb5669f06040b01a15a48b2ce9dabadda'
   vars:
     - netbox_url: 'https://netbox.labhtv.local'
     - netbox_token: 'e4103c8eb5669f06040b01a15a48b2ce9dabadda'
