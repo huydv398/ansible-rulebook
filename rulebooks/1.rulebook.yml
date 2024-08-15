@@ -1,6 +1,6 @@
 
 ---
-- name: webhook Example
+- name: EDA Example
   hosts: localhost
   sources:
     - name: listen webhook

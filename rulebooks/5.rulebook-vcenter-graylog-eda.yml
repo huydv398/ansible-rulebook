@@ -1,5 +1,5 @@
 ---
-- name: webhook Example
+- name: EDA Example
   hosts: localhost
   sources:
     - name: listen webhook
@@ -7,13 +7,13 @@
         host: 0.0.0.0
         port: 5000
   rules:
-    - name: Run Job Template Create VM
-      # condition: event is defined
+    - name: Run Job Template 'entry netbox from vcenter'
       condition: event.payload.event.message is match ("*Successful*") or event.payload.backlog[0].fields.action is match ("*Failed*")
       action:
         run_job_template:
-          name: entry netbox from vcenter
+          name: entry netbox from vCenter
           organization: Default
+          
           job_args:
             extra_vars:
               noti: "{{ event.payload }}"    
