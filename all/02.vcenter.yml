@@ -5,14 +5,14 @@
 - debug_flag: no
 
 # vCenter related details
-- vcenter_server: vcenter.addc.local
-- vcenter_user: administrator@vcenter.addc.local
-- vcenter_pass: Suncloud@2024!
+- vcenter_hostname: vcenter.labhtv.local
+- vcenter_username: Administrator@vsphere.local
+- vcenter_password: Htv2023!
 
 # VMware object related details
-- datacenter: 'DC-01' 
+- datacenter_name: 'DC-01' 
 - cluster_name: VLWARECL
-- vm_name: TEMP-U20
+- vm_name: huydv-test
 - tenant: duonghuy
 
 # OVA Deployment Variables
