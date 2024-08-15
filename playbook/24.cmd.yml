@@ -6,22 +6,21 @@
     - name: display version
       debug:
         msg: "The IPv4: {{ ansible_default_ipv4.address }}"
-    # - name: WGET  Checkmk Agent
-    # - name: Download file and force basic auth
-    #   ansible.builtin.get_url:
-    #     url: https://download.checkmk.com/checkmk/2.2.0p7/check-mk-raw-2.2.0p7_0.jammy_amd64.deb
-    #     dest: /root/
-    - name: Install a .deb package from the internet
-      ansible.builtin.apt:
-        deb: "http://{{ checkmk_server }}/{{ site }}/check_mk/agents/name-agent"
+    - name: WGET  Checkmk Agent
+      ansible.builtin.get_url:
+        url: "http://{{ checkmk_server }}/{{ site }}/check_mk/agents/{{ name_agent }}"
+        dest: /root/
+    # - name: Install a .deb package from the internet
+    #   ansible.builtin.apt:
+    #     deb: "http://{{ checkmk_server }}/{{ site }}/check_mk/agents/{{ name_agent }}"
     # - name: Install the Checkmk agent package
     #   apt:
     #     name: check-mk-agent
     #     state: present
     #     update_cache: yes
 
-    - name: Ensure the Checkmk agent service is started
-      service:
-        name: check-mk-agent
-        state: started
-        enabled: yes
+    # - name: Ensure the Checkmk agent service is started
+    #   service:
+    #     name: check-mk-agent
+    #     state: started
+    #     enabled: yes
