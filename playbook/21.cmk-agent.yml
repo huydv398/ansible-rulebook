@@ -17,14 +17,25 @@
     #     ```{{ ansible_eda.event.payload.backlog[0].fields.vmw_username_vc }} Logged in {{ ansible_eda.event.payload.backlog[0].fields.vmw_login_action }}
     #     Create by EDA Server```
   tasks:
-    - name: Gather all registered virtual machines
-      community.vmware.vmware_vm_info:
-        hostname: '{{ vcenter_server }}'
-        username: '{{ vcenter_user }}'
-        password: '{{ vcenter_pass }}'
-      validate_certs: no
-      delegate_to: localhost
-      register: vminfo
+    # - name: Gather all registered virtual machines
+    #   community.vmware.vmware_vm_info:
+    #     hostname: '{{ vcenter_server }}'
+    #     username: '{{ vcenter_user }}'
+    #     password: '{{ vcenter_pass }}'
+    #   validate_certs: no
+    #   delegate_to: localhost
+    #   register: vminfo
 
-    - debug:
-        var: vminfo.virtual_machines
+    # - debug:
+    #     var: vminfo.virtual_machines
+    - name: get facts from vm
+      vmware_vm_info:
+        hostname: '{{ vcenter_server }}'
+	      username: '{{ vcenter_user }}'
+	      password: '{{ vcenter_pass }}'
+	      datacenter: '{{ datacenter }}'
+      register: vm_info
+
+    - name: show msg
+      debug:
+        msg: "{{ vm_info.virtual_machines|json_query('[].guest_name') }}"
