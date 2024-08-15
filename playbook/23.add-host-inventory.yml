@@ -1,0 +1,17 @@
+---
+- name: Add a host to AWX inventory
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Add host to inventory
+      awx.awx.tower_host:
+        tower_host: "https://awx2.labhtv.local"
+        tower_username: "admin"
+        tower_password: "Htv2023!"
+        name: "huydv-test"
+        inventory: 2
+        state: present
+        validate_certs: no
+        variables:
+          ansible_host: 10.10.240.190
+      delegate_to: localhost
