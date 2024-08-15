@@ -3,20 +3,22 @@
   hosts: huydv-test
   become: yes
   tasks:
-    - name: Add Checkmk repository
-      apt_repository:
-        repo: 'deb [arch=amd64] https://download.checkmk.com/checkmk/2.0.0/check-mk-agent-ubuntu focal main'
-        state: present
+    - name: display version
+      debug:
+        msg: "The IPv4: {{ ansible_default_ipv4.address }}"
+    # - name: Add Checkmk repository
+    #   apt_repository:
+    #     repo: 'deb [arch=amd64] https://download.checkmk.com/checkmk/2.0.0/check-mk-agent-ubuntu focal main'
+    #     state: present
 
-    - name: Install the Checkmk agent package
-      apt:
-        name: check-mk-agent
-        state: present
-        update_cache: yes
+    # - name: Install the Checkmk agent package
+    #   apt:
+    #     name: check-mk-agent
+    #     state: present
+    #     update_cache: yes
 
-    - name: Ensure the Checkmk agent service is started
-      service:
-        name: check-mk-agent
-        state: started
-        enabled: yes
-        
+    # - name: Ensure the Checkmk agent service is started
+    #   service:
+    #     name: check-mk-agent
+    #     state: started
+    #     enabled: yes
