@@ -13,14 +13,4 @@
     - name: Install a .deb package from the internet
       ansible.builtin.apt:
         deb: "/root/{{ name_agent }}"
-    # - name: Install the Checkmk agent package
-    #   apt:
-    #     name: check-mk-agent
-    #     state: present
-    #     update_cache: yes
 
-    # - name: Ensure the Checkmk agent service is started
-    #   service:
-    #     name: check-mk-agent
-    #     state: started
-    #     enabled: yes
