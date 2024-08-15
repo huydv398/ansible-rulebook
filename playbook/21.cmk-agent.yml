@@ -15,7 +15,17 @@
         ```{{ ansible_eda.event.payload.backlog[0].fields.vmw_username_vc }} Logged in {{ ansible_eda.event.payload.backlog[0].fields.vmw_login_action }}
         Create by EDA Server```
   tasks:
-
-    - name: test
+    - name: Login into vCenter
+      uri:
+        url: https://{{ vcenter_server }}/api/session
+        force_basic_auth: yes
+        validate_certs: "{{ validate_certs }}"
+        method: POST
+        status_code: 201
+        user: "{{ vcenter_user }}"
+        password: "{{ vcenter_pass }}"
+      register: login
+      
+    - name: debug message
       debug:
-        msg: "{{ id }}"   
+        var: login
