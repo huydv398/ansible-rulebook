@@ -33,7 +33,7 @@
         hostname: '{{ vcenter_server }}'
 	      username: '{{ vcenter_user }}'
 	      password: '{{ vcenter_pass }}'
-	      datacenter: '{{ datacenter }}'
+	      # datacenter: '{{ datacenter }}'
       register: vm_info
 
     - name: show msg
