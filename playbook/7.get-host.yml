@@ -5,12 +5,30 @@
     - /root/ansible-rolebook/netbox/inventory/group_vars/all/02.vcenter.yml
   hosts: localhost
   tasks:
-    - name: Gather all registered virtual machines
-      community.vmware.vmware_vm_info:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-      delegate_to: localhost
-      register: vminfo
-    - debug:
-      var: vminfo.virtual_machines
+    - name: Login into vCenter
+      uri:
+        url: https://{{ vcenter_server }}/api/session
+        force_basic_auth: yes
+        validate_certs: "{{ validate_certs }}"
+        method: POST
+        status_code: 201
+        user: "{{ vcenter_user }}"
+        password: "{{ vcenter_pass }}"
+      register: login
+      
+    - name: debug message
+      debug:
+        var: login
+
+    - name: Gather hosts info using REST API
+      uri:
+        url: "https://{{ vcenter_server }}/api/vcenter/host"
+        force_basic_auth: yes
+        method: GET
+        validate_certs: no
+        headers:
+          vmware-api-session-id: "{{ login.json }}"
+      register: hosts_info
+    - name: Print hosts info
+      debug:
+          var: hosts_info
