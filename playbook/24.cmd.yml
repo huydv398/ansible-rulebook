@@ -13,7 +13,7 @@
     #     dest: /root/
     - name: Install a .deb package from the internet
       ansible.builtin.apt:
-        deb: "http://{{ checkmk-server }}/{{ site }}/check_mk/agents/name-agent"
+        deb: "http://{{ checkmk_server }}/{{ site }}/check_mk/agents/name-agent"
     # - name: Install the Checkmk agent package
     #   apt:
     #     name: check-mk-agent
