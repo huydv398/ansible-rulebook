@@ -41,13 +41,13 @@
       delegate_to: localhost
       register: info
 
-    # - name: show msg
-    #   debug:
-    #     # msg: "{{ info }}"
-    #     # msg: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[].ipAddress') }}"
-    #     msg: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
+    - name: show msg
+      debug:
+        # msg: "{{ info }}"
+        # msg: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[].ipAddress') }}"
+        msg: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
     - name: Set fact
-      ansible.builtin.set_fact:
+      ansible.builtin.set_stats:
         ipvm: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
 
     # - name: Gather some info from a guest using the vSphere API output schema
