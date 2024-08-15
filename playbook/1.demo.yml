@@ -4,4 +4,4 @@
   tasks:
     - name: test
       debug:
-        msg: "test EDA server "      
+        msg: "{{ ipvm }}"      

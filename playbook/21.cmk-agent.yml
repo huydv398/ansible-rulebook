@@ -1,8 +1,8 @@
 - hosts: localhost
   gather_facts: False
   # connection: local
-  # vars_files:
-  #   - /root/ansible-rulebook/all/02.vcenter.yml
+  vars_files:
+    - /root/ansible-rulebook/all/02.vcenter.yml
   collections:
     - netbox.netbox
   module_defaults:
@@ -36,7 +36,28 @@
         datacenter: "{{ datacenter_name }}"
         name: "{{ vm_name }}"
         schema: "vsphere"
-        properties: ["config.hardware.memoryMB", "guest.disk", "overallStatus"]
+        properties: ["guest.net"]
         validate_certs: no
       delegate_to: localhost
       register: info
+
+    # - name: show msg
+    #   debug:
+    #     # msg: "{{ info }}"
+    #     # msg: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[].ipAddress') }}"
+    #     msg: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
+    - name: Set fact
+      ansible.builtin.set_fact:
+        ipvm: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
+
+    # - name: Gather some info from a guest using the vSphere API output schema
+    #   community.vmware.vmware_guest_info:
+    #     hostname: "{{ vcenter_hostname }}"
+    #     username: "{{ vcenter_username }}"
+    #     password: "{{ vcenter_password }}"
+    #     datacenter: "{{ datacenter_name }}"
+    #     name: "{{ vm_name }}"
+    #     schema: "vsphere"
+    #     properties: ["guest.net"]
+    #     validate_certs: no
+    #   delegate_to: "{{ ipvm }}"
