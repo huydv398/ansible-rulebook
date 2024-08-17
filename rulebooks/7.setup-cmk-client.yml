@@ -1,0 +1,16 @@
+---
+- name: webhook Example
+  hosts: localhost
+  sources:
+    - name: listen webhook
+      ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 5000
+
+  rules:
+
+    - name: test rulebook core
+      condition: event.payload is defined 
+      action:
+        run_playbook:
+          name: /root/ansible-rulebook/playbook/19.test.yml
