@@ -1,0 +1,42 @@
+---
+- name: Add host to Checkmk server
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Add host to Checkmk via API
+      uri:
+        url: "http://{{ checkmk_server }}/{{ checkmk_site }}/check_mk/webapi.py?action=add_host&_username={{ api_user }}&_secret={{ api_secret }}"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+        body_format: json
+        body:
+          hostname: "{{ inventory_hostname }}"
+          folder: "{{ folder }}"
+          attributes:
+            ipaddress: "{{ ansible_host }}"
+            alias: "{{ host_alias }}"
+            tags:
+              - "{{ host_tags }}"
+        status_code: 200
+      delegate_to: localhost
+
+    - name: Activate changes
+      uri:
+        url: "http://{{ checkmk_server }}/{{ checkmk_site }}/check_mk/webapi.py?action=activate_changes&_username={{ api_user }}&_secret={{ api_secret }}"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+        status_code: 200
+      delegate_to: localhost
+
+# Define variables in a separate YAML file or inventory
+vars:
+  checkmk_server: "checkmk.example.com"
+  checkmk_site: "mysite"
+  api_user: "automation"
+  api_secret: "your_api_secret_here"
+  folder: ""
+  host_alias: "My Host"
+  host_tags: "agent"
+
