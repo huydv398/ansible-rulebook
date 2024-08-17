@@ -12,7 +12,7 @@
     - name: test rulebook core
       condition: event.payload is defined 
       action:
-        run_job_template:
+        run_workflow_template:
           name: 1.Add-agent-CMK-Client
           organization: Default
           
