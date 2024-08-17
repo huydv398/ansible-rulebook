@@ -2,41 +2,48 @@
 - name: Add host to Checkmk server
   hosts: localhost
   gather_facts: no
+  vars:
+    - checkmk_server: "http://10.10.240.241"
+    - checkmk_site: "monitoring"
+    - api_user: "automation"
+    - api_secret: "@SJILDJUYFXKQTITEWUR"
+    - folder: ""
+    - ip_host: "10.10.240.190"
+    - host_name: "client1"
+    - alias_name: "alias_name"
   tasks:
-    - name: Add host to Checkmk via API
-      uri:
-        url: "http://{{ checkmk_server }}/{{ checkmk_site }}/check_mk/webapi.py?action=add_host&_username={{ api_user }}&_secret={{ api_secret }}"
-        method: POST
-        headers:
-          Content-Type: "application/json"
-        body_format: json
-        body:
-          hostname: "{{ inventory_hostname }}"
-          folder: "{{ folder }}"
-          attributes:
-            ipaddress: "{{ ansible_host }}"
-            alias: "{{ host_alias }}"
-            tags:
-              - "{{ host_tags }}"
-        status_code: 200
-      delegate_to: localhost
+    - name: Add client host 
+      checkmk.general.host:
+        server_url: "{{ checkmk_server }}"
+        site: "{{ checkmk_site }}"
+        automation_user: "{{ api_user }}"
+        automation_secret: "{{ api_secret }}"
+        name: "{{ host_name }}"
+        attributes:
+          alias: "{{ alias_name}}"
+          ipaddress: "{{ ip_host }}"
+        folder: ""
+        state: "present"
 
-    - name: Activate changes
-      uri:
-        url: "http://{{ checkmk_server }}/{{ checkmk_site }}/check_mk/webapi.py?action=activate_changes&_username={{ api_user }}&_secret={{ api_secret }}"
-        method: POST
-        headers:
-          Content-Type: "application/json"
-        status_code: 200
-      delegate_to: localhost
+    - name: "Add newly discovered services, update labels and remove vanished services on host."
+      checkmk.general.discovery:
+        server_url: "{{ checkmk_server }}"
+        site: "{{ checkmk_site }}"
+        automation_user: "{{ api_user }}"
+        automation_secret: "{{ api_secret }}"
+        host_name: "{{ host_name }}"
+        state: "tabula_rasa"
+        bulk_size: 3
 
-# Define variables in a separate YAML file or inventory
-vars:
-  checkmk_server: "checkmk.example.com"
-  checkmk_site: "mysite"
-  api_user: "automation"
-  api_secret: "your_api_secret_here"
-  folder: ""
-  host_alias: "My Host"
-  host_tags: "agent"
+    - name: Activate all changes HERE
+      checkmk.general.activation:
+        server_url: "{{ checkmk_server }}"
+        site: "{{ checkmk_site }}"
+        automation_user: "{{ api_user }}"
+        automation_secret: "{{ api_secret }}"
+        force_foreign_changes: 'true'
+        sites:
+          - "{{ checkmk_site }}"
+      run_once: 'true'
+
 
