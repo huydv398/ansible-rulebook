@@ -12,5 +12,10 @@
     - name: test rulebook core
       condition: event.payload is defined 
       action:
-        run_playbook:
-          name: /root/ansible-rulebook/playbook/19.test.yml
+        run_job_template:
+          name: 1.Add-agent-CMK-Client
+          organization: Default
+          
+          job_args:
+            extra_vars:
+              noti: "{{ event.payload }}"    
