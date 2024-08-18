@@ -49,9 +49,9 @@
         # msg: "{{ info }}"
         # msg: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[].ipAddress') }}"
         msg: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
-    - name: Set fact
-      ansible.builtin.set_fact:
-        ipvm: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
+    # - name: Set fact
+    #   ansible.builtin.set_fact:
+    #     ipvm: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
     - name: Set fact 1
       ansible.builtin.set_stats:
         data:
