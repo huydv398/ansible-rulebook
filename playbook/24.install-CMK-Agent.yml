@@ -1,6 +1,6 @@
 ---
 - name: Install Checkmk Agent on Ubuntu
-  hosts: huydv-test
+  hosts: "{{ ansible_eda.event.payload.backlog[0].fields.name_vm }}"
   become: yes
   tasks:
     - name: display version

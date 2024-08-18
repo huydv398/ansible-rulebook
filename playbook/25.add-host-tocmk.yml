@@ -2,15 +2,15 @@
 - name: Add host to Checkmk server
   hosts: localhost
   gather_facts: no
-  vars:
-    - checkmk_server: "http://10.10.240.241"
-    - checkmk_site: "monitoring"
-    - api_user: "automation"
-    - api_secret: "@SJILDJUYFXKQTITEWUR"
-    - folder: ""
-    - ip_host: "10.10.240.190"
-    - host_name: "client1"
-    - alias_name: "alias_name"
+  # vars:
+  #   - checkmk_server: "http://10.10.240.241"
+  #   - checkmk_site: "monitoring"
+  #   - api_user: "automation"
+  #   - api_secret: "@SJILDJUYFXKQTITEWUR"
+  #   - folder: ""
+  #   - ip_host: "10.10.240.190"
+  #   - host_name: "client1"
+  #   - alias_name: "alias_name"
   tasks:
     - name: Add client host 
       checkmk.general.host:
@@ -18,10 +18,10 @@
         site: "{{ checkmk_site }}"
         automation_user: "{{ api_user }}"
         automation_secret: "{{ api_secret }}"
-        name: "{{ host_name }}"
+        name: "{{ ansible_eda.event.payload.backlog[0].fields.name_vm }}"
         attributes:
-          alias: "{{ alias_name}}"
-          ipaddress: "{{ ip_host }}"
+          alias: "{{ ansible_eda.event.payload.backlog[0].fields.name_vm }}"
+          ipaddress: "{{ ipvm[0] }}"
         folder: ""
         state: "present"
 
@@ -31,7 +31,7 @@
         site: "{{ checkmk_site }}"
         automation_user: "{{ api_user }}"
         automation_secret: "{{ api_secret }}"
-        host_name: "{{ host_name }}"
+        host_name: "{{ ansible_eda.event.payload.backlog[0].fields.name_vm }}"
         state: "tabula_rasa"
         bulk_size: 3
 
