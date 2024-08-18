@@ -8,10 +8,10 @@
         tower_host: "https://awx2.labhtv.local"
         tower_username: "admin"
         tower_password: "Htv2023!"
-        name: "huydv-test"
+        name: "{{ ansible_eda.event.payload.backlog[0].fields.name_vm }}"
         inventory: 2
         state: present
         validate_certs: no
         variables:
-          ansible_host: 10.10.240.190
+          ansible_host: "{{ ipvm[0] }}"
       delegate_to: localhost
