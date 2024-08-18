@@ -19,3 +19,4 @@
           job_args:
             extra_vars:
               noti: "{{ event.payload }}"    
+              
