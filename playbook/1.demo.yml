@@ -5,3 +5,7 @@
     - name: test
       debug:
         msg: "{{ ipvm }}"      
+    - name: test 2
+      debug:
+        msg: "{{ ansible_eda.event.backlogbacklog[0].fields.name-vm }}"      
+    
