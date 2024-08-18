@@ -4,4 +4,4 @@
 
     - name: test
       debug:
-        msg: "{{vm-name}}: {{ ipvm }}"      
+        msg: "{{ ansible_eda.event.payload.backlog[0].fields.name_vm }}: {{ ipvm }}"      
