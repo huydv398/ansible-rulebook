@@ -1,5 +1,5 @@
 ---
-- name: webhook Example
+- name: EDA - Add & Install Checkmk Agent
   hosts: localhost
   sources:
     - name: listen webhook
@@ -8,9 +8,8 @@
         port: 5000
 
   rules:
-
     - name: test rulebook core
-      condition: event.payload is defined 
+      condition: ansible_eda.event.payload.backlog[0].fields.action == "Deploying"
       action:
         run_workflow_template:
           name: 1.Add-agent-CMK-Client
