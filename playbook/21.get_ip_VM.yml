@@ -12,7 +12,8 @@
   vars:
     - netbox_url: 'https://netbox.labhtv.local'
     - netbox_token: 'e4103c8eb5669f06040b01a15a48b2ce9dabadda'
-    - vm_name: "name={{ ansible_eda.event.payload.backlog[0].fields.name_vm }}"
+    # - vm_name: "name={{ ansible_eda.event.payload.backlog[0].fields.name_vm }}"
+    # - vm_name: "name=congto-edadev"
     # - message: |
     #     ```{{ ansible_eda.event.payload.backlog[0].fields.vmw_username_vc }} Logged in {{ ansible_eda.event.payload.backlog[0].fields.vmw_login_action }}
     #     Create by EDA Server```
@@ -34,13 +35,15 @@
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: "{{ datacenter_name }}"
-        name: "{{ vm_name }}"
+        name: "{{ ansible_eda.event.payload.backlog[0].fields.name_vm }}"
         schema: "vsphere"
         properties: ["guest.net"]
         validate_certs: no
       delegate_to: localhost
       register: info
-
+    # - name: show msg2
+    #   debug:
+    #     msg: "{{ info }}"
     - name: show msg
       debug:
         # msg: "{{ info }}"

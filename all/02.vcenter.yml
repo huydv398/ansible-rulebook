@@ -12,7 +12,7 @@
 # VMware object related details
 - datacenter_name: 'DC-01' 
 - cluster_name: VLWARECL
-- vm_name: huydv-test
+- vm_name: huydv-u22
 - tenant: duonghuy
 
 # OVA Deployment Variables
