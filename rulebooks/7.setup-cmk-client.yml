@@ -14,7 +14,8 @@
         run_workflow_template:
           name: 1.Add-agent-CMK-Client
           organization: Default
-          
+          retries: 3
+          delay: 600
           job_args:
             extra_vars:
               noti: "{{ event.payload }}"    
