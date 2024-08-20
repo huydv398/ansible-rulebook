@@ -8,13 +8,16 @@
   tasks:
     - name: Send notify to Telegram
       community.general.telegram:
+        # token: "5575898315:AAHJuZqnb678LndGCGSPbDFP9py5ZKd70O0"
         token: "{{ api_token }}"
         api_args:
           chat_id: "{{ chat_ID }}"
+          # chat_id: "750878537"
           parse_mode: "markdown"
           # text: "Test msg to tele: {{ansible_eda.rule}} \nNetbox: {{ansible_eda.event.eda.event}} - {{ansible_eda.event.eda.model}}"
           text: |
             ```
+            Kiểm tra lại máy chủ "{{ ansible_eda.event.payload.backlog[0].fields.name_vm }}"
             ```
           disable_web_page_preview: true
           disable_notification: true
