@@ -23,7 +23,8 @@
           # text: "Test msg to tele: {{ansible_eda.rule}} \nNetbox: {{ansible_eda.event.eda.event}} - {{ansible_eda.event.eda.model}}"
           text: |
             ```
-            Kiểm tra lại máy chủ "{{ ansible_eda.event.payload.backlog[0].fields.name_vm }}"
+            Kiểm tra lại máy chủ "{{ ansible_eda.event.payload.backlog[0].fields.name_vm }}" chưa bật hoặc chưa được set IP
+            
             ```
           disable_web_page_preview: true
           disable_notification: true
