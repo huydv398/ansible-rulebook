@@ -7,8 +7,8 @@
         host: 0.0.0.0
         port: 5000
 
-  rules:
-    - name: test rulebook core
+  rules: 
+    - name: Run Job template Add agent
       condition: ansible_eda.event.payload.backlog[0].fields.action == "Deploying"
       action:
         run_workflow_template:
