@@ -1,8 +1,6 @@
 - hosts: localhost
   gather_facts: False
-  vars:
-    - netbox_url: 'https://netbox.labhtv.local'
-    - netbox_token: 'e4103c8eb5669f06040b01a15a48b2ce9dabadda'
+
 
   tasks:
 
@@ -12,7 +10,9 @@
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: "{{ datacenter_name }}"
-        name: "{{ ansible_eda.event.payload.backlog[0].fields.name_vm }}"
+        # name: "{{ ansible_eda.event.payload.backlog[0].fields.name_vm }}"
+        name: Huydv-vm21082024
+
         schema: "vsphere"
         properties: ["guest.net"]
         validate_certs: no
