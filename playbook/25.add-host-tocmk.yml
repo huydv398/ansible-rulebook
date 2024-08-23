@@ -46,4 +46,7 @@
           - "{{ checkmk_site }}"
       run_once: 'true'
 
-
+    - name: Set the message if the previous task failed
+      ansible.builtin.set_stats:
+        data: 
+          massage_event: "OK"

@@ -1,6 +1,7 @@
 - hosts: localhost
   gather_facts: False
-
+  vars:
+    message_failed: "The task failed."
 
   tasks:
 
@@ -21,6 +22,12 @@
       retries: 5
       delay: 60
       until: info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') | length > 0
+    
+    - name: Set the message if the previous task failed
+      ansible.builtin.set_stats:
+        data: 
+          massage_event: "failed"
+      when: info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') | length = 0
 
     - name: show msg
       debug:

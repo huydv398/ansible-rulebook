@@ -2,15 +2,15 @@
 - name: Add host to Checkmk server
   hosts: localhost
   gather_facts: no
-  # vars:
-  #   - checkmk_server: "http://10.10.240.241"
-  #   - checkmk_site: "monitoring"
-  #   - api_user: "automation"
-  #   - api_secret: "@SJILDJUYFXKQTITEWUR"
-  #   - folder: ""
-  #   - ip_host: "10.10.240.190"
-  #   - host_name: "client1"
-  #   - alias_name: "alias_name"
+    vars:
+    - Mess: |-
+        {%- if massage_event == failed -%}
+        check VM: Not IP or Not Power ON
+        {%- elif massage_event == OK -%}
+        Intalled CheckMK Agent
+        {%- else -%}
+        other_value
+        {%- endif -%}
   tasks:
     - name: Send notify to Telegram
       community.general.telegram:
@@ -23,7 +23,7 @@
           # text: "Test msg to tele: {{ansible_eda.rule}} \nNetbox: {{ansible_eda.event.eda.event}} - {{ansible_eda.event.eda.model}}"
           text: |
             ```
-            "{{ massage_event }}"
+            "{{ Mess }}"
             ```
           disable_web_page_preview: true
           disable_notification: true
