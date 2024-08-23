@@ -27,7 +27,7 @@
       ansible.builtin.set_stats:
         data: 
           massage_event: "failed"
-      when: info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') | length == ""
+      when: info.failed
 
     - name: show IP VM
       debug:
