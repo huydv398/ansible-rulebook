@@ -2,15 +2,6 @@
 - name: Add host to Checkmk server
   hosts: localhost
   gather_facts: no
-  # vars:
-  #   - checkmk_server: "http://10.10.240.241"
-  #   - checkmk_site: "monitoring"
-  #   - api_user: "automation"
-  #   - api_secret: "@SJILDJUYFXKQTITEWUR"
-  #   - folder: ""
-  #   - ip_host: "10.10.240.190"
-  #   - host_name: "client1"
-  #   - alias_name: "alias_name"
   tasks:
     - name: Add client host 
       checkmk.general.host:
