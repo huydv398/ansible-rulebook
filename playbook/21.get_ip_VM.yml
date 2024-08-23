@@ -29,7 +29,7 @@
           massage_event: "failed"
       when: info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') | length == ""
 
-    - name: show msg: IP VM
+    - name: show IP VM
       debug:
         msg: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
 
