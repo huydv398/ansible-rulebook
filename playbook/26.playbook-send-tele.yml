@@ -5,9 +5,9 @@
   vars:
     - Mess: |-
         {%- if massage_event == failed -%}
-        check VM: Not IP or Not Power ON
+        'check VM: Not IP or Not Power ON'
         {%- elif massage_event == OK -%}
-        Intalled CheckMK Agent
+        'Intalled CheckMK Agent'
         {%- else -%}
         other_value
         {%- endif -%}
