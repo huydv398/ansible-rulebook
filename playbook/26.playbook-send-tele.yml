@@ -20,7 +20,7 @@
           parse_mode: "markdown"
           text: |
             ```
-            "{{ Mess }}"
+            "Install Agent for {{ ansible_eda.event.payload.backlog[0].fields.name_vm }} is: {{ massage_event }}"
             ```
           disable_web_page_preview: true
           disable_notification: true
