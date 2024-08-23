@@ -2,7 +2,7 @@
 - name: Add host to Checkmk server
   hosts: localhost
   gather_facts: no
-    vars:
+  vars:
     - Mess: |-
         {%- if massage_event == failed -%}
         check VM: Not IP or Not Power ON
