@@ -7,28 +7,19 @@
     - netbox.netbox
   module_defaults:
     group/netbox.netbox.netbox:
-      # netbox_url: http://172.16.66.124:8000
       netbox_url: "{{ netbox_url }}"
-      # netbox_token: '9d937a873ced4bf232571be636df540facfb23a7'
       netbox_token: "{{ netbox_token }}"
   vars:
-    # - netbox_url: 'http://172.16.66.124:8000'
-    # - netbox_token: '9d937a873ced4bf232571be636df540facfb23a7'
-    # - vm_name: "name=vcenter"
     - message: |
-        ```Logged in {{ ansible_eda.event.payload.backlog[0].fields.vmw_login_action }}: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}```
+        ```Logged in {{ ansible_eda.event.payload.backlog[0].fields.action }}: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}```
   tasks:
 
     - name: Define hostname in netbox  
-      # debug:
-      #   msg: "{{ item.value.display }}"
       ansible.builtin.set_fact:
         hostname: "{{ item.value.display }}"
         id: "{{ item.value.id }}"
       loop: "{{ query('netbox.netbox.nb_lookup', 'virtual-machines', api_endpoint=netbox_url, api_filter=vm_name, token=netbox_token) }}"
-    # - name: test
-    #   debug:
-    #     msg: "Ok : {{ id }}"      
+  
     - name: Create a journal entry 
       netbox.netbox.netbox_journal_entry:
         data:
