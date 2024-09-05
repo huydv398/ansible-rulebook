@@ -28,7 +28,7 @@
       loop: "{{ query('netbox.netbox.nb_lookup', 'virtual-machines', api_endpoint=netbox_url, api_filter=vm_name, token=netbox_token) }}"
     # - name: test
     #   debug:
-    #     msg: "{{ id }}"      
+    #     msg: "Ok : {{ id }}"      
     - name: Create a journal entry 
       netbox.netbox.netbox_journal_entry:
         data:
