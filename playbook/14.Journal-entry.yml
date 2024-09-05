@@ -16,7 +16,7 @@
     # - netbox_token: '9d937a873ced4bf232571be636df540facfb23a7'
     # - vm_name: "name=vcenter"
     - message: |
-        ```Logged in successfully: ```
+        ```Logged in {{ ansible_eda.event.payload.backlog[0].fields.vmw_login_action }}: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}```
   tasks:
 
     - name: Define hostname in netbox  
