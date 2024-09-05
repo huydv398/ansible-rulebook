@@ -7,8 +7,10 @@
     - netbox.netbox
   module_defaults:
     group/netbox.netbox.netbox:
-      netbox_url: http://172.16.66.124:8000
-      netbox_token: '9d937a873ced4bf232571be636df540facfb23a7'
+      # netbox_url: http://172.16.66.124:8000
+      netbox_url: "{{ netbox_url }}"
+      # netbox_token: '9d937a873ced4bf232571be636df540facfb23a7'
+      netbox_token: "{{ netbox_token }}"
   vars:
     # - netbox_url: 'http://172.16.66.124:8000'
     # - netbox_token: '9d937a873ced4bf232571be636df540facfb23a7'
