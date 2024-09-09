@@ -19,8 +19,9 @@
       ansible.builtin.set_fact:
         json_data: "{{ ansible_eda.event.payload }}"
 
-    - debug:
-      msg: "{{ json_data }}"
+    - name: Set
+      debug:
+        msg: "{{ json_data }}"
     # - name: Extract user_login values
     #   ansible.builtin.set_fact:
     #     user_logins: "{{ json_data.backlog | map(attribute='fields.user_login') | list }}"
