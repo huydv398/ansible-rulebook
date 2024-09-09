@@ -22,10 +22,10 @@
     - name: Set
       debug:
         msg: "{{ json_data }}"
-    # - name: Extract user_login values
-    #   ansible.builtin.set_fact:
-    #     user_logins: "{{ json_data.backlog | map(attribute='fields.user_login') | list }}"
+    - name: Extract user_login values
+      ansible.builtin.set_fact:
+        user_logins: "{{ json_data.backlog | map(attribute='fields.user_login') | list }}"
 
-    # - name: Display user_login values
-    #   ansible.builtin.debug:
-    #     msg: "{{ user_logins }}"
+    - name: Display user_login values
+      ansible.builtin.debug:
+        msg: "{{ user_logins }}"
