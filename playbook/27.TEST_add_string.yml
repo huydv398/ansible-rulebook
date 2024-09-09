@@ -10,8 +10,8 @@
   vars:
     - message: "`Logged in {{ ansible_eda.event.payload.backlog[0].fields.action }}: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}`"
   tasks:
-      - debug:
-        msg: |-
-          {% for k in _my_vars %}
-          {{ k }}: {{ lookup('vars', k) }}
-          {% endfor %}
+    - debug:
+      msg: |-
+        {% for k in _my_vars %}
+        {{ k }}: {{ lookup('vars', k) }}
+        {% endfor %}
