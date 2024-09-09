@@ -35,7 +35,7 @@
         formatted_entries: >
           {{
             json_data.backlog | map(
-              lambda item: "{{ fields.action }}: {{ fields.user_login }}"
+              lambda item: '{}: {}'.format(item.fields.action, item.fields.user_login)
             ) | list
           }}
 
