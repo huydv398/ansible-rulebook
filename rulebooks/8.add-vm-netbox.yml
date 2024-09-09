@@ -1,0 +1,21 @@
+---
+- name: EDA - Add & Install Checkmk Agent
+  hosts: localhost
+  sources:
+    - name: listen webhook
+      ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 5000
+
+  rules: 
+    - name: Run Job template Add agent
+      condition: ansible_eda.event.payload.backlog[0].fields.action == "Deploying"
+      action:
+        run_workflow_template:
+          name: add vm to netbox
+          organization: Default
+          retries: 3
+          delay: 600
+          job_args:
+            extra_vars:
+              noti: "{{ event.payload }}"    

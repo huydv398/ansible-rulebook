@@ -1,0 +1,4 @@
+vcenter_hostname: vcenter.solus.local
+vcenter_username: Administrator@vsphere.local
+vcenter_password: Solu2025!
+datacenter_name: Solus-CL 
