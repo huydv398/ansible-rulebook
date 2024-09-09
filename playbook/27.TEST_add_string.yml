@@ -30,7 +30,7 @@
       ansible.builtin.debug:
         msg: "{{ user_logins }}"
 
-        - name: Define hostname in netbox  
+    - name: Define hostname in netbox  
       ansible.builtin.set_fact:
         hostname: "{{ item.value.display }}"
         id: "{{ item.value.id }}"
