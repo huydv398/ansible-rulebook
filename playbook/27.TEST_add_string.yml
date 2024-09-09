@@ -29,19 +29,16 @@
     - name: Display user_login values
       ansible.builtin.debug:
         msg: "{{ user_logins }}"
-        
-    - name: Extract user_login and action values
+
+    - name: Extract and format user_login and action values
       ansible.builtin.set_fact:
-        user_login_action_pairs: >
+        formatted_entries: >
           {{
             json_data.backlog | map(
-              lambda item: {
-                'user_login': item.fields.user_login | default('N/A'),
-                'action': item.fields.action | default('N/A')
-              }
+              lambda item: "{{ item.fields.action }}: {{ item.fields.user_login }}"
             ) | list
           }}
 
-    - name: Display user_login and action values
+    - name: Display formatted user_login and action values
       ansible.builtin.debug:
-        msg: "{{ user_login_action_pairs }}"
+        msg: "{{ formatted_entries }}"
