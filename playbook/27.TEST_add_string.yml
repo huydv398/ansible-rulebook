@@ -32,10 +32,10 @@
 
     - name: Extract and format user_login and action values
       ansible.builtin.set_fact:
-        formatted_entries: |
+        formatted_entries: >
           {{
             json_data.backlog | map(
-              lambda item: "{{ item.fields.action }}: {{ item.fields.user_login }}"
+              lambda item: "{{ fields.action }}: {{ fields.user_login }}"
             ) | list
           }}
 
