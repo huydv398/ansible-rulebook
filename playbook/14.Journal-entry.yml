@@ -1,5 +1,3 @@
-
-
 - hosts: localhost
   gather_facts: False
   connection: local
@@ -10,9 +8,22 @@
       netbox_url: "{{ netbox_url }}"
       netbox_token: "{{ netbox_token }}"
   vars:
-    - message: |
-        ```Logged in {{ ansible_eda.event.payload.backlog[0].fields.action }}: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}```
+    - intro: "Logged in {{ ansible_eda.event.payload.backlog[0].fields.action }}"
   tasks:
+    - name: Set JSON data as a variable
+      ansible.builtin.set_fact:
+        json_data: "{{ ansible_eda.event.payload }}"
+
+    - name: Set fact for user_login
+      debug:
+        msg: "{{ json_data }}"
+    - name: Extract user_login values
+      ansible.builtin.set_fact:
+        user_logins: "{{ json_data.backlog | map(attribute='fields.user_login') | list }}"
+
+    - name: Display user_login values
+      ansible.builtin.debug:
+        msg: "{{ user_logins }}"
 
     - name: Define hostname in netbox  
       ansible.builtin.set_fact:
@@ -26,5 +37,7 @@
           assigned_object_type: virtualization.virtualmachine
           assigned_object_id: "{{id}}"
           kind: info
-          comments: "{{ message }}"
+          comments: |
+            ```{{ intro }}
+            {{ user_logins }}```
       when: hostname is defined 
