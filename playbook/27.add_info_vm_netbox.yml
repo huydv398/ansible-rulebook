@@ -22,7 +22,7 @@
         # name: Huydv-vm21082024
 
         schema: "vsphere"
-        properties: ["guest.net"]
+        # properties: ["guest.net"]
         validate_certs: no
       delegate_to: localhost
       register: info
@@ -40,7 +40,7 @@
       debug:
         msg: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
 
-    - name: show IP VM
+    - name: show info  VM
       debug:
         msg: "{{ info }}"
 
