@@ -50,20 +50,20 @@
     #         Disk {{ disk.label }}: {{ disk.capacity_gb }} GB
     #       {%- endfor %}
 
-    # - name: Update vcpus, memory and disk of an existing virtual machine
-    #   netbox_virtual_machine:
-    #     data:
-    #       name: "{{ name }}"
-    #       vcpus: "{{ info | json_query('instance.config.hardware.numCPU') }}"
-    #       memory: "{{ info | json_query('instance.config.hardware.memoryMB') }}"
-    #       disk: 0
-    #       cluster: 
-    #       platform: "{{ info | json_query('instance.summary.guestFullName') }}"
-    #       # primary_ip4: 
-    #       status: "Active"
-    #       custom_fields:
-    #         Custom: huydv
-    #         numVirtualDisks: "{{ info | json_query('instance.summary.config.numVirtualDisks') }}"
+    - name: Update vcpus, memory and disk of an existing virtual machine
+      netbox_virtual_machine:
+        data:
+          name: "{{ name }}"
+          vcpus: "{{ info | json_query('instance.config.hardware.numCPU') }}"
+          memory: "{{ info | json_query('instance.config.hardware.memoryMB') }}"
+          disk: 0
+          cluster: 
+          platform: "{{ info | json_query('instance.summary.guestFullName') }}"
+          # primary_ip4: 
+          status: "Active"
+          custom_fields:
+            Custom: huydv
+            numVirtualDisks: "{{ info | json_query('instance.summary.config.numVirtualDisks') }}"
 
     #     state: present
 
