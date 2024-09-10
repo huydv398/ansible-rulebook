@@ -42,7 +42,7 @@
 
     - name: show info  VM
       debug:
-        msg: "{{ info }}"
+        msg: "{{ info | json_query('instance.summary.config.numVirtualDisks') }}"
     # - name: Print disk information
     #   debug:
     #     msg: >
@@ -59,10 +59,12 @@
     #       disk: 8
     #       cluster: 
     #       platform:
-    #       primary_ip4:
-    #       status: 
-    #       custom_fields:
-    #         Custom: huydv
+          # primary_ip4:
+          # status: 
+          # custom_fields:
+          #   Custom: huydv
+          #   numVirtualDisks: "{{ info | json_query('instance.summary.config.numVirtualDisks') }}"
+
     #     state: present
 
     # - name: show IP VM
