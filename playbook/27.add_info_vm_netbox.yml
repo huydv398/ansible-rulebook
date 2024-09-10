@@ -12,23 +12,23 @@
       delegate_to: localhost
       register: vm_info
       
-    # - name: Gather some info from a guest using the vSphere API output schema
-    #   community.vmware.vmware_guest_info:
-    #     hostname: "{{ vcenter_hostname }}"
-    #     username: "{{ vcenter_username }}"
-    #     password: "{{ vcenter_password }}"
-    #     datacenter: "{{ datacenter_name }}"
-    #     name: "{{ ansible_eda.event.payload.backlog[0].fields.name_vm | default('huyvm3') }}"
-    #     # name: Huydv-vm21082024
+    - name: Gather some info from a guest using the vSphere API output schema
+      community.vmware.vmware_guest_info:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ datacenter_name }}"
+        name: "{{ ansible_eda.event.payload.backlog[0].fields.name_vm | default('huyvm3') }}"
+        # name: Huydv-vm21082024
 
-    #     schema: "vsphere"
-    #     properties: ["guest.net"]
-    #     validate_certs: no
-    #   delegate_to: localhost
-    #   register: info
-    #   # retries: 5
-    #   # delay: 60
-    #   # until: info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') | length > 0
+        schema: "vsphere"
+        properties: ["guest.net"]
+        validate_certs: no
+      delegate_to: localhost
+      register: info
+      retries: 5
+      delay: 60
+      until: info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') | length > 0
     
     # # - name: Set the message if the previous task failed
     # #   ansible.builtin.set_stats:
