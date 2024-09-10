@@ -56,16 +56,12 @@
           name: "{{ name }}"
           vcpus: "{{ info | json_query('instance.config.hardware.numCPU') }}"
           memory: "{{ info | json_query('instance.config.hardware.memoryMB') }}"
-          disk: 0
-          cluster: 
           platform: "{{ info | json_query('instance.summary.guestFullName') }}"
-          # primary_ip4: 
           status: "Active"
           custom_fields:
             Custom: huydv
             numVirtualDisks: "{{ info | json_query('instance.summary.config.numVirtualDisks') }}"
-
-    #     state: present
+        state: present
 
     # - name: show IP VM
     #   debug:
