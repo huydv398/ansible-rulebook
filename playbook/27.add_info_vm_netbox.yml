@@ -42,7 +42,7 @@
 
     - name: show info  VM
       debug:
-        msg: "{{ info | json_query('instance.summary.guestFullName') }}"
+        msg: "{{ info | json_query('instance.summary.config.guestFullName') }}"
     # - name: Print disk information
     #   debug:
     #     msg: >
