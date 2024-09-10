@@ -42,14 +42,20 @@
 
     - name: show info  VM
       debug:
-        msg: "{{ info | json_query('instance.config.hardware.memoryMB') / 1024 }}"
+        msg: "{{ info | json_query('instance.config.hardware.numCPU') }}"
+    - name: Print disk information
+      debug:
+        msg: >
+          {%- for disk in info.virtual_machines[0].disks %}
+            Disk {{ disk.label }}: {{ disk.capacity_gb }} GB
+          {%- endfor %}
 
     # - name: Update vcpus, memory and disk of an existing virtual machine
     #   netbox_virtual_machine:
     #     data:
     #       name: "{{ name }}"
     #       vcpus: "{{ info | json_query('instance.config.hardware.numCPU') }}"
-    #       memory: 8
+    #       memory: {{ info | json_query('instance.config.hardware.memoryMB') }}
     #       disk: 8
     #       cluster: 
     #       platform:
