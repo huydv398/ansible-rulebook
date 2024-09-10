@@ -61,9 +61,9 @@
           memory: "{{ info | json_query('instance.config.hardware.memoryMB') }}"
           platform: "{{ info | json_query('instance.summary.config.guestFullName') }}"
           status: "Active"
-          custom_fields:
-            Custom: huydv
-            numVirtualDisks: "{{ info | json_query('instance.summary.config.numVirtualDisks') }}"
+          # custom_fields:
+          #   Custom: huydv
+          #   numVirtualDisks: "{{ info | json_query('instance.summary.config.numVirtualDisks') }}"
         state: present
 
     # - name: show IP VM
