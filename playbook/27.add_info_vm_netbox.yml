@@ -70,6 +70,7 @@
     #   debug:
     #     msg: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
 
+
     # # - name: Set fact IP VM
     # #   ansible.builtin.set_stats:
     # #     data:
