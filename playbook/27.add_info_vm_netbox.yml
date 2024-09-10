@@ -11,7 +11,7 @@
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: "{{ datacenter_name }}"
-        name: "{{ ansible_eda.event.payload.backlog[0].fields.name_vm }}"
+        name: "{{ ansible_eda.event.payload.backlog[0].fields.name_vm | default('huyvm3') }}"
         # name: Huydv-vm21082024
 
         schema: "vsphere"
