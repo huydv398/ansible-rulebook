@@ -59,7 +59,7 @@
           name: "huyvm3"
           vcpus: "{{ info | json_query('instance.config.hardware.numCPU') }}"
           memory: "{{ info | json_query('instance.config.hardware.memoryMB') }}"
-          platform: "{{ info | json_query('instance.summary.guestFullName') }}"
+          platform: "{{ info | json_query('instance.summary.config.guestFullName') }}"
           status: "Active"
           custom_fields:
             Custom: huydv
