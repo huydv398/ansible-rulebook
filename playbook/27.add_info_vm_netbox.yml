@@ -36,19 +36,19 @@
     # #       massage_event: "failed"
     # #   when: info.failed
 
-    - name: show IP VM
-      debug:
-        msg: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
+    # - name: show IP VM
+    #   debug:
+    #     msg: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
 
     - name: show info  VM
       debug:
-        msg: "{{ info | json_query('instance.config.hardware.numCPU') }}"
-    - name: Print disk information
-      debug:
-        msg: >
-          {%- for disk in info.virtual_machines[0].disks %}
-            Disk {{ disk.label }}: {{ disk.capacity_gb }} GB
-          {%- endfor %}
+        msg: "{{ info }}"
+    # - name: Print disk information
+    #   debug:
+    #     msg: >
+    #       {%- for disk in info.virtual_machines[0].disks %}
+    #         Disk {{ disk.label }}: {{ disk.capacity_gb }} GB
+    #       {%- endfor %}
 
     # - name: Update vcpus, memory and disk of an existing virtual machine
     #   netbox_virtual_machine:
