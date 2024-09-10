@@ -40,6 +40,21 @@
       debug:
         msg: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
 
+    - name: show IP VM
+      debug:
+        msg: "{{ info }}"
+
+    # - name: Update vcpus, memory and disk of an existing virtual machine
+    #   netbox_virtual_machine:
+    #     data:
+    #       name: Test Virtual Machine
+    #       cluster: test cluster
+    #       vcpus: 8
+    #       memory: 8
+    #       disk: 8
+    #       cluster: 
+    #     state: present
+
     # - name: show IP VM
     #   debug:
     #     msg: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
