@@ -42,13 +42,13 @@
 
     - name: show info  VM
       debug:
-        msg: "{{ info | json_query('instance.config.hardware.numCPU') }}"
+        msg: "{{ info | json_query('instance.config.hardware.memoryMB') / 1024 }}"
 
     # - name: Update vcpus, memory and disk of an existing virtual machine
     #   netbox_virtual_machine:
     #     data:
     #       name: "{{ name }}"
-    #       vcpus: 8
+    #       vcpus: "{{ info | json_query('instance.config.hardware.numCPU') }}"
     #       memory: 8
     #       disk: 8
     #       cluster: 
