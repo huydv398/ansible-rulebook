@@ -61,6 +61,7 @@
           memory: "{{ info | json_query('instance.config.hardware.memoryMB') }}"
           platform: "{{ info | json_query('instance.summary.config.guestFullName') }}"
           status: "Active"
+          cluster: "{{ datacenter_name }}"
           # custom_fields:
           #   Custom: huydv
           #   numVirtualDisks: "{{ info | json_query('instance.summary.config.numVirtualDisks') }}"
