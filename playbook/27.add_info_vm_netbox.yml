@@ -42,7 +42,7 @@
 
     - name: show info  VM
       debug:
-        msg: "{{ info | json_query('instance.summary.config.numVirtualDisks') }}"
+        msg: "{{ info | json_query('instance.config.hardware.capacityInKB') }}"
     # - name: Print disk information
     #   debug:
     #     msg: >
