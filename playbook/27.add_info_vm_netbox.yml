@@ -1,7 +1,5 @@
 - hosts: localhost
   gather_facts: False
-  vars:
-    message_failed: "The task failed."
 
   tasks:
 
@@ -23,18 +21,22 @@
       delay: 60
       until: info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') | length > 0
     
-    - name: Set the message if the previous task failed
-      ansible.builtin.set_stats:
-        data: 
-          massage_event: "failed"
-      when: info.failed
+    # - name: Set the message if the previous task failed
+    #   ansible.builtin.set_stats:
+    #     data: 
+    #       massage_event: "failed"
+    #   when: info.failed
+
+    # - name: show IP VM
+    #   debug:
+    #     msg: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
 
     - name: show IP VM
       debug:
         msg: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
 
-    - name: Set fact IP VM
-      ansible.builtin.set_stats:
-        data:
-          ipvm: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
+    # - name: Set fact IP VM
+    #   ansible.builtin.set_stats:
+    #     data:
+    #       ipvm: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
 
