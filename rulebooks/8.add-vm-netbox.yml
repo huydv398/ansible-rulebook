@@ -12,7 +12,7 @@
       condition: ansible_eda.event.payload.backlog[0].fields.action == "Deploying"
       action:
         run_workflow_template:
-          name: add vm to netbox
+          name: 2.add_vm_to_netbox
           organization: Default
           retries: 3
           delay: 60
