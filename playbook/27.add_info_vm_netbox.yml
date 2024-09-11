@@ -56,7 +56,7 @@
         netbox_url: "{{ netbox_url }}"
         netbox_token: "{{ netbox_token }}"
         data:
-          name: "huyvm3"
+          name: "{{ ansible_eda.event.payload.backlog[0].fields.name_vm | default('huyvm3') }}"
           vcpus: "{{ info | json_query('instance.config.hardware.numCPU') }}"
           memory: "{{ info | json_query('instance.config.hardware.memoryMB') }}"
           platform: "{{ info | json_query('instance.summary.config.guestFullName') }}"
@@ -67,10 +67,14 @@
           #   numVirtualDisks: "{{ info | json_query('instance.summary.config.numVirtualDisks') }}"
         state: present
 
-    # - name: show IP VM
-    #   debug:
-    #     msg: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
-
+    - name: Create interface within NetBox with only required information
+      netbox_vm_interface:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          virtual_machine:  "{{ ansible_eda.event.payload.backlog[0].fields.name_vm | default('') }}"
+          name: GigabitEthernet1
+        state: present
 
     # # - name: Set fact IP VM
     # #   ansible.builtin.set_stats:
