@@ -9,7 +9,7 @@
 
   rules: 
     - name: Run Job template Add agent
-      condition: ansible_eda.event.payload.backlog[0].fields.action == "Deploying"
+      condition: event.payload.backlog[0].fields.action == "Deploying"
       action:
         run_workflow_template:
           name: 2.add_vm_to_netbox
