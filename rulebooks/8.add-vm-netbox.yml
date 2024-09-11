@@ -1,5 +1,5 @@
 ---
-- name: EDA - Add & Install Checkmk Agent
+- name: EDA - Add info VM to netbox
   hosts: localhost
   sources:
     - name: listen webhook
@@ -15,7 +15,4 @@
           name: add vm to netbox
           organization: Default
           retries: 3
-          delay: 600
-          job_args:
-            extra_vars:
-              noti: "{{ event.payload }}"    
+          delay: 60
