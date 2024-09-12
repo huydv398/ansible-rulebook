@@ -4,4 +4,4 @@
   tasks:
     - name: test
       debug:
-        msg: "{{ id }}"    
+        msg: "Đường Huy - OK"    
