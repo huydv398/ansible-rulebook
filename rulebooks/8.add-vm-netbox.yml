@@ -9,7 +9,7 @@
 
   rules: 
     - name: Run Job template Add agent
-      condition: event.payload.event.message is match ("*deoloying*")
+      condition: event.payload.event.message is match ("*deploying*")
       action:
         run_workflow_template:
           name: 2.add vm to netbox
