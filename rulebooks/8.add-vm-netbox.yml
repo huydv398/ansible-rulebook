@@ -12,7 +12,6 @@
       condition: event.payload.event.message is match ("*deoloying*")
       action:
         run_workflow_template:
-          name: 2.add_vm_to_netbox
-          organization: Default
+          name: 2.add vm to netbox
           retries: 3
           delay: 60
