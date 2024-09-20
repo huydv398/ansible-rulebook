@@ -1,32 +1,32 @@
 ## vcenter_vars.yml
 ---
 # Common variables
-- validate_certs: no
-- debug_flag: no
+validate_certs: no
+debug_flag: no
 
 # vCenter related details
-- vcenter_hostname: vcenter.labhtv.local
-- vcenter_username: Administrator@vsphere.local
-- vcenter_password: Htv2023!
+vcenter_hostname: vcenter.addc.local
+vcenter_username: Administrator@VCENTER.ADDC.LOCAL
+vcenter_password: Suncloud@2024!
 
 # VMware object related details
-- datacenter_name: 'DC-01' 
-- cluster_name: VLWARECL
-- vm_name: huydv-u22
-- tenant: duonghuy
+datacenter_name: 'DC-01' 
+cluster_name: VLWARECL
+vm_name: huydv-u22
+tenant: duonghuy
 
 # OVA Deployment Variables
-- ova_validate_certs: no
+ova_validate_certs: no
 
 # Default Windows Administrator
-- win_admin_username: "administrator"
-- win_admin_password: "VMwar3!!"
+win_admin_username: "administrator"
+win_admin_password: "VMwar3!!"
 
 # Active Directory Join Domain Account
-- ad_dom_join_username: "svc_dom_join@sgroot.local"
-- ad_dom_join_password: "VMwar3!!"
+ad_dom_join_username: "svc_dom_join@sgroot.local"
+ad_dom_join_password: "VMwar3!!"
 
 # Windows timezone
 # See: https://docs.microsoft.com/en-us/previous-versions/windows/embedded/ms912391(v=winembedded.11)
-- win_timezone: 085
+win_timezone: 085
 

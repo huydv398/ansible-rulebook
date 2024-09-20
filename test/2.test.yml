@@ -1,44 +1,8 @@
----
-- name: Extract and print summary values
-  hosts: localhost
-  gather_facts: no
+- hosts: localhost
+  gather_facts: False
+
   tasks:
-    - name: Define device data
-      set_fact:
-        devices:
-          - _vimtype: "vim.vm.device.VirtualIDEController"
-            deviceInfo:
-              _vimtype: "vim.Description"
-              label: "IDE 0"
-              summary: "IDE 0"
-            key: 200
-            numaNode: null
-          - _vimtype: "vim.vm.device.VirtualIDEController"
-            deviceInfo:
-              _vimtype: "vim.Description"
-              label: "IDE 1"
-              summary: "IDE 1"
-            key: 201
-            numaNode: null
-            slotInfo: null
-            unitNumber: null
-          - _vimtype: "vim.vm.device.VirtualPS2Controller"
-            device:
-              - 600
-              - 700
-            deviceGroupInfo: null
-            deviceInfo:
-              _vimtype: "vim.Description"
-            key: 300
-
-    - name: Set summary_1 and summary_2
-      set_fact:
-        summary_1: "{{ devices[0].deviceInfo.summary if devices[0].deviceInfo.summary is defined else 'N/A' }}"
-        summary_2: "{{ devices[1].deviceInfo.summary if devices[1].deviceInfo.summary is defined else 'N/A' }}"
-
-    - name: Print summary values
+    - name: test
       debug:
-        msg: |
-          Summary 1: {{ summary_1 }}
-          Summary 2: {{ summary_2 }}
-
+        msg: "{{ ansible_eda.event.payload.backlog[0].fields.name_vm }}"    
+  

@@ -1,0 +1,49 @@
+- hosts: localhost
+  gather_facts: False
+  vars_files:
+  - /root/ansible-rulebook/all/02.vcenter.yml
+  tasks:
+
+    # - name: Build a list of all the clusters
+    #   vmware.vmware_rest.vcenter_cluster_info:
+    #     vcenter_hostname: vcenter.addc.local
+    #     vcenter_username: Administrator@VCENTER.ADDC.LOCAL
+    #     vcenter_password: Suncloud@2024!
+    #     vcenter_validate_certs: false
+    #   register: all_the_clusters
+
+    # - name: Retrieve details about the first cluster
+    #   vmware.vmware_rest.vcenter_cluster_info:
+    #     cluster: '{{ all_the_clusters.value[0].cluster }}'
+    #   register: my_cluster_info
+
+    # ---------------------
+    - name: Get the database heath status
+      vmware.vmware_rest.vcenter_host_info:
+        vcenter_hostname: vcenter.addc.local
+        vcenter_username: Administrator@VCENTER.ADDC.LOCAL
+        vcenter_password: Suncloud@2024!
+        vcenter_validate_certs: false
+      register: result
+    - name: Display cluster information
+      debug:
+        var: result
+
+    # - name: Get a list of all the datacenters
+    #   register: existing_datacenters
+    #   vmware.vmware_rest.vcenter_datacenter_info:
+    #     vcenter_hostname: vcenter.addc.local
+    #     vcenter_username: Administrator@VCENTER.ADDC.LOCAL
+    #     vcenter_password: Suncloud@2024!
+    # - name: Force delete the existing DC
+    #   vmware.vmware_rest.vcenter_datacenter:
+    #     state: absent
+    #     datacenter: '{{ item.datacenter }}'
+    #     vcenter_hostname: vcenter.addc.local
+    #     vcenter_username: Administrator@VCENTER.ADDC.LOCAL
+    #     vcenter_password: Suncloud@2024!
+    #     force: true
+    #   with_items: '{{ existing_datacenters.value }}'
+    #   until:
+    #   - _result is not failed
+    #   retries: 7
