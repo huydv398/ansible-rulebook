@@ -1,0 +1,163 @@
+- hosts: localhost
+  gather_facts: False
+  module_defaults:
+    group/community.vmware.vmware:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter: "{{ datacenter_name }}"
+    group/netbox.netbox.netbox:
+      netbox_url: '{{ netbox_url }}'
+      netbox_token: '{{ netbox_token }}'
+      validate_certs: no
+
+  vars:
+    - name_vm: 'huyvm1'
+    - Cluster_Type: Cluster_Type
+    - clusters_vcenter_name: 'vcenter lab suncloud 2'
+    - vm_interface: GigabitEthernet1
+    - vcpus: 8
+    - memory: 8
+    - disk: 8
+  tasks:
+    - name: Look up the VM called VM in the inventory
+      register: search_result
+      vmware.vmware_rest.vcenter_vm_info:
+        vcenter_hostname: vcenter.addc.local
+        vcenter_username: Administrator@VCENTER.ADDC.LOCAL
+        vcenter_password: Suncloud@2024!
+        vcenter_validate_certs: false      
+        filter_names:
+        - "{{ name_vm }}"
+
+    # - name: Collect information about a specific VM
+    #   vmware.vmware_rest.vcenter_vm_info:
+    #     vcenter_hostname: vcenter.addc.local
+    #     vcenter_username: Administrator@VCENTER.ADDC.LOCAL
+    #     vcenter_password: Suncloud@2024!
+    #     vcenter_validate_certs: false
+    #     vm: '{{ search_result.value[0].vm }}'
+    #   register: test_vm1_info
+
+    # - name: Get guest power information
+    #   vmware.vmware_rest.vcenter_vm_power_info:
+    #     vcenter_hostname: vcenter.addc.local
+    #     vcenter_username: Administrator@VCENTER.ADDC.LOCAL
+    #     vcenter_password: Suncloud@2024!
+    #     vcenter_validate_certs: false
+    #     vm: '{{ test_vm1_info.id }}'
+    #   register: result_vm_power
+    # - name: Display cluster information
+    #   debug:
+    #     var: result_vm_power    
+
+    # - name: Turn the power of the VM on
+    #   vmware.vmware_rest.vcenter_vm_power:
+    #     vcenter_hostname: vcenter.addc.local
+    #     vcenter_username: Administrator@VCENTER.ADDC.LOCAL
+    #     vcenter_password: Suncloud@2024!
+    #     vcenter_validate_certs: false
+    #     state: start
+    #     vm: '{{ search_result.value[0].vm }}'
+    #   when: result_vm_power.value.state == "POWERED_OFF"
+    
+    # - name: Gather disk info from virtual machine using name
+    #   community.vmware.vmware_guest_disk_info:
+    #     hostname: "{{ vcenter_hostname }}"
+    #     username: "{{ vcenter_username }}"
+    #     password: "{{ vcenter_password }}"
+    #     datacenter: Cluster
+    #     validate_certs: false
+    #     name: "{{name_vm}}"
+    #   delegate_to: localhost
+    #   register: "disk_info"
+
+    # - debug:
+    #     var: disk_info
+
+    # - name: Gather some info from a guest using the vSphere API output schema
+    #   community.vmware.vmware_guest_info:
+    #     name: "{{ name_vm }}"
+    #     schema: "vsphere"
+    #     properties: ["guest.net"]
+    #     validate_certs: no
+    #   delegate_to: localhost
+    #   register: info
+    #   retries: 5
+    #   delay: 60
+    #   until: info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') | length > 0
+    
+    # - name: Set the message if the previous task failed
+    #   ansible.builtin.set_stats:
+    #     data: 
+    #       massage_event: "failed"
+    #   when: info.failed
+
+    # # - name: show IP VM
+    # #   debug:
+    # #     msg: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
+
+    # - name: Set fact IP VM
+    #   ansible.builtin.set_stats:
+    #     data:
+    #       IP_vm: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
+
+    # - name: "Get Clusters"
+    #   set_fact:
+    #     clusters: "{{ query('netbox.netbox.nb_lookup', 'clusters',
+    #               api_endpoint=netbox_url,
+    #               validate_certs=False,
+    #               token=netbox_token) | map(attribute='value.display') | list }}"
+    # - name: test
+    #   debug:
+    #     msg: "{{ clusters }}"    
+    #     # msg: "{{ clusters | map(attribute='value.display') | list }}" 
+
+    # - name: Create cluster type within NetBox with only required information
+    #   netbox.netbox.netbox_cluster_type:
+    #     data:
+    #       name: "{{ Cluster_Type }}"
+    #     state: present
+
+    # - name: Create cluster within NetBox with only required information
+    #   netbox.netbox.netbox_cluster:
+    #     data:
+    #       name: '{{ clusters_vcenter_name }}'
+    #       cluster_type: "{{ Cluster_Type }}"
+    #     state: present
+    #   when: "clusters_vcenter_name not in clusters"
+
+    # - name: Create virtual machine within NetBox with only required information
+    #   netbox_virtual_machine:
+    #     data:
+    #       name: '{{ name_vm }}'
+    #       cluster: '{{ clusters_vcenter_name }}'
+    #       vcpus: '{{ vcpus }}'
+    #       memory: '{{ memory }}'
+    #       disk: '{{ disk }}'
+    #     state: present
+    # - name: Create interface within NetBox with only required information
+    #   netbox_vm_interface:
+    #     data:
+    #       virtual_machine: '{{ name_vm }}'
+    #       name: '{{ vm_interface }}'
+    #     state: present
+
+    # - name: Add IP address to a virtual machine
+    #   netbox.netbox.netbox_ip_address:
+    #     data:
+    #       address: "{{ IP_vm }}"                 
+    #       status: "active"                            
+    #       assigned_object: 
+    #         virtual_machine: '{{ name_vm }}'
+    #         name: '{{ vm_interface }}'
+    #   register: ip_result
+
+
+
+
+
+
+
+
+

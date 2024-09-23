@@ -2,15 +2,20 @@
   gather_facts: False
   vars:
     message_failed: "The task failed."
-
+  module_defaults:
+    group/community.vmware.vmware:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter: "{{ datacenter_name }}"
   tasks:
 
     - name: Gather some info from a guest using the vSphere API output schema
       community.vmware.vmware_guest_info:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        datacenter: "{{ datacenter_name }}"
+        # hostname: "{{ vcenter_hostname }}"
+        # username: "{{ vcenter_username }}"
+        # password: "{{ vcenter_password }}"
+        # datacenter: "{{ datacenter_name }}"
         name: "{{ ansible_eda.event.payload.backlog[0].fields.name_vm }}"
         # name: Huydv-vm21082024
 

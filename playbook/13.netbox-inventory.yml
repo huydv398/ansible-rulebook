@@ -13,7 +13,7 @@
                   api_endpoint='http://172.16.66.124:8000',
                   api_filter='role=valid status=active',
                   validate_certs=False,
-                  token='9d937a873ced4bf232571be636df540facfb23a7') }}"
+                  token='aa71f1037fc19a5a06051ec95c5f5353473f5ba2') }}"
 
 
     - name: Teste
@@ -25,7 +25,7 @@
         validate_certs: False
         url: "http://172.16.66.124:8000/api/ipam/prefixes/{{ prefixes | json_query('[*].value.id') }}/available-ips/"
         headers:
-          Authorization: "Token 9d937a873ced4bf232571be636df540facfb23a7"
+          Authorization: "Token aa71f1037fc19a5a06051ec95c5f5353473f5ba2"
       register: prefix
       until: prefix
 

@@ -1,8 +1,122 @@
 - hosts: localhost
   gather_facts: False
-
+  vars:
+    - name_vm: huydv01
+    - vcenter_hostname: vcenter.addc.local
+    - vcenter_username: Administrator@VCENTER.ADDC.LOCAL
+    - vcenter_password: Suncloud@2024!
   tasks:
-    - name: test
-      debug:
-        msg: "{{ ansible_eda.event.payload.backlog[0].fields.name_vm }}"    
+    # - name: Set fact Name VM
+    #   ansible.builtin.set_stats:
+    #     data:
+    #       ipvm: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
   
+    # - name: Check Status power VM
+    #   ansible.builtin.set_stats:
+    #     data:
+    #       ipvm: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
+
+    
+    # - name: Set fact IP VM
+    #   ansible.builtin.set_stats:
+    #     data:
+    #       ipvm: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
+    
+    # - name: test
+    #   debug:
+    #     msg: "{{ ansible_eda.event.payload.backlog[0].fields.name_vm }}"    
+
+
+
+    # - name: Look up the VM called test_vm1 in the inventory
+    #   register: search_result
+    #   vmware.vmware_rest.vcenter_vm_info:
+    #     vcenter_hostname: vcenter.addc.local
+    #     vcenter_username: Administrator@VCENTER.ADDC.LOCAL
+    #     vcenter_password: Suncloud@2024!
+    #     vcenter_validate_certs: false
+    #     filter_names:
+    #     - "{{ name_vm }}"
+    # - name: Display cluster information
+    #   debug:
+    #     # var: search_result.value[0].cpu_count
+    #     var: search_result
+
+
+
+    # - name: Collect information about a specific VM
+    #   vmware.vmware_rest.vcenter_vm_info:
+    #     vcenter_hostname: vcenter.addc.local
+    #     vcenter_username: Administrator@VCENTER.ADDC.LOCAL
+    #     vcenter_password: Suncloud@2024!
+    #     vcenter_validate_certs: false
+    #     vm: '{{ name_vm }}'
+    #   register: test_vm1_info
+    # - name: Read the power status of the VM
+    #   vmware.vmware_rest.vcenter_vm_power_info:
+    #     vcenter_hostname: vcenter.addc.local
+    #     vcenter_username: Administrator@VCENTER.ADDC.LOCAL
+    #     vcenter_password: Suncloud@2024!
+    #     vcenter_validate_certs: false
+    #     vm: "{{ name_vm }}"
+    #   register: search_power_info
+
+    # - name: Display cluster information
+    #   debug:
+    #     var: search_power_info      
+    
+
+
+    - name: Look up the VM called test_vm1 in the inventory
+      register: search_result
+      vmware.vmware_rest.vcenter_vm_info:
+        vcenter_hostname: vcenter.addc.local
+        vcenter_username: Administrator@VCENTER.ADDC.LOCAL
+        vcenter_password: Suncloud@2024!
+        vcenter_validate_certs: false      
+        filter_names:
+        - "{{ name_vm }}"
+    - name: Collect information about a specific VM
+      vmware.vmware_rest.vcenter_vm_info:
+        vcenter_hostname: vcenter.addc.local
+        vcenter_username: Administrator@VCENTER.ADDC.LOCAL
+        vcenter_password: Suncloud@2024!
+        vcenter_validate_certs: false
+        vm: '{{ search_result.value[0].vm }}'
+      register: test_vm1_info
+
+    - name: Get guest power information
+      vmware.vmware_rest.vcenter_vm_power_info:
+        vcenter_hostname: vcenter.addc.local
+        vcenter_username: Administrator@VCENTER.ADDC.LOCAL
+        vcenter_password: Suncloud@2024!
+        vcenter_validate_certs: false
+        vm: '{{ test_vm1_info.id }}'
+      register: result_vm_power
+    - name: Display cluster information
+      debug:
+        var: result_vm_power    
+
+    - name: Turn the power of the VM on
+      vmware.vmware_rest.vcenter_vm_power:
+        vcenter_hostname: vcenter.addc.local
+        vcenter_username: Administrator@VCENTER.ADDC.LOCAL
+        vcenter_password: Suncloud@2024!
+        vcenter_validate_certs: false
+        state: start
+        vm: '{{ search_result.value[0].vm }}'
+      when: result_vm_power.value.state == "POWERED_OFF"
+    
+    - name: Gather disk info from virtual machine using name
+      community.vmware.vmware_guest_disk_info:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: Cluster
+        validate_certs: false
+        name: "{{name_vm}}"
+      delegate_to: localhost
+      register: "disk_info"
+
+    - debug:
+        var: disk_info

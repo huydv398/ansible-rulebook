@@ -1,0 +1,29 @@
+- hosts: localhost
+  gather_facts: False
+  collections:
+    - vmware.vmware_rest
+  # become: false
+  vars:
+    - name_vm: huydv01
+  #   - vcenter_hostname: vcenter.addc.local
+  #   - vcenter_username: Administrator@VCENTER.ADDC.LOCAL
+  #   - vcenter_password: Suncloud@2024!
+  # module_defaults:
+  #   vmware.vmware_rest.vcenter_vm_info:
+  module_defaults:
+    group/vmware.vmware_rest.vmware_vm_info:
+      vcenter_hostname: vcenter.addc.local
+      vcenter_username: Administrator@VCENTER.ADDC.LOCAL
+      vcenter_password: Suncloud@2024!
+      vcenter_validate_certs: false 
+  tasks:
+    - name: Look up the VM called test_vm1 in the inventory
+      register: search_result
+      vmware_vm_info:   
+        cluster_name: "Cluster"
+        # vcenter_hostname: vcenter.addc.local
+        # vcenter_username: Administrator@VCENTER.ADDC.LOCAL
+        # vcenter_password: Suncloud@2024!
+        # vcenter_validate_certs: false 
+        # filter_names:
+        # - "{{ name_vm }}"
