@@ -1,5 +1,11 @@
 - hosts: localhost
   gather_facts: False
+  module_defaults:
+    group/community.vmware.vmware:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter: "{{ datacenter_name }}"
 
   tasks:
     - name: Gather one specific VM
