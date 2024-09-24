@@ -93,9 +93,9 @@
           massage_event: "failed"
       when: info.failed
 
-    # - name: show IP VM
-    #   debug:
-    #     msg: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
+    - name: show IP VM
+      debug:
+        msg: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
 
     - name: Set fact IP VM
       ansible.builtin.set_stats:
@@ -108,7 +108,7 @@
                   api_endpoint=netbox_url,
                   validate_certs=False,
                   token=netbox_token) | map(attribute='value.display') | list }}"
-    - name: test
+    - name: debug clusters
       debug:
         msg: "{{ clusters }}"    
         # msg: "{{ clusters | map(attribute='value.display') | list }}" 
