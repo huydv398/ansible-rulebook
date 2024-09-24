@@ -12,7 +12,7 @@
       validate_certs: no
 
   vars:
-    - name_vm: 'huyvm1'
+    - name_vm: "{{ ansible_eda.event.payload.backlog[0].fields.name_vm }}"
     - Cluster_Type: Cluster_Type
     - clusters_vcenter_name: 'vcenter lab suncloud 2'
     - vm_interface: GigabitEthernet1
