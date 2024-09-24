@@ -32,18 +32,18 @@
 
     - name: Collect information about a specific VM
       vmware.vmware_rest.vcenter_vm_info:
-        vcenter_hostname: vcenter.addc.local
-        vcenter_username: Administrator@VCENTER.ADDC.LOCAL
-        vcenter_password: Suncloud@2024!
+        vcenter_hostname: '{{ vcenter_hostname }}'
+        vcenter_username: '{{ vcenter_username }}'
+        vcenter_password: '{{ vcenter_password }}'
         vcenter_validate_certs: false
         vm: '{{ search_result.value[0].vm }}'
       register: test_vm1_info
 
     - name: Get guest power information
       vmware.vmware_rest.vcenter_vm_power_info:
-        vcenter_hostname: vcenter.addc.local
-        vcenter_username: Administrator@VCENTER.ADDC.LOCAL
-        vcenter_password: Suncloud@2024!
+        vcenter_hostname: '{{ vcenter_hostname }}'
+        vcenter_username: '{{ vcenter_username }}'
+        vcenter_password: '{{ vcenter_password }}'
         vcenter_validate_certs: false
         vm: '{{ test_vm1_info.id }}'
       register: result_vm_power
@@ -53,27 +53,27 @@
 
     - name: Turn the power of the VM on
       vmware.vmware_rest.vcenter_vm_power:
-        vcenter_hostname: vcenter.addc.local
-        vcenter_username: Administrator@VCENTER.ADDC.LOCAL
-        vcenter_password: Suncloud@2024!
+        vcenter_hostname: '{{ vcenter_hostname }}'
+        vcenter_username: '{{ vcenter_username }}'
+        vcenter_password: '{{ vcenter_password }}'
         vcenter_validate_certs: false
         state: start
         vm: '{{ search_result.value[0].vm }}'
       when: result_vm_power.value.state == "POWERED_OFF"
     
-    - name: Gather disk info from virtual machine using name
-      community.vmware.vmware_guest_disk_info:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        datacenter: Cluster
-        validate_certs: false
-        name: "{{name_vm}}"
-      delegate_to: localhost
-      register: "disk_info"
+    # - name: Gather disk info from virtual machine using name
+    #   community.vmware.vmware_guest_disk_info:
+    #     hostname: "{{ vcenter_hostname }}"
+    #     username: "{{ vcenter_username }}"
+    #     password: "{{ vcenter_password }}"
+    #     datacenter: Cluster
+    #     validate_certs: false
+    #     name: "{{name_vm}}"
+    #   delegate_to: localhost
+    #   register: "disk_info"
 
-    - debug:
-        var: disk_info
+    # - debug:
+    #     var: disk_info
 
     # - name: Gather some info from a guest using the vSphere API output schema
     #   community.vmware.vmware_guest_info:
