@@ -75,43 +75,43 @@
     - debug:
         var: disk_info
 
-    # - name: Gather some info from a guest using the vSphere API output schema
-    #   community.vmware.vmware_guest_info:
-    #     name: "{{ name_vm }}"
-    #     schema: "vsphere"
-    #     properties: ["guest.net"]
-    #     validate_certs: no
-    #   delegate_to: localhost
-    #   register: info
-    #   retries: 5
-    #   delay: 60
-    #   until: info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') | length > 0
+    - name: Gather some info from a guest using the vSphere API output schema
+      community.vmware.vmware_guest_info:
+        name: "{{ name_vm }}"
+        schema: "vsphere"
+        properties: ["guest.net"]
+        validate_certs: no
+      delegate_to: localhost
+      register: info
+      retries: 5
+      delay: 60
+      until: info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') | length > 0
     
-    # - name: Set the message if the previous task failed
-    #   ansible.builtin.set_stats:
-    #     data: 
-    #       massage_event: "failed"
-    #   when: info.failed
+    - name: Set the message if the previous task failed
+      ansible.builtin.set_stats:
+        data: 
+          massage_event: "failed"
+      when: info.failed
 
-    # # - name: show IP VM
-    # #   debug:
-    # #     msg: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
-
-    # - name: Set fact IP VM
-    #   ansible.builtin.set_stats:
-    #     data:
-    #       IP_vm: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
-
-    # - name: "Get Clusters"
-    #   set_fact:
-    #     clusters: "{{ query('netbox.netbox.nb_lookup', 'clusters',
-    #               api_endpoint=netbox_url,
-    #               validate_certs=False,
-    #               token=netbox_token) | map(attribute='value.display') | list }}"
-    # - name: test
+    # - name: show IP VM
     #   debug:
-    #     msg: "{{ clusters }}"    
-    #     # msg: "{{ clusters | map(attribute='value.display') | list }}" 
+    #     msg: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
+
+    - name: Set fact IP VM
+      ansible.builtin.set_stats:
+        data:
+          IP_vm: "{{ info | json_query('instance.guest.net[].ipConfig.ipAddress[0].ipAddress') }}"
+
+    - name: "Get Clusters"
+      set_fact:
+        clusters: "{{ query('netbox.netbox.nb_lookup', 'clusters',
+                  api_endpoint=netbox_url,
+                  validate_certs=False,
+                  token=netbox_token) | map(attribute='value.display') | list }}"
+    - name: test
+      debug:
+        msg: "{{ clusters }}"    
+        # msg: "{{ clusters | map(attribute='value.display') | list }}" 
 
     # - name: Create cluster type within NetBox with only required information
     #   netbox.netbox.netbox_cluster_type:
