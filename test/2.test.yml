@@ -1,10 +1,21 @@
 - hosts: localhost
   gather_facts: False
+  module_defaults:
+    group/community.vmware.vmware:
+      hostname: "{{ vcenter_hostname | default('vcenter.addc.local') }}"
+      username: "{{ vcenter_username | default('Administrator@VCENTER.ADDC.LOCAL') }}"
+      password: "{{ vcenter_password | default('Suncloud@2024!') }}"
+      validate_certs: false
+    group/netbox.netbox.netbox:
+      netbox_url: "{{ netbox_url | default('') }}"
+      netbox_token: "{{ netbox_token | default('') }}"
+      validate_certs: no
   vars:
     - name_vm: huydv01
     - vcenter_hostname: vcenter.addc.local
     - vcenter_username: Administrator@VCENTER.ADDC.LOCAL
     - vcenter_password: Suncloud@2024!
+    - datacenter: "{{ datacenter_name | default('Cluster') }}"
   tasks:
     # - name: Set fact Name VM
     #   ansible.builtin.set_stats:
@@ -132,3 +143,10 @@
         - '{{ name_vm }}'
     - debug:
         var: search_result
+    - name: Gather one specific VM
+      community.vmware.vmware_vm_info:
+        vm_name: '{{ name_vm }}'
+      delegate_to: localhost
+      register: vm_info
+    - debug:
+        var: vm_info
