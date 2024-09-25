@@ -146,36 +146,36 @@
     #     - '{{ name_vm }}'
     # - debug:
     #     var: search_result
-    - name: Gather one specific VM
-      community.vmware.vmware_vm_info:
-        vm_name: '{{ name_vm }}'
-      delegate_to: localhost
-      register: vm_info
-    - debug:
-        var: vm_info.virtual_machines[0].cluster
-    - name: "Get Clusters"
-      set_fact:
-        clusters: "{{ query('netbox.netbox.nb_lookup', 'clusters',
-                  api_endpoint=netbox_url,
-                  validate_certs=False,
-                  token=netbox_token) | map(attribute='value.display') | list }}"
-    - name: debug clusters
-      debug:
-        msg: "{{ clusters }}"    
-        # msg: "{{ clusters | map(attribute='value.display') | list }}" 
+    # - name: Gather one specific VM
+    #   community.vmware.vmware_vm_info:
+    #     vm_name: '{{ name_vm }}'
+    #   delegate_to: localhost
+    #   register: vm_info
+    # - debug:
+    #     var: vm_info.virtual_machines[0].cluster
+    # - name: "Get Clusters"
+    #   set_fact:
+    #     clusters: "{{ query('netbox.netbox.nb_lookup', 'clusters',
+    #               api_endpoint=netbox_url,
+    #               validate_certs=False,
+    #               token=netbox_token) | map(attribute='value.display') | list }}"
+    # - name: debug clusters
+    #   debug:
+    #     msg: "{{ clusters }}"    
+    #     # msg: "{{ clusters | map(attribute='value.display') | list }}" 
 
-    - name: Set fact Cluster
-      set_fact:
-        clusters_vcenter_name: "{{ vm_info.virtual_machines[0].cluster }}"
+    # - name: Set fact Cluster
+    #   set_fact:
+    #     clusters_vcenter_name: "{{ vm_info.virtual_machines[0].cluster }}"
 
-    - name: Create cluster type within NetBox with only required information
-      netbox.netbox.netbox_cluster_type:
-        data:
-          name: "{{ Cluster_Type }}"
-        state: present
-    - name: debug clusters
-      debug:
-        msg: "{{ clusters_vcenter_name }}" 
+    # - name: Create cluster type within NetBox with only required information
+    #   netbox.netbox.netbox_cluster_type:
+    #     data:
+    #       name: "{{ Cluster_Type }}"
+    #     state: present
+    # - name: debug clusters
+    #   debug:
+    #     msg: "{{ clusters_vcenter_name }}" 
     # - name: Create cluster within NetBox with only required information
     #   netbox.netbox.netbox_cluster:
     #     data:
@@ -183,3 +183,91 @@
     #       cluster_type: "{{ Cluster_Type }}"
     #     state: present
     #   when: "clusters_vcenter_name not in  vm_info.virtual_machines[0].cluster"
+    - name: Collect the IPv4 network information
+      vmware.vmware_rest.appliance_networking_interfaces_info:
+        vcenter_hostname: vcenter.addc.local
+        vcenter_username: Administrator@VCENTER.ADDC.LOCAL
+        vcenter_password: Suncloud@2024!
+        vcenter_validate_certs: false
+        # interface_name: nic0
+      register: result
+
+    - name: Set fact IPv4
+      set_fact:
+        IP_vm: "{{ result.value[0].ipv4.address }}/{{ result.value[0].ipv4.prefix }}"
+      when: result is defined
+    - name: debug ip
+      debug:
+        var: result  
+      # when: IP_vm is defined
+
+    # - name: "Get Clusters"
+    #   set_fact:
+    #     clusters: "{{ query('netbox.netbox.nb_lookup', 'clusters',
+    #               api_endpoint=netbox_url,
+    #               validate_certs=False,
+    #               token=netbox_token) | map(attribute='value.display') | list }}"
+
+    # - debug:
+    #     var: clusters
+    # - name: Look up the VM called VM in the inventory
+    #   register: search_result
+    #   vmware.vmware_rest.vcenter_vm_info:
+    #     vcenter_hostname: '{{ vcenter_hostname }}'
+    #     vcenter_username: '{{ vcenter_username }}'
+    #     vcenter_password: '{{ vcenter_password }}'
+    #     vcenter_validate_certs: false      
+    #     filter_names:
+    #     - "{{ name_vm }}"
+
+    # - name: Collect information about a specific VM
+    #   vmware.vmware_rest.vcenter_vm_info:
+    #     vcenter_hostname: '{{ vcenter_hostname }}'
+    #     vcenter_username: '{{ vcenter_username }}'
+    #     vcenter_password: '{{ vcenter_password }}'
+    #     vcenter_validate_certs: false
+    #     vm: '{{ search_result.value[0].vm }}'
+    #   register: test_vm1_info
+
+    # - name: Get guest power information
+    #   vmware.vmware_rest.vcenter_vm_power_info:
+    #     vcenter_hostname: '{{ vcenter_hostname }}'
+    #     vcenter_username: '{{ vcenter_username }}'
+    #     vcenter_password: '{{ vcenter_password }}'
+    #     vcenter_validate_certs: false
+    #     vm: '{{ test_vm1_info.id }}'
+    #   register: result_vm_power
+
+    # - name: Display cluster information
+    #   debug:
+    #     var: test_vm1_info  
+    # - name: Set fact Cluster of VM
+    #   set_fact:
+    #     cpu: "{{ test_vm1_info.value.cpu.count }}"
+    #     guest_OS: "{{ test_vm1_info.value.guest_OS }}"
+    #     memory: "{{ test_vm1_info.value.memory.size_MiB }}"
+    #     id: "{{ test_vm1_info.value.id }}"
+
+
+    # - name: debug RAM
+    #   debug:
+    #     msg: "{{ test_vm1_info.value.cpu.count }} - guest_OS: {{ test_vm1_info.value.guest_OS }} "        
+    # - name: debug RAM
+    #   debug:
+    #     msg: "{{ test_vm1_info.value.memory.size_MiB }}"    
+
+    # - name: Gather disk info from virtual machine using name
+    #   community.vmware.vmware_guest_disk_info:
+    #     hostname: "{{ vcenter_hostname }}"
+    #     username: "{{ vcenter_username }}"
+    #     password: "{{ vcenter_password }}"
+    #     datacenter: "Cluster"
+    #     validate_certs: false
+    #     name: "{{name_vm}}"
+    #   delegate_to: localhost
+    #   register: "disk_info"
+
+
+    # - name: debug RAM
+    #   debug:
+    #     msg: "{{ disk_info.guest_disk_info['0'].capacity_in_kb / (1024*1024) }} "

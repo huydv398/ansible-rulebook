@@ -2,17 +2,22 @@
   gather_facts: False
   module_defaults:
     group/community.vmware.vmware:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      #datacenter: "{{ datacenter_name }}"
+      hostname: "{{ vcenter_hostname | default('vcenter.addc.local') }}"
+      username: "{{ vcenter_username | default('Administrator@VCENTER.ADDC.LOCAL') }}"
+      password: "{{ vcenter_password | default('Suncloud@2024!') }}"
+      validate_certs: false
     group/netbox.netbox.netbox:
-      netbox_url: '{{ netbox_url }}'
-      netbox_token: '{{ netbox_token }}'
+      netbox_url: "{{ netbox_url | default('https://netbox.addc.local/') }}"
+      netbox_token: "{{ netbox_token | default('8634e963dd1f51788a9d6fdc11e735d5f468fccb') }}"
       validate_certs: no
-
   vars:
-    - name_vm: "{{ ansible_eda.event.payload.backlog[0].fields.name_vm }}"
+    - name_vm: huydv01
+    - netbox_url: 'https://netbox.addc.local/'
+    - netbox_token: '8634e963dd1f51788a9d6fdc11e735d5f468fccb'
+    - vcenter_hostname: vcenter.addc.local
+    - vcenter_username: Administrator@VCENTER.ADDC.LOCAL
+    - vcenter_password: Suncloud@2024!
+    - datacenter: "{{ datacenter_name | default('Cluster') }}"
     - Cluster_Type: VMware
   tasks:
     - name: Gather one specific VM
@@ -48,6 +53,9 @@
         vm: '{{ search_result.value[0].vm }}'
       register: test_vm1_info
 
+
+
+
     - name: Get guest power information
       vmware.vmware_rest.vcenter_vm_power_info:
         vcenter_hostname: '{{ vcenter_hostname }}'
@@ -71,6 +79,11 @@
         vm: '{{ search_result.value[0].vm }}'
       when: result_vm_power.value.state == "POWERED_OFF"
     
+
+
+
+
+
     - name: Gather disk info from virtual machine using name
       community.vmware.vmware_guest_disk_info:
         hostname: "{{ vcenter_hostname }}"
@@ -89,6 +102,11 @@
         memory: "{{ test_vm1_info.value.memory.size_MiB }}"
         # id: "{{ test_vm1_info.value.id }}"
         disk: "{{ disk_info.guest_disk_info['0'].capacity_in_kb / (1024*1024) }} "
+
+
+
+
+
 
     - name: Collect the IPv4 network information
       vmware.vmware_rest.appliance_networking_interfaces_info:
@@ -109,6 +127,7 @@
         data:
           name: "{{ Cluster_Type }}"
         state: present
+
 
     - name: "Get Clusters"
       set_fact:
@@ -151,3 +170,12 @@
             name: '{{ int_name }}'
       # register: ip_result
       when: IP_vm is defined
+
+
+
+
+
+
+
+
+
