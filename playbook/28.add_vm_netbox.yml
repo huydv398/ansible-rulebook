@@ -5,7 +5,7 @@
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
-      datacenter: "{{ datacenter_name }}"
+      #datacenter: "{{ datacenter_name }}"
     group/netbox.netbox.netbox:
       netbox_url: '{{ netbox_url }}'
       netbox_token: '{{ netbox_token }}'
@@ -117,7 +117,7 @@
         vm_name: '{{ name_vm }}'
       delegate_to: localhost
       register: vm_info
-      
+
     - name: Set fact Cluster
       set_fact:
         clusters_vcenter_name: "{{ vm_info.virtual_machines[0].cluster }}"
