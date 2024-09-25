@@ -7,15 +7,18 @@
       password: "{{ vcenter_password | default('Suncloud@2024!') }}"
       validate_certs: false
     group/netbox.netbox.netbox:
-      netbox_url: "{{ netbox_url | default('') }}"
-      netbox_token: "{{ netbox_token | default('') }}"
+      netbox_url: "{{ netbox_url | default('https://netbox.addc.local/') }}"
+      netbox_token: "{{ netbox_token | default('8634e963dd1f51788a9d6fdc11e735d5f468fccb') }}"
       validate_certs: no
   vars:
     - name_vm: huydv01
+    - netbox_url: 'https://netbox.addc.local/'
+    - netbox_token: '8634e963dd1f51788a9d6fdc11e735d5f468fccb'
     - vcenter_hostname: vcenter.addc.local
     - vcenter_username: Administrator@VCENTER.ADDC.LOCAL
     - vcenter_password: Suncloud@2024!
     - datacenter: "{{ datacenter_name | default('Cluster') }}"
+    - Cluster_Type: VMware
   tasks:
     # - name: Set fact Name VM
     #   ansible.builtin.set_stats:
@@ -132,21 +135,51 @@
     # - debug:
     #     var: disk_info
 
-    - name: Look up the VM called test_vm1 in the inventory
-      register: search_result
-      vmware.vmware_rest.vcenter_vm_info:
-        vcenter_hostname: vcenter.addc.local
-        vcenter_username: Administrator@VCENTER.ADDC.LOCAL
-        vcenter_password: Suncloud@2024!
-        vcenter_validate_certs: false
-        filter_names:
-        - '{{ name_vm }}'
-    - debug:
-        var: search_result
+    # - name: Look up the VM called test_vm1 in the inventory
+    #   register: search_result
+    #   vmware.vmware_rest.vcenter_vm_info:
+    #     vcenter_hostname: vcenter.addc.local
+    #     vcenter_username: Administrator@VCENTER.ADDC.LOCAL
+    #     vcenter_password: Suncloud@2024!
+    #     vcenter_validate_certs: false
+    #     filter_names:
+    #     - '{{ name_vm }}'
+    # - debug:
+    #     var: search_result
     - name: Gather one specific VM
       community.vmware.vmware_vm_info:
         vm_name: '{{ name_vm }}'
       delegate_to: localhost
       register: vm_info
     - debug:
-        var: vm_info
+        var: vm_info.virtual_machines[0].cluster
+    - name: "Get Clusters"
+      set_fact:
+        clusters: "{{ query('netbox.netbox.nb_lookup', 'clusters',
+                  api_endpoint=netbox_url,
+                  validate_certs=False,
+                  token=netbox_token) | map(attribute='value.display') | list }}"
+    - name: debug clusters
+      debug:
+        msg: "{{ clusters }}"    
+        # msg: "{{ clusters | map(attribute='value.display') | list }}" 
+
+    - name: Set fact Cluster
+      set_fact:
+        clusters_vcenter_name: "{{ vm_info.virtual_machines[0].cluster }}"
+
+    - name: Create cluster type within NetBox with only required information
+      netbox.netbox.netbox_cluster_type:
+        data:
+          name: "{{ Cluster_Type }}"
+        state: present
+    - name: debug clusters
+      debug:
+        msg: "{{ clusters_vcenter_name }}" 
+    # - name: Create cluster within NetBox with only required information
+    #   netbox.netbox.netbox_cluster:
+    #     data:
+    #       name: "{{ vm_info.virtual_machines[0].cluster }}"
+    #       cluster_type: "{{ Cluster_Type }}"
+    #     state: present
+    #   when: "clusters_vcenter_name not in  vm_info.virtual_machines[0].cluster"

@@ -111,21 +111,32 @@
     - name: debug clusters
       debug:
         msg: "{{ clusters }}"    
-        # msg: "{{ clusters | map(attribute='value.display') | list }}" 
 
-    # - name: Create cluster type within NetBox with only required information
-    #   netbox.netbox.netbox_cluster_type:
-    #     data:
-    #       name: "{{ Cluster_Type }}"
-    #     state: present
+    - name: Gather one specific VM
+      community.vmware.vmware_vm_info:
+        vm_name: '{{ name_vm }}'
+      delegate_to: localhost
+      register: vm_info
+      
+    - name: Set fact Cluster
+      set_fact:
+        clusters_vcenter_name: "{{ vm_info.virtual_machines[0].cluster }}"
 
-    # - name: Create cluster within NetBox with only required information
-    #   netbox.netbox.netbox_cluster:
-    #     data:
-    #       name: '{{ clusters_vcenter_name }}'
-    #       cluster_type: "{{ Cluster_Type }}"
-    #     state: present
-    #   when: "clusters_vcenter_name not in clusters"
+
+
+    - name: Create cluster type within NetBox with only required information
+      netbox.netbox.netbox_cluster_type:
+        data:
+          name: "{{ Cluster_Type }}"
+        state: present
+
+    - name: Create cluster within NetBox with only required information
+      netbox.netbox.netbox_cluster:
+        data:
+          name: '{{ clusters_vcenter_name }}'
+          cluster_type: "{{ Cluster_Type }}"
+        state: present
+      when: "clusters_vcenter_name not in clusters"
 
     # - name: Create virtual machine within NetBox with only required information
     #   netbox_virtual_machine:
