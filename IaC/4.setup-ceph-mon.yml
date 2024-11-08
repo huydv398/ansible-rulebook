@@ -1,0 +1,101 @@
+- name: Set CEPH MON
+  hosts: ceph01
+  become: yes
+  gather_facts: yes
+  collections:
+    - community.vmware
+
+  pre_tasks:
+    - include_vars: 0.info_vm.yml
+  tasks:
+    # - name: Add a line dns to a file resolv.conf
+    #   ansible.builtin.lineinfile:
+    #     path: /etc/resolv.conf
+    #     line: nameserver 8.8.8.8
+    #     create: yes
+    # - name: Download Ceph GPG key and convert it
+    #   ansible.builtin.get_url:
+    #     url: 'https://download.ceph.com/keys/release.asc'
+    #     dest: /tmp/release.asc
+
+    # - name: Convert the GPG key to a trusted key format
+    #   ansible.builtin.command:
+    #     cmd: gpg --dearmor -o /etc/apt/trusted.gpg.d/cephadm.gpg /tmp/release.asc
+
+    # - name: Remove the temporary GPG key file
+    #   ansible.builtin.file:
+    #     path: /tmp/release.asc
+    #     state: absent
+
+    # - name: Add the Ceph repository to apt sources list
+    #   ansible.builtin.shell:
+    #     cmd: echo "deb https://download.ceph.com/debian-reef/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/cephadm.list
+    #   # creates: /etc/apt/sources.list.d/cephadm.list  # Prevents this task from running if the file already exists
+    
+    # - name: Update apt package index
+    #   ansible.builtin.apt:
+    #     update_cache: yes
+    #   retries: 3
+
+    # - name: Install cephadm
+    #   ansible.builtin.apt:
+    #     name:
+    #       - cephadm
+    #       - ceph-common
+    #       - sshpass
+    #     state: present
+
+    # - name: Create Bootstrap cluster
+    #   ansible.builtin.shell:
+    #     cmd: cephadm bootstrap --mon-ip 172.16.81.21 --cluster-network 172.16.81.0/24 --initial-dashboard-user admin --initial-dashboard-password Solus2025!
+
+    # - name: Copy file /etc/ceph/ceph.pub
+    #   ansible.builtin.fetch:
+    #     src: /etc/ceph/ceph.pub
+    #     dest: template/ceph/ceph.pub
+    #     flat: yes
+    # - name:  ssh-copy-id  ceph02
+    #   ansible.builtin.shell:
+    #     cmd:  sshpass -p 'Solus2025!' ssh-copy-id -f -i /etc/ceph/ceph.pub root@ceph02
+    # - name: ssh-copy-id  ceph03
+    #   ansible.builtin.shell:
+    #     cmd:  sshpass -p 'Solus2025!' ssh-copy-id -o StrictHostKeyChecking=no -f -i /etc/ceph/ceph.pub root@ceph03
+
+    # - name: Unmanage mon
+    #   ansible.builtin.shell:
+    #     cmd: ceph orch apply mon --unmanaged
+
+    # - name: cmd config ceph add MON + OSDs
+    #   ansible.builtin.shell:
+    #     cmd: |
+    #       ceph orch host add ceph02 172.16.81.22
+    #       ceph orch host add ceph03 172.16.81.23
+    #       ceph orch host label add ceph02 _admin
+    #       ceph orch host label add ceph03 _admin
+    #       ceph orch daemon add mon ceph02:172.16.81.22
+    #       ceph orch daemon add mon ceph03:172.16.81.23
+    #       ceph orch apply mon --placement="ceph01,ceph02,ceph03" --dry-run
+    #       ceph orch apply mon --placement="ceph01,ceph02,ceph03"
+    #       ceph orch host label add ceph01 osd
+    #       ceph orch host label add ceph02 osd
+    #       ceph orch host label add ceph03 osd
+
+    - name: cmd config ceph add MON + OSDs
+      ansible.builtin.shell:
+        cmd: ceph orch host add ceph02 172.16.81.22
+      register: result_add_ceph02
+    - name: show info  VM
+      debug:
+        msg: "{{ result_add_ceph02 }}"  
+# - name: copy file ceph.pub
+#   hosts: ceph
+#   become: yes
+#   gather_facts: yes
+#   tasks:
+#   - name: show info  VM
+#     debug:
+#       msg: "{{ inventory_hostname }}"  
+
+  # - name: Create Bootstrap cluster
+  #   ansible.builtin.shell:
+  #     cmd:  sshpass -p 'Solus2025!' ssh-copy-id -f -i /etc/ceph/ceph.pub root@CEPH-MON02

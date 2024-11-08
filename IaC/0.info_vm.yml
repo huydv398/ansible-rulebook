@@ -1,0 +1,377 @@
+vcenter_hostname: "vcenter.solus.local"  # Địa chỉ của vCenter
+vcenter_username: "administrator@vsphere.local"  # Tài khoản đăng nhập vào vCenter
+vcenter_password: "Solus2025!"  # Mật khẩu đăng nhập vào vCenter
+datacenter: "DC"  # Tên Datacenter trong vCenter
+timezone: "Asia/Ho_Chi_Minh"
+
+# Danh sách các máy ảo cần tạo
+vm_list:
+
+#####--- CONTROLLER01 ---#####
+  - name: "CTL_01"
+    network:
+      - name: int0
+        ip: "172.16.99.150"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: "172.16.99.254"
+        vlan: "vlan-mgnt"
+      - name: int01
+        ip: "172.16.81.11"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN81"
+      - name: int02
+        ip: "172.16.85.11"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN85"
+      - name: int03
+        ip: "172.16.82.11"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN82"
+      - name: int04
+        ip: "172.16.84.11"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN84"
+    disk: "200"
+    cpu_count: "16"
+    memory_size_gb: "16"
+    datastore: "NVMe02"
+    esxi: "172.16.99.4"  # Địa chỉ ESXi host
+    #cluster: "Cluster"  # khai báo host thì bỏ cluster
+    template: "TEMP-U2204"  # Tên của template máy ảo bạn muốn clone
+      #Tên mạng mà máy ảo sẽ kết nối
+    folder_name: "OPS-VNPT"
+#####--- CONTROLLER02 ---#####
+  - name: "CTL_02"
+    network:
+      - name: int0
+        ip: "172.16.99.151"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: "172.16.99.254"
+        vlan: "vlan-mgnt"
+      - name: int01
+        ip: "172.16.81.12"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN81"
+      - name: int02
+        ip: "172.16.85.12"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN85"
+      - name: int03
+        ip: "172.16.82.12"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN82"
+      - name: int04
+        ip: "172.16.84.12"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN84"
+
+    disk: "200"
+    cpu_count: "16"
+    memory_size_gb: "16"
+    datastore: "NVMe02"
+    esxi: "172.16.99.4"  # Địa chỉ ESXi host
+    #cluster: "Cluster"  # khai báo host thì bỏ cluster
+    template: "TEMP-U2204"  # Tên của template máy ảo bạn muốn clone
+      #Tên mạng mà máy ảo sẽ kết nối
+    folder_name: "OPS-VNPT"
+
+#####--- CONTROLLER03 ---#####
+  - name: "CTL_03"
+    network:
+      - name: int0
+        ip: "172.16.99.152"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: "172.16.99.254"
+        vlan: "vlan-mgnt"
+      - name: int01
+        ip: "172.16.81.13"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN81"
+      - name: int02
+        ip: "172.16.85.13"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN85"
+      - name: int03
+        ip: "172.16.82.13"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN82"
+      - name: int04
+        ip: "172.16.84.13"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN84"
+
+    disk: "200"
+    cpu_count: "16"
+    memory_size_gb: "16"
+    datastore: "NVMe02"
+    esxi: "172.16.99.4"  # Địa chỉ ESXi host
+    #cluster: "Cluster"  # khai báo host thì bỏ cluster
+    template: "TEMP-U2204"  # Tên của template máy ảo bạn muốn clone
+      #Tên mạng mà máy ảo sẽ kết nối
+    folder_name: "OPS-VNPT"
+
+#####--- compute01 ---#####
+  - name: "COMPUTE01"
+    network:
+      - name: int0
+        ip: "172.16.99.153"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: "172.16.99.254"
+        vlan: "vlan-mgnt"
+      - name: int01
+        ip: "172.16.81.41"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN81"
+      - name: int02
+        ip: "172.16.85.41"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN85"
+      - name: int03
+        ip: "172.16.82.41"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN82"
+      - name: int04
+        ip: "172.16.84.41"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN84"
+
+    disk: "100"
+    cpu_count: "32"
+    memory_size_gb: "32"
+    datastore: "NVMe02"
+    esxi: "172.16.99.4"  # Địa chỉ ESXi host
+    #cluster: "Cluster"  # khai báo host thì bỏ cluster
+    template: "TEMP-U2204"  # Tên của template máy ảo bạn muốn clone
+      #Tên mạng mà máy ảo sẽ kết nối
+    folder_name: "OPS-VNPT"
+
+
+#####--- compute02 ---#####
+  - name: "COMPUTE02"
+    network:
+      - name: int0
+        ip: "172.16.99.154"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: "172.16.99.254"
+        vlan: "vlan-mgnt"
+      - name: int01
+        ip: "172.16.81.42"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN81"
+      - name: int02
+        ip: "172.16.85.42"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN85"
+      - name: int03
+        ip: "172.16.82.42"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN82"
+      - name: int04
+        ip: "172.16.84.42"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN84"
+
+    disk: "100"
+    cpu_count: "32"
+    memory_size_gb: "32"
+    datastore: "NVMe02"
+    esxi: "172.16.99.4"  # Địa chỉ ESXi host
+    #cluster: "Cluster"  # khai báo host thì bỏ cluster
+    template: "TEMP-U2204"  # Tên của template máy ảo bạn muốn clone
+      #Tên mạng mà máy ảo sẽ kết nối
+    folder_name: "OPS-VNPT"
+
+
+#####--- CEPH01 ---#####
+  - name: "CEPH01"
+    network:
+      - name: int0
+        ip: "172.16.99.155"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: "172.16.99.254"
+        vlan: "vlan-mgnt"
+      - name: int01
+        ip: "172.16.81.21"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN81"
+      - name: int02
+        ip: "172.16.82.21"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN82"
+      - name: int03
+        ip: "172.16.83.21"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN83"
+
+#####--- CEPH02 ---#####
+  - name: "CEPH02"
+    network:
+      - name: int0
+        ip: "172.16.99.156"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: "172.16.99.254"
+        vlan: "vlan-mgnt"
+      - name: int01
+        ip: "172.16.81.22"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN81"
+      - name: int02
+        ip: "172.16.82.22"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN82"
+      - name: int03
+        ip: "172.16.83.22"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN83"
+
+#####--- CEPH03 ---#####
+  - name: "CEPH03"
+    network:
+      - name: int0
+        ip: "172.16.99.157"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: "172.16.99.254"
+        vlan: "vlan-mgnt"
+      - name: int01
+        ip: "172.16.81.23"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN81"
+      - name: int02
+        ip: "172.16.82.23"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN82"
+      - name: int03
+        ip: "172.16.83.23"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN83"
+
+#####--- OPS-MON ---#####
+  - name: "OPS-MON"
+    network:
+      - name: int0
+        ip: "172.16.99.158"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: "172.16.99.254"
+        vlan: "vlan-mgnt"
+      - name: int01
+        ip: "172.16.81.113"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN81"
+      # - name: int02
+      #   ip: "172.16.82.23"  # Địa chỉ IP tĩnh cho máy ảo
+      #   netmask: "255.255.255.0"
+      #   gateway: ""
+      #   vlan: "VLAN82"
+      # - name: int04
+      #   ip: "172.16.83.23"  # Địa chỉ IP tĩnh cho máy ảo
+      #   netmask: "255.255.255.0"
+      #   gateway: ""
+      #   vlan: "VLAN83"
+
+    disk: "40"
+    cpu_count: "2"
+    memory_size_gb: "2"
+    datastore: "NVMe02"
+    esxi: "172.16.99.4"  # Địa chỉ ESXi host
+    #cluster: "Cluster"  # khai báo host thì bỏ cluster
+    template: "TEMP-U2204"  # Tên của template máy ảo bạn muốn clone
+      #Tên mạng mà máy ảo sẽ kết nối
+    folder_name: "OPS-VNPT"
+
+#####--- Harbor ---#####
+  - name: "Harbor"
+    network:
+      - name: int0
+        ip: "172.16.99.159"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: "172.16.99.254"
+        vlan: "vlan-mgnt"
+      - name: int01
+        ip: "172.16.81.112"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN81"
+      # - name: int02
+      #   ip: "172.16.82.23"  # Địa chỉ IP tĩnh cho máy ảo
+      #   netmask: "255.255.255.0"
+      #   gateway: ""
+      #   vlan: "VLAN82"
+      # - name: int04
+      #   ip: "172.16.83.23"  # Địa chỉ IP tĩnh cho máy ảo
+      #   netmask: "255.255.255.0"
+      #   gateway: ""
+      #   vlan: "VLAN83"
+
+    disk: "60"
+    cpu_count: "2"
+    memory_size_gb: "2"
+    datastore: "NVMe02"
+    esxi: "172.16.99.4"  # Địa chỉ ESXi host
+    #cluster: "Cluster"  # khai báo host thì bỏ cluster
+    template: "TEMP-U2204"  # Tên của template máy ảo bạn muốn clone
+      #Tên mạng mà máy ảo sẽ kết nối
+    folder_name: "OPS-VNPT"
+
+#####--- NTP ---#####
+  - name: "NTP"
+    network:
+      - name: int0
+        ip: "172.16.99.160"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: "172.16.99.254"
+        vlan: "vlan-mgnt"
+      - name: int01
+        ip: "172.16.81.101"  # Địa chỉ IP tĩnh cho máy ảo
+        netmask: "255.255.255.0"
+        gateway: ""
+        vlan: "VLAN81"
+      # - name: int02
+      #   ip: "172.16.82.23"  # Địa chỉ IP tĩnh cho máy ảo
+      #   netmask: "255.255.255.0"
+      #   gateway: ""
+      #   vlan: "VLAN82"
+      # - name: int04
+      #   ip: "172.16.83.23"  # Địa chỉ IP tĩnh cho máy ảo
+      #   netmask: "255.255.255.0"
+      #   gateway: ""
+      #   vlan: "VLAN83"
+
+    disk: "20"
+    cpu_count: "2"
+    memory_size_gb: "2"
+    datastore: "NVMe02"
+    esxi: "172.16.99.4"  # Địa chỉ ESXi host
+    #cluster: "Cluster"  # khai báo host thì bỏ cluster
+    template: "TEMP-U2204"  # Tên của template máy ảo bạn muốn clone
+      #Tên mạng mà máy ảo sẽ kết nối
+    folder_name: "OPS-VNPT"

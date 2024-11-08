@@ -1,0 +1,8 @@
+---
+# handlers file for openstack
+- name: Update apt
+  apt:
+    update_cache: yes
+    # cache_valid_time: 3600  # Thời gian hợp lệ của cache (giới hạn cache cho 1 giờ)
+  when: ansible_facts.packages is changed && ansible_facts.distribution == "Ubuntu" # Chạy chỉ khi có thay đổi
+  listen: Update_apt

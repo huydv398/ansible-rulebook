@@ -1,0 +1,16 @@
+- name: Clone multiple virtual machines from Linux template and customize
+  hosts: CTL_01
+  become: false
+  gather_facts: yes
+  collections:
+    - community.vmware
+
+  # pre_tasks:
+  #   - include_vars: 0.info_vm.yml
+
+  tasks:
+    - name: show info  VM
+      debug:
+        msg: "info: {{ inventory_hostname }}"
+
+#https://docs.google.com/document/d/1IO-9vXHFV8fAlXY-gtzrbq0dV08zz-gxusrGQ3p4XJU/edit?tab=t.0

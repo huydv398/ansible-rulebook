@@ -1,0 +1,92 @@
+---
+- name: Print information for host ceph01
+  hosts: NTP
+  gather_facts: yes  # This will gather system information (facts)
+  tasks:
+    - name: Print the inventory_hostname
+      debug:
+        msg: "Host info: {{ inventory_hostname }}"
+        
+    - name: Set a inventory_hostname variable
+      set_fact:
+        NTP_host: "{{ ansible_host }}"
+
+- name: Setup Pritunl Client 
+  hosts: all
+  gather_facts: yes  # This will gather system information (facts)
+  vars:
+    chrony_ntp_server: "{{ hostvars['NTP']['ansible_host'] | default('192.168.0.1') }}"  # Replace with your NTP server's IP or hostname
+    chrony_timezone: "Asia/Ho_Chi_Minh" 
+  tasks:
+        
+    - name: Setup the Client
+      debug:
+        msg: "Host info: {{ chrony_ntp_server }}"
+        # msg: "Host info: {{ hostvars['NTP']['ansible_host'] }}"
+      when: inventory_hostname != 'NTP'
+    
+    - name: Install chrony
+      package:
+        name: chrony
+        state: present
+      when: inventory_hostname != 'NTP'
+
+    - name: Comment out pool lines in chrony.conf
+      lineinfile:
+        path: /etc/chrony/chrony.conf
+        regexp: '^pool 2.ubuntu.pool.ntp.org iburst maxsources 2$'  # Match lines starting with 'pool'
+        line: '#\0'  # Prepend '#' to the matched line
+        backrefs: yes  # Ensure the matched content is used in the line
+        create: yes  # Ensure the file exists
+      when: inventory_hostname != 'NTP'
+
+    - name: Comment out pool lines in chrony.conf
+      lineinfile:
+        path: /etc/chrony/chrony.conf
+        regexp: '^pool ntp.ubuntu.com        iburst maxsources 4$'  # Match lines starting with 'pool'
+        line: '#\0'  # Prepend '#' to the matched line
+        backrefs: yes  # Ensure the matched content is used in the line
+        create: yes  # Ensure the file exists
+      when: inventory_hostname != 'NTP'
+
+    - name: Comment out pool lines in chrony.conf
+      lineinfile:
+        path: /etc/chrony/chrony.conf
+        regexp: '^pool 0.ubuntu.pool.ntp.org iburst maxsources 1$'  # Match lines starting with 'pool'
+        line: '#\0'  # Prepend '#' to the matched line
+        backrefs: yes  # Ensure the matched content is used in the line
+        create: yes  # Ensure the file exists
+      when: inventory_hostname != 'NTP'
+
+
+
+    - name: Configure chrony.conf to use NTP server
+      lineinfile:
+        path: /etc/chrony/chrony.conf
+        regexp: '^pool'
+        line: "pool {{ chrony_ntp_server }} iburst"
+        create: yes
+      when: inventory_hostname != 'NTP'
+
+    - name: Ensure chronyd is started and enabled
+      service:
+        name: chronyd
+        state: started
+        enabled: yes
+      when: inventory_hostname != 'NTP'
+
+    - name: Set the timezone to {{ chrony_timezone }}
+      timezone:
+        name: "{{ chrony_timezone }}"
+      when: inventory_hostname != 'NTP'
+
+    - name: Verify Chrony synchronization status
+      command: chronyc sources
+      register: chrony_status
+      changed_when: false
+      when: inventory_hostname != 'NTP'
+
+    - name: Show Chrony synchronization status
+      debug:
+        msg: "{{ chrony_status.stdout }}"
+      when: inventory_hostname != 'NTP'

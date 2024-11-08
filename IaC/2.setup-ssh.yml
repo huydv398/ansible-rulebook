@@ -1,0 +1,29 @@
+
+---
+- name: Copy SSH key to remote hosts
+  hosts: localhost
+  become: false
+  gather_facts: false
+  collections:
+    - community.vmware
+  pre_tasks:
+    - include_vars: 0.info_vm.yml
+  tasks:
+    # - name: Add SSH key to authorized_keys
+    #   authorized_key:
+    #     user: remote_user        # The user on the remote machine
+    #     state: present           # Ensure the key is present
+    #     ke
+
+    # - name: show info  VM
+    #   debug:
+    #     msg: "{{ item.name }}"
+    #   loop: "{{ vm_list }}"
+    - name: show info  VM
+      # debug: 
+        # msg: "{{ item.network[1].ip}}"
+      # ansible.builtin.command: sshpass -p 'Sulos2025!' ssh-copy-id root@{{ item.network[0].ip}}
+      ansible.builtin.command: sshpass -p 'Solus2025!' ssh-copy-id -o StrictHostKeyChecking=no -f root@{{ item.network[1].ip }}
+
+      loop: "{{ vm_list }}"
+# echo -e "Solus2025!" | mysql_secure_installation

@@ -1,0 +1,12 @@
+- name: Clone multiple virtual machines from Linux template and customize
+  hosts: all
+  become: false
+  gather_facts: yes
+  tasks:
+    - name: Display resolv.conf contents
+      command: cat hosts chdir=/etc
+      register: command_output
+
+    - name: Print to console
+      debug: 
+        msg: "{{command_output}}"

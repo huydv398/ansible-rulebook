@@ -1,0 +1,59 @@
+---
+# tasks file for ntp-chrony
+- name: Setup NTP Server
+  hosts: NTP
+  become: yes
+  gather_facts: yes
+  vars:
+    chrony_ntp_servers:
+      - 0.centos.pool.ntp.org
+      - 1.centos.pool.ntp.org
+      - 2.centos.pool.ntp.org
+      - 3.centos.pool.ntp.org
+    chrony_allow:
+      - 172.16.81.0/24  # Adjust this for your local network
+      - 127.0.0.1
+    chrony_logdir: /var/log/chrony/
+    chrony_timezone: "Asia/Ho_Chi_Minh"
+  # pre_tasks:
+  #   - include_vars: 0.info_vm.yml
+
+  tasks:
+    - name: Install chrony
+      package:
+        name: chrony
+        state: present
+
+    - name: Configure chrony.conf
+      template:
+        src: chrony.conf.j2
+        dest: /etc/chrony/chrony.conf
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Start and enable chrony service
+      service:
+        name: chronyd
+        state: started
+        enabled: yes
+
+    # - name: Configure firewall for NTP
+    #   firewalld:
+    #     service: ntp
+    #     permanent: yes
+    #     state: enabled
+    #     immediate: yes
+
+    - name: Set the timezone to {{ chrony_timezone }}
+      timezone:
+        name: "{{ chrony_timezone }}"
+
+    - name: Ensure chrony is synchronized
+      command: chronyc tracking
+      register: chrony_tracking
+      changed_when: false
+
+    - name: Show Chrony tracking status
+      debug:
+        msg: "{{ chrony_tracking.stdout }}"

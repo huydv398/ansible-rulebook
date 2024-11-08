@@ -1,0 +1,21 @@
+---
+- name: Print information for host ceph01
+  hosts: NTP
+  gather_facts: yes  # This will gather system information (facts)
+  tasks:
+    - name: Print the inventory_hostname
+      debug:
+        msg: "Host info: {{ inventory_hostname }}"
+        
+    - name: Set a inventory_hostname variable
+      set_fact:
+        NTP_host: "{{ ansible_host }}"
+
+- name: Print 
+  hosts: localhost
+  gather_facts: yes  # This will gather system information (facts)
+  tasks:
+    - name: Print 
+      debug:
+        msg: "Host info: {{ hostvars['NTP']['NTP_host'] }}"
+        
