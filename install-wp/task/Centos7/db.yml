@@ -1,0 +1,16 @@
+---
+- name: Install MySQL-python
+  yum:
+    name: MySQL-python
+    state: present
+- name: Install the latest version of mariadb
+  yum:
+    name:
+      - epel-release
+      - mariadb
+      - mariadb-server
+- name: Ennble service mariadb
+  service:
+    name: mariadb
+    state: started
+    enabled: yes

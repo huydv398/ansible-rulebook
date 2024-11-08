@@ -1,0 +1,40 @@
+---
+- name: Install the latest version of mariadb
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - build-essential
+  - python-dev
+  - libmysqlclient-dev
+  - python-pip
+  - mysql-server
+  - mysql-client
+# ---
+# - name: Install required software
+#   apt: name={{ item }} state=present
+#   sudo: yes
+#   with_items:
+#     - apache2
+#     - build-essential
+#     - python-dev
+#     - libmysqlclient-dev
+#     - python-pip
+#     - mysql-server
+#     - mysql-client
+#     - php7.0
+#     - php7.0-mysql
+#     - libapache2-mod-php7.0
+#     - php7.0-cli
+#     - php7.0-cgi
+#     - php7.0-gd
+#     - php7.0-mcrypt
+
+# - name: Install the MySQL-python through pip
+#   sudo: yes
+#   pip:
+#     name: "{{ item }}"
+#     state: forcereinstall
+#   with_items:
+#     - pip
+#     - MySQL-python

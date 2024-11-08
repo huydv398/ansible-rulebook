@@ -1,0 +1,9 @@
+---
+package:
+- epel-release
+- yum-utils
+- php
+- php-opcache
+- php-mysql
+- php-gd
+- MySQL-python

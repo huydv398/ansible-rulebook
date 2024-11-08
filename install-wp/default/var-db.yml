@@ -1,0 +1,2 @@
+---
+- { database_name: wordpress, db_user: suncloud, db_pass: Suncloud@2022 }
