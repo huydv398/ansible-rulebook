@@ -5,7 +5,7 @@
   become: yes
   gather_facts: yes
   vars:
-    chrony_ntp_servers:
+    chrony_ntp_servers: 
       - 0.centos.pool.ntp.org
       - 1.centos.pool.ntp.org
       - 2.centos.pool.ntp.org
