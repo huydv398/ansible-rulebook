@@ -1,5 +1,5 @@
 
-- hosts: win-client
+- hosts: all
   gather_facts: False
   # connection: local
 
