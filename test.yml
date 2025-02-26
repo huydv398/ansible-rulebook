@@ -7,4 +7,4 @@
   tasks:
   - name: Add 127.0.0.1 as an A record for localhost
     debug:
-      msg: "{{ zone }}"
+      msg: "{{ survey_var }}"
