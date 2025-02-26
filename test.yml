@@ -2,9 +2,10 @@
 - hosts: all
   gather_facts: False
   # connection: local
-
+  vars:
+    vm: "{{ vm_config }}"
 
   tasks:
   - name: Add 127.0.0.1 as an A record for localhost
     debug:
-      msg: "{{ vm_config[0].id }}"
+      msg: "{{ vm }}"
