@@ -7,4 +7,4 @@
   tasks:
   - name: Add 127.0.0.1 as an A record for localhost
     debug:
-      msg: "{{ vm_config.id }}"
+      msg: "{{ vm_config[0].id }}"
