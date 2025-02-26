@@ -1,0 +1,25 @@
+# /etc/chrony/chrony.conf
+
+# NTP servers
+{% for server in chrony_ntp_servers %}
+server {{ server }} iburst
+{% endfor %}
+
+# Allow NTP clients to access the server
+{% for network in chrony_allow %}
+allow {{ network }}
+{% endfor %}
+
+# Logging configuration
+log tracking measurements statistics
+logdir {{ chrony_logdir }}
+
+# RTC file
+rtcfile /var/lib/chrony/chrony.rtc
+
+# Local time settings
+local stratum 10
+
+# Drift file and step settings
+driftfile /var/lib/chrony/drift
+makestep 1.0 3

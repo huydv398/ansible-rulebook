@@ -1,0 +1,62 @@
+---
+- name: Print information for host ceph01
+  hosts: NTP
+  gather_facts: yes  # This will gather system information (facts)
+  tasks:
+    - name: Print the inventory_hostname
+      debug:
+        msg: "Host info: {{ inventory_hostname }}"
+        
+    - name: Set a inventory_hostname variable
+      set_fact:
+        NTP_host: "{{ ansible_host }}"
+
+- name: Setup Pritunl Client 
+  hosts: all
+  gather_facts: yes  # This will gather system information (facts)
+  vars:
+    chrony_ntp_servers: "{{ hostvars['NTP']['ansible_host'] | default('192.168.0.1') }}"  # Replace with your NTP server's IP or hostname
+    chrony_timezone: "Asia/Ho_Chi_Minh" 
+    chrony_allow:
+      - 127.0.0.1
+    chrony_logdir: /var/log/chrony/
+    chrony_timezone: "Asia/Ho_Chi_Minh"
+  tasks: 
+        
+    - name: Setup the Client
+      debug:
+        msg: "Host info: {{ chrony_ntp_server }}"
+        # msg: "Host info: {{ hostvars['NTP']['ansible_host'] }}"
+      when: inventory_hostname != 'NTP'
+    
+    - name: Configure chrony.conf
+      template:
+        src: chrony.conf.j2
+        dest: /etc/chrony/chrony.conf
+        owner: root
+        group: root
+        mode: '0644'
+
+
+    - name: Start and enable chrony service
+      service:
+        name: chronyd
+        state: started
+        enabled: yes
+      when: inventory_hostname != 'NTP'
+
+    - name: Set the timezone to {{ chrony_timezone }}
+      timezone:
+        name: "{{ chrony_timezone }}"
+      when: inventory_hostname != 'NTP'
+
+    - name: Verify Chrony synchronization status
+      command: chronyc sources
+      register: chrony_status
+      changed_when: false
+      when: inventory_hostname != 'NTP'
+
+    - name: Show Chrony synchronization status
+      debug:
+        msg: "{{ chrony_status.stdout }}"
+      when: inventory_hostname != 'NTP'

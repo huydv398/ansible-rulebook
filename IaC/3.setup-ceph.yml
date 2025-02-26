@@ -1,0 +1,95 @@
+- name: Setup CEPH Basic
+  hosts: ceph
+  become: yes
+  gather_facts: yes
+  collections:
+    - community.vmware
+
+  pre_tasks:
+    - include_vars: 0.info_vm.yml
+  tasks:
+
+    - name: Copy file /etc/hosts
+      ansible.builtin.copy:
+        src: template/ceph/hosts
+        dest: /etc/hosts
+        mode: '0644'    
+
+    - name: Copy file /etc/apt/apt.conf.d/20auto-upgrades
+      ansible.builtin.copy:
+        src: template/ceph/20auto-upgrades
+        dest: /etc/apt/apt.conf.d/20auto-upgrades
+        mode: '0644'    
+
+    - name: Add a line dns to a file resolv.conf
+      ansible.builtin.lineinfile:
+        path: /etc/resolv.conf
+        line: nameserver 8.8.8.8
+        create: yes
+    
+    - name: Update apt package index
+      ansible.builtin.apt:
+        update_cache: yes
+      retries: 3
+    - name: Download Docker GPG key
+      ansible.builtin.get_url:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        dest: /tmp/docker.gpg
+        mode: '0644'
+      retries: 3
+    - name: Convert the Docker GPG key to a keyring format
+      ansible.builtin.command:
+        cmd: gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg /tmp/docker.gpg
+
+    - name: Remove temporary Docker GPG key
+      ansible.builtin.file:
+        path: /tmp/docker.gpg
+        state: absent
+
+    - name: Set up the stable Docker repository
+      ansible.builtin.apt_repository:
+        repo: 'deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu jammy stable'
+        state: present
+      retries: 3
+
+    - name: Update apt package index
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Install prerequisites for Docker
+      ansible.builtin.apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+
+    - name: Install Docker
+      ansible.builtin.apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+
+    - name: Ensure Docker service is started and enabled
+      ansible.builtin.systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Verify Docker installation
+      ansible.builtin.command:
+        cmd: docker --version
+      register: docker_version
+      changed_when: false
+
+    - name: Show Docker version
+      ansible.builtin.debug:
+        msg: "Docker version installed: {{ docker_version.stdout }}"
+
+    - name: Reboot the server
+      ansible.builtin.reboot:
+        reboot_timeout: 600  # The maximum time to wait for the system to come back up (seconds)
+        test_command: whoami  # Command to test if the server is back online after reboot

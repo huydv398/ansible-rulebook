@@ -1,0 +1,74 @@
+---
+- hosts: client3
+  become: true
+  vars_files:
+    - default/var-db.yml
+    - default/package.yml
+  handlers:
+  - import_tasks: handlers/main.yml
+  tasks: 
+  # - name: call handlers
+  #   debug:
+  #     msg: "{{ item }}"
+  #   loop: "{{ package }}"
+  #   notify:
+  #     - ping
+  - name: install package
+    yum:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+    - epel-release
+    - yum-utils
+    - php
+    - php-opcache
+    - php-mysql
+    - php-gd
+    - MySQL-python
+  - name: install & enable HTTPD
+    include_tasks: task/Centos7/apache.yml
+  - name: install & enable mariadb
+    include_tasks: task/Centos7/db.yml
+  - name: create DB & DB_User 
+    include_tasks: task/Centos7/create-db-user.yml
+  - name: install & enable php
+    include_tasks: task/Centos7/php.yml
+  - name: Setup WP
+    include_tasks: task/Centos7/setup-wp.yml
+  - name: restart httpd - finish install wp
+    shell: systemctl restart httpd 
+  - name:
+    debug:
+      msg: "Finish install"
+
+- hosts: client1
+  become: true
+  vars_files:
+    - default/var-db.yml
+    - default/package.yml
+  tasks: 
+  - name: update & install py3
+    apt: 
+      name: 
+        - python3-pip
+      state: latest
+  - name: install & enable apache
+    include_tasks: task/Ubuntu20/apache.yml
+  - name: install & enable db
+    include_tasks: task/Ubuntu20/db.yml
+    
+  - name: Install MySQL-python
+    pip:
+      name: pymysql
+  - name: install & enable php
+    include_tasks: task/Ubuntu20/php.yml
+  - name: create db & user
+    include_tasks: task/Ubuntu20/create-db-user.yml
+  - name: setup wp
+    include_tasks: task/Ubuntu20/setup-wp.yml
+  - name: restart httpd - finish install wp
+    shell: systemctl restart apache2 
+  - name: alert finish
+    debug:
+      msg: "Finish install"
+

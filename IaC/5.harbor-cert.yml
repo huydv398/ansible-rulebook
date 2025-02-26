@@ -1,0 +1,252 @@
+- name: Clone multiple virtual machines from Linux template and customize
+  hosts: Harbor
+  become: false
+  gather_facts: yes
+  collections:
+    - community.vmware
+
+  pre_tasks:
+    - include_vars: 0.info_vm.yml
+
+  tasks:
+    - name: show info  VM
+      debug:
+        msg: "info: {{ ansible_distribution }}"
+
+    # - name: Update apt package index
+    #   ansible.builtin.apt:
+    #     update_cache: yes
+    #   retries: 3
+
+    # - name: Install cephadm
+    #   ansible.builtin.apt:
+    #     name:
+    #       - apt-transport-https
+    #       - ca-certificates
+    #       - curl 
+    #       - software-properties-common
+    #     state: present
+
+    # - name: Download Ceph GPG key and convert it
+    #   ansible.builtin.get_url:
+    #     url: https://download.docker.com/linux/ubuntu/gpg
+    #     dest: /tmp/docker.gpg
+
+    # - name: Add Docker GPG key to keyring
+    #   ansible.builtin.command:
+    #     cmd: gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg /tmp/docker.gpg
+
+    # - name: Remove temporary Docker GPG file
+    #   file:
+    #     path: /tmp/docker.gpg
+    #     state: absent
+
+    # - name: Add the Ceph repository to apt sources list
+    #   ansible.builtin.shell:
+    #     cmd: echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+    # - name: Update apt package index
+    #   ansible.builtin.apt:
+    #     update_cache: yes
+    #   retries: 3
+    # - name: Check availability of docker-ce package
+    #   command: apt-cache policy docker-ce
+
+    # - name: Install docker-ce package
+    #   apt:
+    #     name: docker-ce
+    #     state: present
+
+    # - name: usermod 
+    #   ansible.builtin.shell:
+    #     cmd: sudo usermod -aG docker ${USER}
+
+    # - name: Create the directory ~/.docker/cli-plugins
+    #   file:
+    #     path: "{{ ansible_env.HOME }}/.docker/cli-plugins"
+    #     state: directory
+    #     mode: '0755'
+
+    # - name: Download Docker Compose binary
+    #   get_url:
+    #     url: "https://github.com/docker/compose/releases/download/v2.24.6/docker-compose-linux-x86_64"
+    #     dest: "{{ ansible_env.HOME }}/.docker/cli-plugins/docker-compose"
+    #     mode: '0755'
+
+    # - name: Make Docker Compose binary executable
+    #   file:
+    #     path: "{{ ansible_env.HOME }}/.docker/cli-plugins/docker-compose"
+    #     mode: '0755'
+
+    # - name: Verify Docker Compose version
+    #   command: "docker compose version"
+    #   register: compose_version
+    #   changed_when: false
+
+    # - name: Show Docker Compose version
+    #   debug:
+    #     msg: "Docker Compose version: {{ compose_version.stdout }}"
+
+    # - name: Create the directory /opt/harbor_docker_compose
+    #   file:
+    #     path: "/opt/harbor_docker_compose"
+    #     state: directory
+    #     mode: '0755'
+
+    # - name: Download Harbor online installer
+    #   get_url:
+    #     url: "https://github.com/goharbor/harbor/releases/download/v2.9.1/harbor-online-installer-v2.9.1.tgz"
+    #     dest: "/tmp/harbor-online-installer-v2.9.1.tgz"
+    #     mode: '0644'
+
+    # - name: Extract Harbor installer tarball
+    #   unarchive:
+    #     src: "/tmp/harbor-online-installer-v2.9.1.tgz"
+    #     dest: "/opt/harbor_docker_compose"
+    #     remote_src: yes
+
+    # - name: Remove Harbor installer tarball
+    #   file:
+    #     path: "/tmp/harbor-online-installer-v2.9.1.tgz"
+    #     state: absent
+
+    # - name: Create the directory /opt/harbor_docker_compose/harbor/cert
+    #   file:
+    #     path: "/opt/harbor_docker_compose/harbor/cert"
+    #     state: directory
+    #     mode: '0755'
+
+
+    # - name: Generate RSA private key
+    #   command:
+    #     cmd: "openssl genrsa -out /opt/harbor_docker_compose/harbor/cert/ca.key 4096"
+
+    # - name: Generate the CA certificate.
+    #   command: |
+    #     openssl req -x509 -new -nodes -sha512 -days 3650 \
+    #     -subj "/C=VN/ST=Hanoi/L=Hanoi/O=example/OU=Personal/CN=harbor.dataonline.local" \
+    #     -key /opt/harbor_docker_compose/harbor/cert/ca.key \
+    #     -out /opt/harbor_docker_compose/harbor/cert/ca.crt
+
+    # - name: Generate a private key.
+    #   command: openssl genrsa -out /opt/harbor_docker_compose/harbor/cert/harbor.dataonline.local.key 4096
+
+    # - name: Generate RSA private key
+    #   command: |
+    #     openssl req -sha512 -new \
+    #     -subj "/C=VN/ST=Hanoi/L=Hanoi/O=harbor.dataonline.local/OU=Personal/CN=harbor.dataonline.local" \
+    #     -key /opt/harbor_docker_compose/harbor/cert/harbor.dataonline.local.key \
+    #     -out /opt/harbor_docker_compose/harbor/cert/harbor.dataonline.local.csr
+
+    # - name: Copy file v3.ext 
+    #   ansible.builtin.copy:
+    #     src: template/cert/v3.ext
+    #     dest: /opt/harbor_docker_compose/harbor/cert/v3.ext 
+
+    # - name: Generate RSA private key
+    #   command: |
+    #     openssl x509 -req -sha512 -days 3650 \
+    #     -extfile /opt/harbor_docker_compose/harbor/cert/v3.ext \
+    #     -CA /opt/harbor_docker_compose/harbor/cert/ca.crt -CAkey /opt/harbor_docker_compose/harbor/cert/ca.key -CAcreateserial \
+    #     -in /opt/harbor_docker_compose/harbor/cert/harbor.dataonline.local.csr \
+    #     -out /opt/harbor_docker_compose/harbor/cert/harbor.dataonline.local.crt
+
+    # - name: Generate RSA private key
+    #   command: openssl x509 -inform PEM -in /opt/harbor_docker_compose/harbor/cert/harbor.dataonline.local.crt -out /opt/harbor_docker_compose/harbor/cert/harbor.dataonline.local.cert
+    
+    # - name: Copy file cert
+    #   ansible.builtin.fetch:
+    #     src: /opt/harbor_docker_compose/harbor/cert/harbor.dataonline.local.cert
+    #     dest: template/cert/
+    #     flat: yes   
+    # - name: Copy file cert
+    #   ansible.builtin.fetch:
+    #     src: /opt/harbor_docker_compose/harbor/cert/ca.crt
+    #     dest: template/cert/
+    #     flat: yes   
+    # - name: Copy file cert
+    #   ansible.builtin.fetch:
+    #     src: /opt/harbor_docker_compose/harbor/cert/harbor.dataonline.local.key
+    #     dest: template/cert/
+    #     flat: yes
+
+    # - name: Copy file harbor.yml
+    #   ansible.builtin.copy:
+    #     src: template/harbor.yml
+    #     dest: /opt/harbor_docker_compose/harbor/harbor.yml
+
+    # - name: Run script install Harbor
+    #   command: bash /opt/harbor_docker_compose/harbor/install.sh
+    #   register: info_Harbor
+    #   retries: 3
+
+    # - name: Show Docker Compose version
+    #   debug:
+    #     msg: "{{ info_Harbor }}"
+
+    # - name: Copy file Resolved the issue by adding a file /etc/docker/daemon.json
+    #   ansible.builtin.copy:
+    #     src: template/daemon.json
+    #     dest: /etc/docker/daemon.json
+
+    # - name: Create the directory /etc/docker/certs.d/harbor.dataonline.local/
+    #   file:
+    #     path: "/etc/docker/certs.d/harbor.dataonline.local/"
+    #     state: directory
+    #     mode: '0755'
+
+    # - name: Copy file harbor.dataonline.local.cert
+    #   ansible.builtin.copy:
+    #     src: template/cert/harbor.dataonline.local.cert
+    #     dest: /etc/docker/certs.d/harbor.dataonline.local/
+    
+    # - name: Copy file harbor.dataonline.local.key
+    #   ansible.builtin.copy:
+    #     src: template/cert/harbor.dataonline.local.key
+    #     dest: /etc/docker/certs.d/harbor.dataonline.local/
+    
+    # - name: Copy file ca.crt
+    #   ansible.builtin.copy:
+    #     src: template/cert/ca.crt
+    #     dest: /etc/docker/certs.d/harbor.dataonline.local/
+
+    # - name: Restart Docker service
+    #   systemd:
+    #     name: docker
+    #     state: restarted
+
+    - name: Copy file file pull-image.sh
+      ansible.builtin.copy:
+        src: template/pull-image.sh
+        dest: /root/pull-image.sh
+    
+    # - name: Copy file kolla_images.list
+    #   ansible.builtin.copy:
+    #     src: template/kolla_images.list
+    #     dest: /root/kolla_images.list
+    
+    - name: Run script pull-image.sh
+      command: bash /root/pull-image.sh
+    
+    # - name: Generate RSA private key
+    #   command: |
+    
+    # - name: Generate RSA private key
+    #   command: |
+    
+    # - name: Generate RSA private key
+    #   command: |
+    
+    # - name: Generate RSA private key
+    #   command: |
+    
+    # - name: Generate RSA private key
+    #   command: |
+    # - name: Run script install Harbor
+    #   command: bash /opt/harbor_docker_compose/harbor/install.sh
+    #   register: info_1
+    # - name: Show Docker Compose version
+    #   debug:
+    #     msg: "{{ compose_version.info_1 }}"
+
+# https://docs.google.com/document/d/1IO-9vXHFV8fAlXY-gtzrbq0dV08zz-gxusrGQ3p4XJU/edit?tab=t.0

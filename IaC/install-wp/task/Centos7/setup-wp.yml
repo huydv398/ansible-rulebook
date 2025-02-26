@@ -1,0 +1,42 @@
+
+
+- name: rm html
+  shell: "rm -rf /var/www/html/*"
+- name: Unarchive a file that needs to be downloaded
+  ansible.builtin.unarchive:
+    src: http://wordpress.org/latest.tar.gz
+    dest: /opt/
+    remote_src: yes
+- name: Copy file WP with owner and permissions
+  ansible.builtin.copy:
+    src: /opt/wordpress/
+    dest: /var/www/html/
+    owner: apache 
+    group: apache
+    mode: "0755"
+    remote_src: yes
+  notify: restart httpd
+- name: Copy file WP.config with owner and permissions
+  ansible.builtin.copy:
+    src: /var/www/html/wp-config-sample.php
+    dest: /var/www/html/wp-config.php
+    owner: apache
+    group: apache
+    mode: "0755"
+    remote_src: yes
+  notify: restart httpd
+- name: Config db name
+  replace:
+    path: /var/www/html/wp-config.php
+    regexp: database_name_here
+    replace: "{{ database_name }}"
+- name: Config db user name
+  replace:
+    path: /var/www/html/wp-config.php
+    regexp: username_here
+    replace: "{{ db_user }}"
+- name: Config db user password
+  replace:
+    path: /var/www/html/wp-config.php
+    regexp: password_here
+    replace: "{{ db_pass }}"

@@ -1,0 +1,56 @@
+- name: Clone multiple virtual machines from Linux template and customize
+  hosts: localhost
+  become: false
+  gather_facts: false
+  collections:
+    - community.vmware
+
+  pre_tasks:
+    - include_vars: 0.info_vm.yml
+
+  tasks:
+    - name: Create and customize the virtual machines 1
+      community.vmware.vmware_guest:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ datacenter }}"
+        esxi_hostname: "{{ item.esxi }}"
+          #cluster: "{{ item.cluster }}"
+        state: poweredoff
+        template: "{{ item.template }}"
+        name: "{{ item.name }}"
+        
+        disk:
+          - size_gb: "{{ item.disk }}"
+            type: thin
+            datastore: "{{ item.datastore }}"
+        hardware:
+          memory_mb: "{{ item.memory_size_gb | int * 1024 }}"
+          num_cpus: "{{ item.cpu_count }}"
+          hotadd_cpu: true
+          hotadd_memory: true
+        networks: |
+          {%- set networks = [] %}
+          {%- for net in item.network %}
+            {%- set _ = networks.append({
+                'name': net.vlan,
+                'device_type': 'vmxnet3',
+                'ip': net.ip,
+                'netmask': net.netmask,
+                'gateway': net.gateway
+            }) %}
+          {%- endfor %}
+          {{ networks }}
+
+        
+        folder: "{{ item.folder_name }}"
+        customization:
+          timezone: "{{ timezone }}"
+          dns_servers:
+          - 8.8.8.8
+          - 8.8.4.4
+        wait_for_customization: true
+      delegate_to: localhost
+      loop: "{{ vm_list }}"

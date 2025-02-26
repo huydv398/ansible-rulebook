@@ -1,0 +1,62 @@
+- name: Clone multiple virtual machines from Linux template and customize
+  hosts: localhost
+  become: false
+  gather_facts: false
+  collections:
+    - community.vmware
+
+  pre_tasks:
+    - include_vars: 0.info_vm.yml
+
+
+
+
+ 
+
+  # tasks:
+  #   - name: show info  VM
+  #     debug:
+  #       msg: "info: {{ vm_list[0].name }}"
+      # loop: "{{ vm_list[0] }}"
+    # - name: Print disk information
+    #   debug:
+    #     msg: >
+    #       {%- for vm in item.network %}
+    #         VM: {{ vm.name }} - Interface: {{ info.name }} - VLAN: {{ info.vlan }} - IP: {{ info.ip }}
+    #       {%- endfor %}
+    #   loop: "{{ vm_list }}"
+
+    # - name: Print disk information
+    #   debug:
+    #     # msg: "vlan: {{ item.network[0].name }}"
+    #     msg: |
+    #       {%- for net in item.network %}
+    #       - name: "{{ net.vlan }}"
+    #       {%- endfor %}
+    #   loop: "{{ vm_list }}"
+
+    # - name: Print network information for each VM
+    #   debug:
+    #     msg: >
+    #       {%- for vm in vm_list %}
+    #         {%- for info in vm.network %}
+    #           VM: {{ vm.name }} - Interface: {{ info.name }} - VLAN: {{ info.vlan }} - IP: {{ info.ip }}
+    #         {%- endfor %}
+    #       {%- endfor %}
+
+    # - name: Add host to group 'just_created' with variable foo=42
+    #   ansible.builtin.add_host:
+    #     name: '{{ vm_list[0].name }}'
+    #     groups: openstack
+    #     hostname: '{{ vm_list[0].name }}'
+    #     ansible_ssh_host: '{{ vm_list[0].network[1].ip }}'
+    #     ansible_ssh_port: '22'
+    # - name: Ping the EC2 instance
+    #   ansible.builtin.ping:
+    #   hosts: '{{ vm_list[0].name }}
+
+    - name: Add a line to a file if the file does not exist, without passing regexp
+      ansible.builtin.lineinfile:
+        path: /root/vmware/template/ceph/hosts
+        line: 192.168.1.99 foo.lab.net foo
+        create: yes

@@ -1,0 +1,45 @@
+---
+all:
+  children:
+    openstack:
+      vars:
+        ansible_port: 22
+        ansible_user: root
+        ansible_python_interpreter: '/usr/bin/python3.10'
+      hosts:
+        CTL_01:
+          ansible_host: 172.16.81.11
+        CTL_02:
+          ansible_host: 172.16.81.12
+        CTL_03:
+          ansible_host: 172.16.81.13
+        compute01:
+          ansible_host: 172.16.81.41
+        compute02:
+          ansible_host: 172.16.81.42
+        OPS-MON:
+          ansible_host: 172.16.81.113
+
+    ceph:
+      vars:
+        ansible_port: 22
+        ansible_user: root
+        ansible_python_interpreter: '/usr/bin/python3.10'
+      hosts:
+        ceph01:
+          ansible_host: 172.16.81.21
+        ceph02:
+          ansible_host: 172.16.81.22
+        ceph03:
+          ansible_host: 172.16.81.23
+
+    vm_fw:
+      vars:
+        ansible_port: 22
+        ansible_user: root
+        ansible_python_interpreter: '/usr/bin/python3.10'
+      hosts:
+        Harbor:
+          ansible_host: 172.16.81.112
+        NTP:
+          ansible_host: 172.16.81.101
