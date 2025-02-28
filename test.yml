@@ -10,7 +10,7 @@
     - vcenter_pass: Suncloud@2024!
     - ova_validate_certs: false
   # Var infomation vm from Netbox  
-    - vm: "{{ vm_config | to_json }}"
+    - vm_info: "{{ vm_config }}"
     # - template: |-
     #     {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
     #     temp-centos7
@@ -38,7 +38,7 @@
     - name: test
       debug:
         # msg: "{{ ansible_eda.event.payload.data.tenant.name }}"   
-        msg: "{{ vm['id'] }}"   
+        msg: "{{ vm_info.id }}"   
     # - name: Create a VM folder on given datacenter
     #   # debug:
     #   #   msg: "{{ template }} {{ guest_id }}"
