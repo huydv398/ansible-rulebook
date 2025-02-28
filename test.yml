@@ -10,10 +10,16 @@
     - vcenter_pass: Suncloud@2024!
     - ova_validate_certs: false
     - datacenter: Datacenter
+    - template: TEMP-U22
   # Var infomation vm from Netbox  
     - vm_info: "{{ vm_config }}"
     - vm_id: "{{ vm_info.id }}"
     - tenant: "{{ vm_info.tenant.name }}" 
+    - cluster: "{{ vm_info.cluster.name }}"
+    - vm_name: "{{ vm_info.name }}"
+    - vm_cpu: "{{ vm_info.custom_fields.CPU }}"
+    - vm_ram: "{{ vm_info.custom_fields.RAM }}"
+    - vm_disk: "{{ vm_info.custom_fields.RAM * 10 }}"
     # - template: |-
     #     {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
     #     temp-centos7
@@ -56,39 +62,40 @@
         # folder_name: "{{ ansible_eda.event.payload.data.tenant.name }}"
         folder_type: vm
         state: present
-    # - name: Create a New Virtual Machine
-    #   vmware_guest:
-    #     hostname: '{{ vcenter_server }}'
-    #     username: '{{ vcenter_user }}'
-    #     password: '{{ vcenter_pass }}'
-    #     validate_certs: '{{ ova_validate_certs }}'
-    #     datacenter: '{{ datacenter }}'
-    #     cluster: "{{  }}"
-    #     # cluster: "{{ ansible_eda.event.payload.data.cluster.name }}"
-    #     folder: '{{  }}'
-    #     # folder: '{{ ansible_eda.event.payload.data.tenant.name }}'
-    #     template: '{{ template }}'
-    #     datastore: '{{ datastore_tmp }}'
-    #     name: '{{  }}'
-    #     # name: '{{ ansible_eda.event.payload.data.name | upper }}'
-    #     guest_id: '{{ guest_id }}'
-    #     disk:
-    #       - size_gb: '{{ }}'
-    #       # - size_gb: '{{ ansible_eda.event.payload.data.disk }}'
-    #         type: '{{ vm_disk_type }}'
-    #         datastore: '{{ vm_disk_datastore }}'
-    #     hardware:
-    #       # memory_mb: '{{ ansible_eda.event.payload.data.memory }}'
-    #       memory_mb: '{{  }}'
-    #       # num_cpus: '{{ ansible_eda.event.payload.snapshots.postchange.vcpus }}'
-    #       num_cpus: '{{  }}'
-    #       scsi: '{{ vm_hardware_controller }}'
-    #     state: poweredon
-    #     # wait_for_customization: yes # tự động bật máy ảo khi hoàn thành
-    #   register: status
-    #   delegate_to: localhost
-    # # - name: Push out event
-    # #   set_fact:
-    # #     cacheable: true #phản hồi lại eda 1 event có value
-    # #     output_status: "{{status}}"
-    # #     eda: "{{ansible_eda.event.payload}}"
+
+    - name: Create a New Virtual Machine
+      vmware_guest:
+        hostname: '{{ vcenter_server }}'
+        username: '{{ vcenter_user }}'
+        password: '{{ vcenter_pass }}'
+        validate_certs: '{{ ova_validate_certs }}'
+        datacenter: '{{ datacenter }}'
+        cluster: "{{ cluster }}"
+        # cluster: "{{ ansible_eda.event.payload.data.cluster.name }}"
+        folder: "{{ tenant }}"
+        # folder: '{{ ansible_eda.event.payload.data.tenant.name }}'
+        template: '{{ template }}'
+        datastore: '{{ vm_disk_datastore }}'
+        name: '{{ vm_name }}'
+        # name: '{{ ansible_eda.event.payload.data.name | upper }}'
+        # guest_id: '{{ guest_id }}'
+        disk:
+          - size_gb: '{{ vm_disk }}'
+          # - size_gb: '{{ ansible_eda.event.payload.data.disk }}'
+            type: '{{ vm_disk_type }}'
+            datastore: '{{ vm_disk_datastore }}'
+        hardware:
+          # memory_mb: '{{ ansible_eda.event.payload.data.memory }}'
+          memory_mb: '{{ vm_ram }}'
+          # num_cpus: '{{ ansible_eda.event.payload.snapshots.postchange.vcpus }}'
+          num_cpus: '{{ vm_cpu }}'
+          scsi: '{{ vm_hardware_controller }}'
+        state: poweredon
+        # wait_for_customization: yes # tự động bật máy ảo khi hoàn thành
+      register: status
+      delegate_to: localhost
+    # - name: Push out event
+    #   set_fact:
+    #     cacheable: true #phản hồi lại eda 1 event có value
+    #     output_status: "{{status}}"
+    #     eda: "{{ansible_eda.event.payload}}"
