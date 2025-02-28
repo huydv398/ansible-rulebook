@@ -18,7 +18,7 @@
     - cluster: "{{ vm_info.cluster.name }}"
     - vm_name: "{{ vm_info.name }}"
     - vm_cpu: "{{ vm_info.custom_fields.CPU }}"
-    - vm_ram: "{{ vm_info.custom_fields.RAM }}"
+    - vm_ram: "{{ vm_info.custom_fields.RAM * 1024 }}"
     - vm_disk: "{{ vm_info.custom_fields.RAM * 10 }}"
     # - template: |-
     #     {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
