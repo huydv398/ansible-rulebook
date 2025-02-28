@@ -11,7 +11,7 @@
     - ova_validate_certs: false
   # Var infomation vm from Netbox  
     - vm_info: "{{ vm_config }}"
-    - vm_id: "{{ vm_config.id }}"
+    - vm_id: "{{ vm_info.id }}"
     # - template: |-
     #     {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
     #     temp-centos7
