@@ -12,6 +12,7 @@
   # Var infomation vm from Netbox  
     - vm_info: "{{ vm_config }}"
     - vm_id: "{{ vm_info.id }}"
+    - tenant: "{{ vm_info.tenant.name }}" 
     # - template: |-
     #     {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
     #     temp-centos7
@@ -41,19 +42,19 @@
         # msg: "{{ ansible_eda.event.payload.data.tenant.name }}"   
         msg: "{{ vm_info.tenant.name }}"   
  
-    # - name: Create a VM folder on given datacenter
-    #   # debug:
-    #   #   msg: "{{ template }} {{ guest_id }}"
-    #   community.vmware.vcenter_folder:
-    #     hostname: '{{ vcenter_server }}'
-    #     username: '{{ vcenter_user }}'
-    #     password: '{{ vcenter_pass }}'
-    #     validate_certs: '{{ ova_validate_certs }}'
-    #     datacenter: "{{ datacenter }}"
-    #     folder_name: "{{  }}"
-    #     # folder_name: "{{ ansible_eda.event.payload.data.tenant.name }}"
-    #     folder_type: vm
-    #     state: present
+    - name: Create a VM folder on given datacenter
+      # debug:
+      #   msg: "{{ template }} {{ guest_id }}"
+      community.vmware.vcenter_folder:
+        hostname: '{{ vcenter_server }}'
+        username: '{{ vcenter_user }}'
+        password: '{{ vcenter_pass }}'
+        validate_certs: '{{ ova_validate_certs }}'
+        datacenter: "{{ datacenter }}"
+        folder_name: "{{ tenant }}"
+        # folder_name: "{{ ansible_eda.event.payload.data.tenant.name }}"
+        folder_type: vm
+        state: present
     # - name: Create a New Virtual Machine
     #   vmware_guest:
     #     hostname: '{{ vcenter_server }}'
