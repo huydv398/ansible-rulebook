@@ -39,11 +39,8 @@
     - name: test
       debug:
         # msg: "{{ ansible_eda.event.payload.data.tenant.name }}"   
-        msg: "{{ vm_info.id }}"   
-    - name: test2
-      debug:
-        # msg: "{{ ansible_eda.event.payload.data.tenant.name }}"   
-        msg: "{{ vm_id }}"   
+        msg: "{{ vm_info.tenant.name }}"   
+ 
     # - name: Create a VM folder on given datacenter
     #   # debug:
     #   #   msg: "{{ template }} {{ guest_id }}"
