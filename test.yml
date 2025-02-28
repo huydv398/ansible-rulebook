@@ -38,6 +38,10 @@
     - name: test
       debug:
         # msg: "{{ ansible_eda.event.payload.data.tenant.name }}"   
+        msg: "{{ vm_config }}"   
+    - name: test2
+      debug:
+        # msg: "{{ ansible_eda.event.payload.data.tenant.name }}"   
         msg: "{{ vm_config | to_nice_json  }}"   
     # - name: Create a VM folder on given datacenter
     #   # debug:
