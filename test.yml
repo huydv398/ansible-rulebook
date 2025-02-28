@@ -9,6 +9,7 @@
     - vcenter_user: Administrator@VCENTER.ADDC.LOCAL
     - vcenter_pass: Suncloud@2024!
     - ova_validate_certs: false
+    - datacenter: datacenter
   # Var infomation vm from Netbox  
     - vm_info: "{{ vm_config }}"
     - vm_id: "{{ vm_info.id }}"
