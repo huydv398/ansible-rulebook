@@ -6,7 +6,8 @@
 
   # Var define vCenter
     - vcenter_server: vcenter.addc.local
-    - vcenter_user: 
+    - vcenter_user: Administrator@VCENTER.ADDC.LOCAL
+    - vcenter_pass: Suncloud@2024!
     - ova_validate_certs: false
   # Var infomation vm from Netbox  
     - vm: "{{ vm_config }}"
