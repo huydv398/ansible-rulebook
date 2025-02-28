@@ -3,6 +3,12 @@
   connection: local
   hosts: localhost
   vars:
+
+  # Var define vCenter
+    - vcenter_server: vcenter.addc.local
+    - vcenter_user: 
+    - ova_validate_certs: false
+  # Var infomation vm from Netbox  
     - vm: "{{ vm_config }}"
     # - template: |-
     #     {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
@@ -31,7 +37,7 @@
     - name: test
       debug:
         # msg: "{{ ansible_eda.event.payload.data.tenant.name }}"   
-        msg: "{{ vm }}"   
+        msg: "{{ vm.tenant }}"   
     # - name: Create a VM folder on given datacenter
     #   # debug:
     #   #   msg: "{{ template }} {{ guest_id }}"
