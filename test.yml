@@ -46,9 +46,14 @@
     - name: test
       debug:
         msg: "{{ vm_config }}"   
-    - name: test 1
+
+    - name: Set fact Cluster of VM
+      set_fact:
+        test: "{{ vm_config }}"
+
+    - name: test 2
       debug:
-        msg: "{{ vm_config.id }}"   
+        msg: "{{ test }}"   
     # - name: Create a New Virtual Machine
     #   vmware_guest:
     #     hostname: '{{ vcenter_server }}'
