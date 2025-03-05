@@ -21,7 +21,7 @@
     - template: |-
         {%- if vm_info.platform.id == 4 -%}
         temp-centos7
-        {%- elif ansible_eda.event.payload.data.platform.id == 3 -%}
+        {%- elif vm_info.platform.id == 3 -%}
         TEMP-U22
         {%- else -%}
         other_value
@@ -40,7 +40,7 @@
     - vm_disk_datastore: |-
         {%- if vm_info.cluster == 3 -%}
         DATA01
-        {%- elif ansible_eda.event.payload.data.platform.id == 11 -%}
+        {%- elif vm_info.cluster == 11 -%}
         ubuntu64Guest
         {%- else -%}
         other_value
