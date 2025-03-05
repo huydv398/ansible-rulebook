@@ -11,15 +11,13 @@
     - ova_validate_certs: false
     - datacenter: Datacenter
     - template: TEMP-U22
+    - vm_config: vm_config
   # Var infomation vm from Netbox  
-    - vm_info: "{{ vm_config }}"
-    - vm_id: "{{ vm_info.id }}"
-    - tenant: "{{ vm_info.tenant.name }}" 
-    - cluster: "{{ vm_info.cluster.name }}"
-    - vm_name: "{{ vm_info.name }}"
-    - vm_cpu: "{{ vm_info.custom_fields.CPU }}"
-    - vm_ram: "{{ vm_info.custom_fields.RAM * 1024 }}"
-    - vm_disk: "{{ vm_info.custom_fields.RAM * 10 }}"
+    - cluster: "SUN-Cluster"
+    - vm_name: "{{ vm_info.name | default('huydv3') }}"
+    # - vm_cpu: "{{ vm_info.custom_fields.CPU | default('4') }}"
+    # - vm_ram: "{{ vm_info.custom_fields.RAM * 1024 | default('4096')}}"
+    # - vm_disk: "{{ vm_info.custom_fields.RAM * 10 | default('100') }}"
     # - template: |-
     #     {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
     #     temp-centos7
@@ -41,61 +39,34 @@
     - datastore_tmp: data
     # - guest_id: centos7_64Guest
     - vm_disk_type: thin
-    - vm_disk_datastore: 'DATA02'
+    - vm_disk_datastore: 'DATA01'
     - vm_hardware_controller: paravirtual
   tasks:
     - name: test
       debug:
-        # msg: "{{ ansible_eda.event.payload.data.tenant.name }}"   
-        msg: "{{ vm_info.tenant.name }}"   
- 
-    - name: Create a VM folder on given datacenter
-      # debug:
-      #   msg: "{{ template }} {{ guest_id }}"
-      community.vmware.vcenter_folder:
-        hostname: '{{ vcenter_server }}'
-        username: '{{ vcenter_user }}'
-        password: '{{ vcenter_pass }}'
-        validate_certs: '{{ ova_validate_certs }}'
-        datacenter: "{{ datacenter }}"
-        folder_name: "{{ tenant }}"
-        # folder_name: "{{ ansible_eda.event.payload.data.tenant.name }}"
-        folder_type: vm
-        state: present
+        msg: "oke"   
 
-    - name: Create a New Virtual Machine
-      vmware_guest:
-        hostname: '{{ vcenter_server }}'
-        username: '{{ vcenter_user }}'
-        password: '{{ vcenter_pass }}'
-        validate_certs: '{{ ova_validate_certs }}'
-        datacenter: '{{ datacenter }}'
-        cluster: "{{ cluster }}"
-        # cluster: "{{ ansible_eda.event.payload.data.cluster.name }}"
-        folder: "{{ tenant }}"
-        # folder: '{{ ansible_eda.event.payload.data.tenant.name }}'
-        template: '{{ template }}'
-        datastore: '{{ vm_disk_datastore }}'
-        name: '{{ vm_name }}'
-        # name: '{{ ansible_eda.event.payload.data.name | upper }}'
-        # guest_id: '{{ guest_id }}'
-        disk:
-          - size_gb: '{{ vm_disk }}'
-          # - size_gb: '{{ ansible_eda.event.payload.data.disk }}'
-            type: '{{ vm_disk_type }}'
-            datastore: '{{ vm_disk_datastore }}'
-        hardware:
-          # memory_mb: '{{ ansible_eda.event.payload.data.memory }}'
-          memory_mb: '{{ vm_ram }}'
-          # num_cpus: '{{ ansible_eda.event.payload.snapshots.postchange.vcpus }}'
-          num_cpus: '{{ vm_cpu }}'
-          scsi: '{{ vm_hardware_controller }}'
-        state: poweredon
-        # wait_for_customization: yes # tự động bật máy ảo khi hoàn thành
-      register: status
-      delegate_to: localhost
-    # - name: Push out event
-    #   set_fact:
-    #     cacheable: true #phản hồi lại eda 1 event có value
-    #     output_status: "{{status}}"
-    #     eda: "{{ansible_eda.event.payload}}"
+    # - name: Create a New Virtual Machine
+    #   vmware_guest:
+    #     hostname: '{{ vcenter_server }}'
+    #     username: '{{ vcenter_user }}'
+    #     password: '{{ vcenter_pass }}'
+    #     validate_certs: '{{ ova_validate_certs }}'
+    #     datacenter: '{{ datacenter }}'
+    #     cluster: "{{ cluster }}"
+    #     folder: "{{ tenant | default('huydv3testvm') }}"
+    #     template: '{{ template }}'
+    #     datastore: '{{ vm_disk_datastore }}'
+    #     name: "{{ vm_name  }}"
+    #     disk:
+    #       - size_gb: '{{ vm_disk | default("100") }}'
+    #         type: '{{ vm_disk_type }}'
+    #         datastore: '{{ vm_disk_datastore }}'
+    #     hardware:
+    #       memory_mb: '{{ vm_ram | default("4096") }}'
+    #       num_cpus: '{{ vm_cpu | default("4") }}'
+    #       scsi: '{{ vm_hardware_controller }}'
+    #     state: poweredon
+    #     wait_for_customization: yes # tự động bật máy ảo khi hoàn thành
+    #   register: status
+    #   delegate_to: localhost
