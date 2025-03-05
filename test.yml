@@ -11,8 +11,9 @@
     - vcenter_pass: Suncloud@2024!
     - ova_validate_certs: false
     - datacenter: Datacenter
-    - vm_info: "{{ vm_config }}"
+
   # Var infomation vm from Netbox  
+    - vm_info: "{{ vm_config }}"
     - cluster: "{{ vm_info.cluster.name | default('SUN-Cluster') }}"
     - vm_name: "{{ vm_info.name | default('huydv3') }}"
     - vm_cpu: "{{ vm_info.custom_fields.cpu_vm | default('4') }}"
@@ -47,51 +48,28 @@
         {%- endif -%}
     - vm_hardware_controller: paravirtual
   tasks:
-    - name: test
-      debug:
-        msg: "{{ cluster }}"   
-    - name: vm_name
-      debug:
-        msg: "{{ vm_name }}"   
-    - name: vm_disk_datastore
-      debug:
-        msg: "{{ vm_disk_datastore | default('DATA4_OS') }}"   
-    - name: vm_cpu
-      debug:
-        msg: "{{ vm_cpu }}"   
-    - name: vm_disk
-      debug:
-        msg: "{{ vm_disk }}"   
-    - name: vm_ram
-      debug:
-        msg: "{{ vm_ram }}"   
-        
-    - name: template
-      debug:
-        msg: "{{ template }}"   
-        
 
-    # - name: Create a New Virtual Machine
-    #   vmware_guest:
-    #     hostname: '{{ vcenter_server }}'
-    #     username: '{{ vcenter_user }}'
-    #     password: '{{ vcenter_pass }}'
-    #     validate_certs: '{{ ova_validate_certs }}'
-    #     datacenter: '{{ datacenter }}'
-    #     cluster: "{{ cluster }}"
-    #     folder: "{{ tenant | default('huydv3testvm') }}"
-    #     template: '{{ template }}'
-    #     datastore: '{{ vm_disk_datastore }}'
-    #     name: "{{ vm_name  }}"
-    #     disk:
-    #       - size_gb: '{{ vm_disk | default("100") }}'
-    #         type: '{{ vm_disk_type }}'
-    #         datastore: '{{ vm_disk_datastore }}'
-    #     hardware:
-    #       memory_mb: '{{ vm_ram | default("4096") }}'
-    #       num_cpus: '{{ vm_cpu | default("4") }}'
-    #       scsi: '{{ vm_hardware_controller }}'
-    #     state: poweredon
-    #     wait_for_customization: yes # tự động bật máy ảo khi hoàn thành
-    #   register: status
-    #   delegate_to: localhost
+    - name: Create a New Virtual Machine
+      vmware_guest:
+        hostname: '{{ vcenter_server }}'
+        username: '{{ vcenter_user }}'
+        password: '{{ vcenter_pass }}'
+        validate_certs: '{{ ova_validate_certs }}'
+        datacenter: '{{ datacenter }}'
+        cluster: "{{ cluster }}"
+        folder: "{{ tenant | default('huydv3testvm') }}"
+        template: '{{ template }}'
+        datastore: '{{ vm_disk_datastore }}'
+        name: "{{ vm_name  }}"
+        disk:
+          - size_gb: '{{ vm_disk | default("100") }}'
+            type: '{{ vm_disk_type }}'
+            datastore: '{{ vm_disk_datastore }}'
+        hardware:
+          memory_mb: '{{ vm_ram | default("4096") }}'
+          num_cpus: '{{ vm_cpu | default("4") }}'
+          scsi: '{{ vm_hardware_controller }}'
+        state: poweredon
+        wait_for_customization: yes # tự động bật máy ảo khi hoàn thành
+      register: status
+      delegate_to: localhost
