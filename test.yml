@@ -45,7 +45,7 @@
   tasks:
     - name: test
       debug:
-        msg: "oke"   
+        msg: "{{ vm_config }}"   
 
     # - name: Create a New Virtual Machine
     #   vmware_guest:
