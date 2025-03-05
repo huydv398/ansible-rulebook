@@ -43,7 +43,7 @@
         {%- elif vm_info.cluster == 11 -%}
         ubuntu64Guest
         {%- else -%}
-        other_value
+        DATA03
         {%- endif -%}
     - vm_hardware_controller: paravirtual
   tasks:
