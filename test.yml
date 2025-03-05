@@ -11,7 +11,7 @@
     - vcenter_pass: Suncloud@2024!
     - ova_validate_certs: false
     - datacenter: Datacenter
-    - vm_config: "{{ vm_info }}"
+    - vm_info: "{{ vm_config }}"
   # Var infomation vm from Netbox  
     - cluster: "{{ vm_info.cluster | default('SUN-Cluster') }}"
     - vm_name: "{{ vm_info.name | default('huydv3') }}"
