@@ -57,7 +57,7 @@
         validate_certs: '{{ ova_validate_certs }}'
         datacenter: '{{ datacenter }}'
         cluster: "{{ cluster }}"
-        folder: "{{ tenant | default('huydv3testvm') }}"
+        # folder: "{{ tenant | default('huydv3testvm') }}"
         template: '{{ template }}'
         datastore: '{{ vm_disk_datastore }}'
         name: "{{ vm_name  }}"
