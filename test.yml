@@ -13,7 +13,7 @@
     - datacenter: Datacenter
     - vm_info: "{{ vm_config }}"
   # Var infomation vm from Netbox  
-    - cluster: "{{ vm_info.cluster | default('SUN-Cluster') }}"
+    - cluster: "{{ vm_info.cluster.name | default('SUN-Cluster') }}"
     - vm_name: "{{ vm_info.name | default('huydv3') }}"
     - vm_cpu: "{{ vm_info.custom_fields.cpu_vm | default('4') }}"
     - vm_ram: "{{ vm_info.custom_fields.ram_vm * 1024 | default('4096')}}"
@@ -37,14 +37,14 @@
 
     # - guest_id: centos7_64Guest
     - vm_disk_type: thin
-    # - vm_disk_datastore: |-
-    #     {%- if vm_info.cluster.id == 3 -%}
-    #     DATA01
-    #     {%- elif vm_info.cluster.id == 11 -%}
-    #     ubuntu64Guest
-    #     {%- else -%}
-    #     DATA03
-    #     {%- endif -%}
+    - vm_disk_datastore: |-
+        {%- if vm_info.cluster.id == 3 -%}
+        DATA01
+        {%- elif vm_info.cluster.id == 11 -%}
+        ubuntu64Guest
+        {%- else -%}
+        DATA03
+        {%- endif -%}
     - vm_hardware_controller: paravirtual
   tasks:
     - name: test
@@ -65,6 +65,10 @@
     - name: vm_ram
       debug:
         msg: "{{ vm_ram }}"   
+        
+    - name: template
+      debug:
+        msg: "{{ template }}"   
         
 
     # - name: Create a New Virtual Machine
