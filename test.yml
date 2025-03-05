@@ -4,6 +4,7 @@
   hosts: localhost
   vars:
 
+
   # # Var define vCenter
   #   - vcenter_server: vcenter.addc.local
   #   - vcenter_user: Administrator@VCENTER.ADDC.LOCAL
