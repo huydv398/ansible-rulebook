@@ -5,43 +5,43 @@
   vars:
 
 
-  # # Var define vCenter
-  #   - vcenter_server: vcenter.addc.local
-  #   - vcenter_user: Administrator@VCENTER.ADDC.LOCAL
-  #   - vcenter_pass: Suncloud@2024!
-  #   - ova_validate_certs: false
-  #   - datacenter: Datacenter
-  #   - template: TEMP-U22
-  #   - vm_config: vm_config
-  # # Var infomation vm from Netbox  
-  #   - cluster: "SUN-Cluster"
-  #   - vm_name: "{{ vm_info.name | default('huydv3') }}"
-  #   # - vm_cpu: "{{ vm_info.custom_fields.CPU | default('4') }}"
-  #   # - vm_ram: "{{ vm_info.custom_fields.RAM * 1024 | default('4096')}}"
-  #   # - vm_disk: "{{ vm_info.custom_fields.RAM * 10 | default('100') }}"
-  #   # - template: |-
-  #   #     {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
-  #   #     temp-centos7
-  #   #     {%- elif ansible_eda.event.payload.data.platform.id == 11 -%}
-  #   #     TEMP-U22
-  #   #     {%- else -%}
-  #   #     other_value
-  #   #     {%- endif -%}
-  #   # - guest_id: |-
-  #   #     {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
-  #   #     centos7_64Guest
-  #   #     {%- elif ansible_eda.event.payload.data.platform.id == 11 -%}
-  #   #     ubuntu64Guest
-  #   #     {%- else -%}
-  #   #     other_value
-  #   #     {%- endif -%}
+  # Var define vCenter
+    - vcenter_server: vcenter.addc.local
+    - vcenter_user: Administrator@VCENTER.ADDC.LOCAL
+    - vcenter_pass: Suncloud@2024!
+    - ova_validate_certs: false
+    - datacenter: Datacenter
+    - template: TEMP-U22
+    - vm_config: vm_config
+  # Var infomation vm from Netbox  
+    - cluster: "SUN-Cluster"
+    - vm_name: "{{ vm_info.name | default('huydv3') }}"
+    # - vm_cpu: "{{ vm_info.custom_fields.CPU | default('4') }}"
+    # - vm_ram: "{{ vm_info.custom_fields.RAM * 1024 | default('4096')}}"
+    # - vm_disk: "{{ vm_info.custom_fields.RAM * 10 | default('100') }}"
+    # - template: |-
+    #     {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
+    #     temp-centos7
+    #     {%- elif ansible_eda.event.payload.data.platform.id == 11 -%}
+    #     TEMP-U22
+    #     {%- else -%}
+    #     other_value
+    #     {%- endif -%}
+    # - guest_id: |-
+    #     {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
+    #     centos7_64Guest
+    #     {%- elif ansible_eda.event.payload.data.platform.id == 11 -%}
+    #     ubuntu64Guest
+    #     {%- else -%}
+    #     other_value
+    #     {%- endif -%}
 
-  #   # - template: temp-centos7 
-  #   - datastore_tmp: data
-  #   # - guest_id: centos7_64Guest
-  #   - vm_disk_type: thin
-  #   - vm_disk_datastore: 'DATA01'
-  #   - vm_hardware_controller: paravirtual
+    # - template: temp-centos7 
+    - datastore_tmp: data
+    # - guest_id: centos7_64Guest
+    - vm_disk_type: thin
+    - vm_disk_datastore: 'DATA01'
+    - vm_hardware_controller: paravirtual
   tasks:
     - name: test
       debug:
