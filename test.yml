@@ -37,14 +37,14 @@
 
     # - guest_id: centos7_64Guest
     - vm_disk_type: thin
-    - vm_disk_datastore: |-
-        {%- if vm_info.cluster.id == 3 -%}
-        DATA01
-        {%- elif vm_info.cluster.id == 11 -%}
-        ubuntu64Guest
-        {%- else -%}
-        DATA03
-        {%- endif -%}
+    # - vm_disk_datastore: |-
+    #     {%- if vm_info.cluster.id == 3 -%}
+    #     DATA01
+    #     {%- elif vm_info.cluster.id == 11 -%}
+    #     ubuntu64Guest
+    #     {%- else -%}
+    #     DATA03
+    #     {%- endif -%}
     - vm_hardware_controller: paravirtual
   tasks:
     - name: test
@@ -55,7 +55,7 @@
         msg: "{{ vm_name }}"   
     - name: vm_disk_datastore
       debug:
-        msg: "{{ vm_disk_datastore }}"   
+        msg: "{{ vm_disk_datastore | default('DATA4_OS') }}"   
     - name: vm_cpu
       debug:
         msg: "{{ vm_cpu }}"   
