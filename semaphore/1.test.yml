@@ -9,3 +9,4 @@
     - name: test 2
       debug:
         msg: "{{var_custom}}"    
+      ignore_errors: true
