@@ -1,7 +1,8 @@
-- hosts: localhost
-  gather_facts: False
-  connection: local
+---
+- name: Test playbook
+  hosts: all
+  # gather_facts: no
   tasks:
     - name: test
       debug:
-        msg: "Đường Huy - OK"    
+        msg: "{{ansible_hostname}}"    
