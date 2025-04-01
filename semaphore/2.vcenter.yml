@@ -4,7 +4,7 @@
   hosts: localhost
   vars:
     # - ansible_python_interpreter: "/usr/bin/env python3"
-    - vcenter_hostname: https://vcenter.solus.local
+    - vcenter_hostname: vcenter.solus.local
     - vcenter_username: administrator@vsphere.local
     - vcenter_password: Solus2025!
   tasks:
