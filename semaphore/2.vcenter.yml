@@ -7,7 +7,6 @@
     - vcenter_hostname: https://vcenter.solus.local
     - vcenter_username: administrator@vsphere.local
     - vcenter_password: Solus2025!
-  hosts: localhost
   tasks:
   - name: Provide information about vCenter folders
     community.vmware.vmware_folder_info:
