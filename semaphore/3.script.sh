@@ -4,8 +4,6 @@ backup_day=$(date +'%Y%m%d')
 clean_day=$(date --date="3 day ago" +'%Y%m%d')
 
 
-apiToken='6073261344:AAEWZ83zFaVYEXW_vAQB0jLiNyl2pmV-E5k'
-chatId='-4101230458'
 
 #echo $message
 
