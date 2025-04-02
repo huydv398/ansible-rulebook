@@ -6,7 +6,22 @@
     - name: print test
       debug:
         msg: "{{ansible_hostname}}"    
+
     - name: print test 2
       debug:
         msg: "{{apiToken}}///{{chatId}}"    
+      ignore_errors: true
+
+    - name: Send notify to Telegram
+      community.general.telegram:
+        token: "{{ api_token }}"
+        api_args:
+          chat_id: "{{ chat_ID }}"
+          parse_mode: "markdown"
+          text: |
+            ```
+            "Install Agent in {{ ansible_date_time.date }}-{{ ansible_date_time.hour }}-{{ ansible_date_time.minute }}"
+            ```
+          disable_web_page_preview: true
+          disable_notification: true
       ignore_errors: true
