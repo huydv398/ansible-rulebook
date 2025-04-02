@@ -3,10 +3,10 @@
   hosts: all
   # gather_facts: no
   tasks:
-    - name: test
+    - name: print test
       debug:
         msg: "{{ansible_hostname}}"    
-    - name: test 2
+    - name: print test 2
       debug:
         msg: "{{apiToken}}///{{chatId}}"    
       ignore_errors: true
