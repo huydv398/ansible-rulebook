@@ -20,7 +20,7 @@
           parse_mode: "markdown"
           text: |
             ```
-            "Install Agent in {{ ansible_date_time.date }}-{{ ansible_date_time.hour }}-{{ ansible_date_time.minute }}"
+            "{{ansible_hostname}} --- Install Agent in {{ ansible_date_time.date }}-{{ ansible_date_time.hour }}-{{ ansible_date_time.minute }}"
             ```
           disable_web_page_preview: true
           disable_notification: true
