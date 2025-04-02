@@ -8,5 +8,5 @@
         msg: "{{ansible_hostname}}"    
     - name: test 2
       debug:
-        msg: "{{var_custom}}"    
+        msg: "{{apiToken}}///{{chatId}}"    
       ignore_errors: true
