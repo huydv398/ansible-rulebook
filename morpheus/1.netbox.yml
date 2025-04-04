@@ -3,10 +3,10 @@
   connection: local
   collections:
     - netbox.netbox
-  module_defaults:
-    group/netbox.netbox.netbox:
-      netbox_url: https://172.16.66.29
-      netbox_token: '99c0150c3e9c093d9a14c72d7c8067c1c0b18196'
+  # module_defaults:
+  #   group/netbox.netbox.netbox:
+  #     netbox_url: https://172.16.66.29
+  #     netbox_token: '99c0150c3e9c093d9a14c72d7c8067c1c0b18196'
   vars:
     - netbox_url: 'https://172.16.66.29'
     - netbox_token: '99c0150c3e9c093d9a14c72d7c8067c1c0b18196'
