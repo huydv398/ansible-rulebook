@@ -1,6 +1,4 @@
-- hosts: localhost
-  gather_facts: False
-  connection: local
+- hosts: all
   tasks:
     - name: test
       debug:
