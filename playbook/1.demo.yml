@@ -6,5 +6,5 @@
     - name: test 2
       debug:
         msg: "{{ ansible_hostname }}"  
-      ignore_error: true  
+      ignore_errors: true
     
