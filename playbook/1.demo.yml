@@ -4,8 +4,9 @@
   tasks:
     - name: test
       debug:
-        msg: "{{ ipvm }}"      
+        msg: "linux test"      
     - name: test 2
       debug:
-        msg: "{{ ansible_eda.event.payload.backlog[0].fields.name_vm }}"      
+        msg: "{{ ansible_hostname }}"  
+      ignore: true    
     
