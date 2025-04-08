@@ -37,7 +37,6 @@
     #     {%- endif -%}
 
     # - guest_id: centos7_64Guest
-    - vm_disk_type: thin
     - vm_disk_datastore: |-
         {%- if vm_info.cluster.id == 3 -%}
         DATA01
@@ -63,13 +62,13 @@
         name: "{{ vm_name  }}"
         disk:
           - size_gb: '{{ vm_disk | default("100") }}'
-            type: '{{ vm_disk_type }}'
+            type: thin
             datastore: '{{ vm_disk_datastore }}'
         hardware:
           memory_mb: '{{ vm_ram | default("4096") }}'
           num_cpus: '{{ vm_cpu | default("4") }}'
           scsi: '{{ vm_hardware_controller }}'
         state: poweredon
-        wait_for_customization: yes # tự động bật máy ảo khi hoàn thành
+        # wait_for_customization: yes # tự động bật máy ảo khi hoàn thành
       register: status
       delegate_to: localhost

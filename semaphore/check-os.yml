@@ -1,0 +1,45 @@
+---
+- name: Check server status and save results locally 
+  hosts: all
+  become: yes
+  gather_facts: no
+  vars:
+    local_results_dir: "/root/check_results"  # Directory path to save results    
+
+  tasks:
+    - name: Check system uptime 
+      command: uptime
+      register: uptime_result
+
+    - name: Check disk usage 
+      shell: df -hTP
+      register: disk_usage
+
+    - name: Disk usage string formatting 
+      set_fact:
+        formatted_disk_usage: "{{ disk_usage.stdout_lines | join('\n     ') }}"
+
+    - name: Check memory usage
+      command: free -m
+      register: memory_usage
+
+    - name: Check CPU usage 
+      shell: top -bn1 | grep load
+      register: cpu_usage
+
+    - name: Save the inspection results to a file   
+      delegate_to: localhost
+      blockinfile:
+        path: "{{ local_results_dir }}/check_result_{{ inventory_hostname }}.txt"
+        create: yes
+        block: |
+          Target Server: 
+            {{ inventory_hostname }}
+          Uptime:
+            {{ uptime_result.stdout }}
+          Disk Usage:  
+            {{ formatted_disk_usage }}
+          Memory Usage: 
+            {{ memory_usage.stdout }}
+          CPU Usage: 
+            {{ cpu_usage.stdout }}
