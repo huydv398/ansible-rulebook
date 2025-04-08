@@ -53,19 +53,19 @@
           disable_notification: true
       ignore_errors: true
 
-    # - name: Save the inspection results to a file   
-    #   delegate_to: localhost
-    #   blockinfile:
-    #     path: "{{ local_results_dir }}/check_result_{{ inventory_hostname }}.txt"
-    #     create: yes
-    #     block: |
-    #       Target Server: 
-    #         {{ inventory_hostname }}
-    #       Uptime:
-    #         {{ uptime_result.stdout }}
-    #       Disk Usage:  
-    #         {{ formatted_disk_usage }}
-    #       Memory Usage: 
-    #         {{ memory_usage.stdout }}
-    #       CPU Usage: 
-    #         {{ cpu_usage.stdout }}
+    - name: Save the inspection results to a file   
+      delegate_to: localhost
+      blockinfile:
+        path: "/root/check_result_{{ inventory_hostname }}.txt"
+        create: yes
+        block: |
+          Target Server: 
+            {{ inventory_hostname }}
+          Uptime:
+            {{ uptime_result.stdout }}
+          Disk Usage:  
+            {{ formatted_disk_usage }}
+          Memory Usage: 
+            {{ memory_usage.stdout }}
+          CPU Usage: 
+            {{ cpu_usage.stdout }}
