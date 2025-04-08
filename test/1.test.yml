@@ -26,10 +26,11 @@
     - name: Check CPU usage 
       shell: top -bn1 | grep load
       register: cpu_usage
-    - name: debug tele
-      delegate_to: localhost
-      debug:
-        msg: "{{ apiToken }} - {{ chatId }}"
+    # - name: debug tele
+    #   delegate_to: localhost
+    #   debug:
+    #     msg: "{{ apiToken }} - {{ chatId }}"
+
     - name: Send notify to Telegram
       community.general.telegram:
         token: "{{ apiToken }}"
@@ -53,19 +54,20 @@
           disable_notification: true
       ignore_errors: true
 
-    - name: Save the inspection results to a file   
-      delegate_to: localhost
-      blockinfile:
-        path: "/tmp/check_result_{{ inventory_hostname }}.txt"
-        create: yes
-        block: |
-          Target Server: 
-            {{ inventory_hostname }}
-          Uptime:
-            {{ uptime_result.stdout }}
-          Disk Usage:  
-            {{ formatted_disk_usage }}
-          Memory Usage: 
-            {{ memory_usage.stdout }}
-          CPU Usage: 
-            {{ cpu_usage.stdout }}
+    # - name: Save the inspection results to a file   
+    #   delegate_to: localhost
+    #   blockinfile:
+    #     path: "/root/test.txt"
+    #     # path: "/root/check_result_{{ inventory_hostname }}.txt"
+    #     create: yes
+    #     block: |
+    #       Target Server: 
+    #         {{ inventory_hostname }}
+    #       Uptime:
+    #         {{ uptime_result.stdout }}
+    #       Disk Usage:  
+    #         {{ formatted_disk_usage }}
+    #       Memory Usage: 
+    #         {{ memory_usage.stdout }}
+    #       CPU Usage: 
+    #         {{ cpu_usage.stdout }}
