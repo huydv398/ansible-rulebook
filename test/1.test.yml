@@ -1,37 +1,45 @@
-- hosts: localhost
-  gather_facts: False
-  connection: local
-  collections:
-    - netbox.netbox
-  module_defaults:
-    group/netbox.netbox.netbox:
-      netbox_url: https://netbox.labhtv.local
-      netbox_token: 'd4e80be5feffd86bbe85e48a4a0dbde920abc784'
+---
+- name: Check server status and save results locally 
+  hosts: all
+  become: yes
+  gather_facts: no
   vars:
-    - netbox_url: 'https://netbox.labhtv.local'
-    - netbox_token: 'd4e80be5feffd86bbe85e48a4a0dbde920abc784'
-    - vm_name: "name=VMwarevCenterServer"
-    - message: |
-        ```Logged in successfully: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}
-        User: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}
-        Role: {{ ansible_eda.event.payload.backlog[0].fields.user_login }}```
-  tasks:
+    local_results_dir: "/root/check_results"  # Directory path to save results    
 
-    - name: Define hostname in netbox  
-      # debug:
-      #   msg: "{{ item.value.display }}"
-      ansible.builtin.set_fact:
-        hostname: "{{ item.value.display }}"
-        id: "{{ item.value.id }}"
-      loop: "{{ query('netbox.netbox.nb_lookup', 'virtual-machines', api_endpoint=netbox_url, api_filter=vm_name, token=netbox_token) }}"
-    - name: test
-      debug:
-        msg: "{{ id }}"      
-    # - name: Create a journal entry 
-    #   netbox.netbox.netbox_journal_entry:
-    #     data:
-    #       assigned_object_type: virtualization.virtualmachine
-    #       assigned_object_id: "{{id}}"
-    #       kind: info
-    #       comments: "{{ message }}"
-    #   when: hostname is defined 
+  tasks:
+    - name: Check system uptime 
+      command: uptime
+      register: uptime_result
+
+    - name: Check disk usage 
+      shell: df -hTP
+      register: disk_usage
+
+    - name: Disk usage string formatting 
+      set_fact:
+        formatted_disk_usage: "{{ disk_usage.stdout_lines | join('\n     ') }}"
+
+    - name: Check memory usage
+      command: free -m
+      register: memory_usage
+
+    - name: Check CPU usage 
+      shell: top -bn1 | grep load
+      register: cpu_usage
+
+    - name: Save the inspection results to a file   
+      delegate_to: localhost
+      blockinfile:
+        path: "{{ local_results_dir }}/check_result_{{ inventory_hostname }}.txt"
+        create: yes
+        block: |
+          Target Server: 
+            {{ inventory_hostname }}
+          Uptime:
+            {{ uptime_result.stdout }}
+          Disk Usage:  
+            {{ formatted_disk_usage }}
+          Memory Usage: 
+            {{ memory_usage.stdout }}
+          CPU Usage: 
+            {{ cpu_usage.stdout }}
