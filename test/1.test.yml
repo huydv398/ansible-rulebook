@@ -56,7 +56,7 @@
     - name: Save the inspection results to a file   
       delegate_to: localhost
       blockinfile:
-        path: "/root/check_result_{{ inventory_hostname }}.txt"
+        path: "/tmp/check_result_{{ inventory_hostname }}.txt"
         create: yes
         block: |
           Target Server: 
