@@ -4,7 +4,7 @@
   become: yes
   gather_facts: no
   vars:
-    local_results_dir: "/root/check_results"  # Directory path to save results    
+    local_results_dir: "/root/"  # Directory path to save results    
 
   tasks:
     - name: Check system uptime 
