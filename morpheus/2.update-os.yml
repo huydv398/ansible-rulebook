@@ -1,0 +1,11 @@
+---
+- name: Test playbook
+  hosts: all
+  # gather_facts: no
+  tasks:
+    - name: print test
+      debug:
+        msg: "UPDATE : {{ansible_hostname}}"    
+    - name: Upgrade all apt packages
+      apt: state=latest force_apt_get=yes
+      when: ansible_os_family == "Debian"

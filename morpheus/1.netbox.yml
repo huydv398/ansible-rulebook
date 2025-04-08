@@ -1,0 +1,25 @@
+- hosts: all
+  gather_facts: False
+  connection: local
+  vars:
+    - netbox_url: 'https://172.16.66.29'
+    - netbox_token: '99c0150c3e9c093d9a14c72d7c8067c1c0b18196'
+  tasks:
+
+    # - name: Define vCenter in netbox  
+    #   # debug:
+    #   #   msg: "{{ item.value.display }}"
+    #   ansible.builtin.set_fact:
+    #     hostname: "{{ item.value.display }}"
+    #     id: "{{ item.value.id }}"
+    #   loop: "{{ query('netbox.netbox.nb_lookup', 'virtual-machines', validate_certs=False, api_endpoint=netbox_url, api_filter=vm_name, token=netbox_token) }}"
+
+    - name: Create a journal entry 
+      netbox.netbox.netbox_journal_entry:
+        data:
+          assigned_object_type: virtualization.virtualmachine
+          assigned_object_id: "144"
+          # assigned_object_id: "{{id}}"
+          kind: info
+          comments: "{{ansible_hostname}} --- Install Agent in {{ ansible_date_time.date }}-{{ ansible_date_time.hour }}-{{ ansible_date_time.minute }}"
+        validate_certs: False
