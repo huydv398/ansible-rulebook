@@ -1,278 +1,151 @@
 ---
-
 - name: create vm from netbox - wd03
-
   hosts: localhost 
-
   vars:
-
     - ova_validate_certs: false
-
   # Var infomation vm from Netbox  
-
-    - content_library: VX-VCF-temp
-
+    - content_library: VX-huy3-temp
     - vm_info: "{{ vm_config }}"
-
     - vm_id: "{{ vm_info.id }}"
-
     - tenant: "{{ vm_info.tenant.name }}" 
-
     - cluster: "{{ vm_info.cluster.name }}"
-
     - vm_name: "{{ vm_info.name }}"
-
     - vm_cpu: "{{ vm_info.custom_fields.vcpu_vm | default('2')  }}"
-
     - vm_ram: "{{ vm_info.custom_fields.ram_vm * 1024 | default('2048') }}"
-
     - hostname: "{{ lookup('ansible.builtin.env', 'VMWARE_HOST') }}"
-
     - username: "{{ lookup('ansible.builtin.env', 'VMWARE_USER') }}"
-
     - password: "{{ lookup('ansible.builtin.env', 'VMWARE_PASSWORD') }}"
-
     - datastore: >-
-
         {%- if vm_info.cluster.id == 8 -%}
-
           VxRail-Virtual-SAN-Datastore-b55790ba-0f97-49de-89fb-2dd1e7659bde
-
         {%- elif vm_info.cluster.id == 4 -%}
-
           VxRail-Virtual-SAN-Datastore-5c571cab-976a-4092-9813-33835db21b19
-
         {%- else -%}
-
           other_value
-
         {%- endif -%}
-
     - ovf_template: >-
-
         {%- if vm_info.platform.name == "Ubuntu Linux (64-bit)" -%}
-
           temp-u22-18.02.2025
-
         {%- elif vm_info.platform.name == "Red Hat Enterprise Linux 8 (64-bit)" -%}
-
           temp-rhel8-12.07.2023
-
         {%- elif vm_info.platform.name == "Microsoft Windows Server 2022 (64-bit)" -%}
-
           temp-windows22
-
         {%- elif vm_info.platform.name == "Microsoft Windows Server 2019 (64-bit)" -%}
-
           temp-w19-dc-25.1.2024
-
         {%- else -%}
-
           other_value
-
         {%- endif -%}
-
     - datacenter: >-
-
-        {%- if vm_info.cluster.name == "dc-vcf-wd-06-vxrail" -%}
-
-          dc-vcf-wd-06-dc01
-
-        {%- elif vm_info.cluster.name == "dc-vcf-wd-03" -%}
-
-          dc-vcf-wd-03-dc01
-
+        {%- if vm_info.cluster.name == "dc-huy3-wd-06-vxrail" -%}
+          dc-huy3-wd-06-dc01
+        {%- elif vm_info.cluster.name == "dc-huy3-wd-03" -%}
+          dc-huy3-wd-03-dc01
         {%- else -%}
-
           other_value
-
         {%- endif -%}
  
   tasks:
-
   - name: test var1
-
     debug:
-
       msg: "{{ vm_info }}"
-
   - name: test var2
-
     debug:
-
       msg: " Cluster: {{ vm_info.cluster.name }}--- id: {{ vm_info.cluster.id }} --- Storage: {{ datastore }}  --- datacenter: {{ datacenter }}   --- ovf_template: {{ ovf_template }} "
  
  
   # - name: Get List of Content Libraries
-
   #   community.vmware.vmware_content_library_info:
-
   #     hostname: '{{ hostname }}'
-
   #     username: '{{ username }}'
-
   #     password: '{{ password }}'
-
   #     validate_certs: false
-
   #   delegate_to: localhost
-
   #   register: content_library
  
   # - name: Get Virtual Machine info
-
   #   debug:
-
   #     var: content_library
  
   # - name: Get information about content library
-
   #   community.vmware.vmware_content_library_info:
-
   #     hostname: '{{ hostname }}'
-
   #     username: '{{ username }}'
-
   #     password: '{{ password }}'
-
   #     validate_certs: false
-
   #     library_id: '7cc56ea6-fc03-4c26-83ae-32fb021cd18e'
-
   #   delegate_to: localhost
-
   #   register: content_library1
  
   # - name: Get Virtual Machine info
-
   #   debug:
-
   #     var: content_library1
  
   - name: Deploy Virtual Machine from template in content library
-
     community.vmware.vmware_content_deploy_ovf_template:
-
       hostname: '{{ hostname }}'
-
       username: '{{ username }}'
-
       password: '{{ password }}'
-
       ovf_template: '{{ ovf_template }}'
-
       content_library: '{{ content_library }}'
-
       datastore: "{{ datastore }}"
-
       folder: netbox
-
       datacenter: '{{ datacenter }}'
-
       cluster: "{{ vm_info.cluster.name }}"
-
       name: "{{vm_name}}"
-
       resource_pool: netbox
-
       validate_certs: false
-
     ignore_errors: true
  
   - name: Get Virtual Machine info
-
     vmware_guest_info:
-
       hostname: '{{ hostname }}'
-
       username: '{{ username }}'
-
       password: '{{ password }}'
-
       # datastore: "{{ datastore }}"
-
       validate_certs: false
-
       datacenter: '{{ datacenter }}'
-
       name: "{{vm_name}}"
-
       schema: "vsphere"
-
       properties:
-
     delegate_to: localhost
-
     register: vminfo
  
   - name: Get Virtual Machine info
-
     debug:
-
       var: vminfo.instance.config.uuid
  
   - name: Add disks to virtual machine using UUID
-
     vmware_guest_disk:
-
       hostname: '{{ hostname }}'
-
       username: '{{ username }}'
-
       password: '{{ password }}'
-
       datacenter: '{{ datacenter }}'
-
       validate_certs: false
-
       uuid: "{{ vminfo.instance.config.uuid }}"
-
       disk:
-
         - size_mb: "{{ vm_info.custom_fields.disk_vm * 1024}}"
-
           type: thin
-
           datastore: "{{ datastore }}"
-
           state: present
-
           scsi_controller: 1
-
           unit_number: 1
-
           scsi_type: 'paravirtual'
-
     when: vm_info.custom_fields.disk_vm is integer
  
   - name: Customize Virtual Machine
-
     vmware_guest:
-
       hostname: '{{ hostname }}'
-
       username: '{{ username }}'
-
       password: '{{ password }}'
-
       validate_certs: '{{ ova_validate_certs }}'
-
       datacenter: '{{ datacenter }}'
-
       cluster: "{{ cluster }}"
-
       name: "{{vm_name}}"
-
       hardware:
-
         memory_mb: '{{ vm_ram }}'
-
         num_cpus: '{{ vm_cpu }}'
-
         num_cpu_cores_per_socket: '{{ vm_cpu }}'
-
       state: present
-
     register: status
  
  
@@ -284,20 +157,12 @@
  
  
     # - cluster: |-
-
     #     {%- if vm_info.platform.id == 4 -%}
-
     #     temp-centos7
-
     #     {%- elif vm_info.platform.id == 3 -%}
-
     #     TEMP-U22
-
     #     {%- else -%}
-
     #     other_value
-
     #     {%- endif -%}
-
     # - vm_hardware_controller: paravirtual
  
