@@ -38,6 +38,16 @@
       debug:
         var: vminfo.instance.config.uuid
 
+    - name: Set powerstate of a virtual machine to poweroff by using UUID
+      community.vmware.vmware_guest:
+        hostname: '{{ hostname }}'
+        username: '{{ username }}'
+        password: '{{ password }}'
+        validate_certs: 'False'
+        uuid: "{{ vminfo.instance.config.uuid }}"
+        state: poweredoff
+      delegate_to: localhost
+
     - name: Delete Virtual Machine
       vmware_guest:
         hostname: '{{ hostname }}'
