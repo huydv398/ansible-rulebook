@@ -1,0 +1,52 @@
+## absent
+- name: Create VM for vCenter
+  gather_facts: False
+  connection: local
+  hosts: localhost
+  vars:
+    - hostname: "{{ lookup('ansible.builtin.env', 'VMWARE_HOST') }}"
+    - username: "{{ lookup('ansible.builtin.env', 'VMWARE_USER') }}"
+    - password: "{{ lookup('ansible.builtin.env', 'VMWARE_PASSWORD') }}"
+    # - ova_validate_certs: "{{ lookup('ansible.builtin.env', 'OVA_VALIDATE_CERTS') | default('False') }}"
+    # - datacenter: "{{ lookup('ansible.builtin.env', 'VMWARE_DATACENTER') | default('Datacenter') }}"
+    - cluster: "SUN-Cluster"
+    - folder: "huydv3"
+    - datacenter: "Datacenter"
+    - vm_name: "huydv333_c7"
+ 
+    
+  tasks:
+    - name: test
+      debug:
+        msg: "{{ hostname }} {{ username }} {{ password }} {{ os_vm }} {{ os_vm }} "   
+    - name: test 2
+      debug:
+        msg: "{{ template }} "
+
+    - name: Get Virtual Machine info
+      vmware_guest_info:
+        hostname: '{{ hostname }}'
+        username: '{{ username }}'
+        password: '{{ password }}'
+        # datastore: "{{ datastore }}"
+        validate_certs: false
+        datacenter: '{{ datacenter }}'
+        name: "{{vm_name}}"
+        schema: "vsphere"
+        properties:
+      delegate_to: localhost
+      register: vminfo
+  
+    - name: Get Virtual Machine info
+      debug:
+        var: vminfo.instance.config.uuid
+
+    - name: Delete Virtual Machine
+      vmware_guest:
+        hostname: '{{ hostname }}'
+        username: '{{ username }}'
+        password: '{{ password }}'
+        validate_certs: 'False'
+        uuid: "{{ vminfo.instance.config.uuid }}"
+        state: absent
+      delegate_to: localhost

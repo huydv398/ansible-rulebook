@@ -1,4 +1,4 @@
-- name: Gather cluster information for vCenter
+- name: Create VM for vCenter
   gather_facts: False
   connection: local
   hosts: localhost
