@@ -10,7 +10,6 @@
     # - datacenter: "{{ lookup('ansible.builtin.env', 'VMWARE_DATACENTER') | default('Datacenter') }}"
     - cluster: "SUN-Cluster"
     - folder: "huydv3"
-    - template: TEMP-U24 
     - datastore_tmp: "DATA02"
     # - size_gb: 20
     - vm_disk_type: thin
@@ -19,14 +18,18 @@
     # - memory_mb: 2048
     # - num_cpus: 2
 
-    # - template: |-
-    #     {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
-    #     temp-centos7
-    #     {%- elif ansible_eda.event.payload.data.platform.id == 11 -%}
-    #     TEMP-U22
-    #     {%- else -%}
-    #     other_value
-    #     {%- endif -%}
+    - template: |-
+        {%- if os_vm == Centos -%}
+        Temp-C7
+        {%- if os_vm == Ubuntu22.04 -%}
+        TEMP-U22 
+        {%- if os_vm == Ubuntu24.04 -%}
+        TEMP-U24
+        {%- elif os_vm == Windows-Server-22 -%}
+        TEMP-WIN2019
+        {%- else -%}
+        other_value
+        {%- endif -%}
     # - guest_id: |-
     #     {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
     #     centos7_64Guest
@@ -42,7 +45,7 @@
   tasks:
     - name: test
       debug:
-        msg: "{{ hostname }} {{ username }} {{ password }} {{ os_vm }} "   
+        msg: "{{ hostname }} {{ username }} {{ password }} {{ os_vm }} {{ template }} "   
 
     # - name: Create a New Virtual Machine
     #   vmware_guest:
