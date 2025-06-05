@@ -18,7 +18,7 @@
     - vm_hardware_controller: paravirtual
     - memory_mb: 2048
     - num_cpus: 2
-    
+
     # - template: |-
     #     {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
     #     temp-centos7
@@ -62,8 +62,8 @@
             type: '{{ vm_disk_type }}'
             datastore: '{{ vm_disk_datastore }}'
         hardware:
-          memory_mb: '{{ ansible_eda.event.payload.data.memory }}'
-          num_cpus: '{{ ansible_eda.event.payload.snapshots.postchange.vcpus }}'
+          memory_mb: '{{ memory_mb }}'
+          num_cpus: '{{ num_cpus }}'
           scsi: '{{ vm_hardware_controller }}'
         state: poweredon
         # wait_for_customization: yes # tự động bật máy ảo khi hoàn thành
