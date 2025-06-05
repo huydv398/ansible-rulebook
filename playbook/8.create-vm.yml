@@ -6,6 +6,19 @@
     - hostname: "{{ lookup('ansible.builtin.env', 'VMWARE_HOST') }}"
     - username: "{{ lookup('ansible.builtin.env', 'VMWARE_USER') }}"
     - password: "{{ lookup('ansible.builtin.env', 'VMWARE_PASSWORD') }}"
+    - ova_validate_certs: "{{ lookup('ansible.builtin.env', 'OVA_VALIDATE_CERTS') | default('False') }}"
+    - datacenter: "{{ lookup('ansible.builtin.env', 'VMWARE_DATACENTER') | default('Datacenter') }}"
+    - cluster: "SUN-Cluster"
+    - folder: "huydv3"
+    - template: TEMP-U24 
+    - datastore_tmp: "DATA02"
+    - size_gb: 20
+    - vm_disk_type: thin
+    - vm_disk_datastore: 'DATA02'
+    - vm_hardware_controller: paravirtual
+    - memory_mb: 2048
+    - num_cpus: 2
+    
     # - template: |-
     #     {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
     #     temp-centos7
@@ -22,16 +35,44 @@
     #     {%- else -%}
     #     other_value
     #     {%- endif -%}
-    # - template: temp-centos7 
-    - datastore_tmp: data
+    
+    
     # - guest_id: centos7_64Guest
-    - vm_disk_type: thin
-    - vm_disk_datastore: 'DATA02'
-    - vm_hardware_controller: paravirtual
+    
   tasks:
     - name: test
       debug:
         msg: "{{ hostname }} {{ username }} {{ password }}"   
+
+    - name: Create a New Virtual Machine
+      vmware_guest:
+        hostname: '{{ hostname }}'
+        username: '{{ username }}'
+        password: '{{ password }}'
+        validate_certs: '{{ ova_validate_certs }}'
+        datacenter: '{{ datacenter }}'
+        cluster: "{{ cluster }}"
+        folder: '{{ folder }}'
+        template: '{{ template }}'
+        datastore: '{{ datastore_tmp }}'
+        name: 'huydv3-test'
+        # guest_id: '{{ guest_id }}'
+        disk:
+          - size_gb: '{{ size_gb }}'
+            type: '{{ vm_disk_type }}'
+            datastore: '{{ vm_disk_datastore }}'
+        hardware:
+          memory_mb: '{{ ansible_eda.event.payload.data.memory }}'
+          num_cpus: '{{ ansible_eda.event.payload.snapshots.postchange.vcpus }}'
+          scsi: '{{ vm_hardware_controller }}'
+        state: poweredon
+        # wait_for_customization: yes # tự động bật máy ảo khi hoàn thành
+      register: status
+      delegate_to: localhost
+
+
+
+
     # - name: Create a VM folder on given datacenter
     #   # debug:
     #   #   msg: "{{ template }} {{ guest_id }}"
