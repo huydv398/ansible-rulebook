@@ -18,7 +18,7 @@
   tasks:
     - name: test
       debug:
-        msg: "{{ hostname }} {{ username }} {{ password }} {{ os_vm }} {{ os_vm }} "   
+        msg: "{{ hostname }} {{ username }} {{ password }}"   
     - name: test 2
       debug:
         msg: "{{ template }} "
