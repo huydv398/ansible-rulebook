@@ -19,13 +19,13 @@
     # - num_cpus: 2
 
     - template: |-
-        {%- if os_vm == Centos -%}
+        {%- if os_vm == "Centos" -%}
         Temp-C7
-        {%- elif os_vm == Ubuntu22.04 -%}
+        {%- elif os_vm == "Ubuntu22.04" -%}
         TEMP-U22 
-        {%- elif os_vm == Ubuntu24.04 -%}
+        {%- elif os_vm == "Ubuntu24.04" -%}
         TEMP-U24
-        {%- elif os_vm == Windows-Server-22 -%}
+        {%- elif os_vm == "Windows-Server-22" -%}
         TEMP-WIN2019
         {%- else -%}
         other_value
