@@ -6,7 +6,7 @@
     - hostname: "{{ lookup('ansible.builtin.env', 'VMWARE_HOST') }}"
     - username: "{{ lookup('ansible.builtin.env', 'VMWARE_USER') }}"
     - password: "{{ lookup('ansible.builtin.env', 'VMWARE_PASSWORD') }}"
-    - ova_validate_certs: "{{ lookup('ansible.builtin.env', 'OVA_VALIDATE_CERTS') | default('False') }}"
+    # - ova_validate_certs: "{{ lookup('ansible.builtin.env', 'OVA_VALIDATE_CERTS') | default('False') }}"
     - datacenter: "{{ lookup('ansible.builtin.env', 'VMWARE_DATACENTER') | default('Datacenter') }}"
     - cluster: "SUN-Cluster"
     - folder: "huydv3"
@@ -49,7 +49,7 @@
         hostname: '{{ hostname }}'
         username: '{{ username }}'
         password: '{{ password }}'
-        validate_certs: '{{ ova_validate_certs }}'
+        validate_certs: 'False'
         datacenter: '{{ datacenter }}'
         cluster: "{{ cluster }}"
         folder: '{{ folder }}'
