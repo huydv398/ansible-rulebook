@@ -6,22 +6,22 @@
     - hostname: "{{ lookup('ansible.builtin.env', 'VMWARE_HOST') }}"
     - username: "{{ lookup('ansible.builtin.env', 'VMWARE_USER') }}"
     - password: "{{ lookup('ansible.builtin.env', 'VMWARE_PASSWORD') }}"
-    - template: |-
-        {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
-        temp-centos7
-        {%- elif ansible_eda.event.payload.data.platform.id == 11 -%}
-        TEMP-U22
-        {%- else -%}
-        other_value
-        {%- endif -%}
-    - guest_id: |-
-        {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
-        centos7_64Guest
-        {%- elif ansible_eda.event.payload.data.platform.id == 11 -%}
-        ubuntu64Guest
-        {%- else -%}
-        other_value
-        {%- endif -%}
+    # - template: |-
+    #     {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
+    #     temp-centos7
+    #     {%- elif ansible_eda.event.payload.data.platform.id == 11 -%}
+    #     TEMP-U22
+    #     {%- else -%}
+    #     other_value
+    #     {%- endif -%}
+    # - guest_id: |-
+    #     {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
+    #     centos7_64Guest
+    #     {%- elif ansible_eda.event.payload.data.platform.id == 11 -%}
+    #     ubuntu64Guest
+    #     {%- else -%}
+    #     other_value
+    #     {%- endif -%}
     # - template: temp-centos7 
     - datastore_tmp: data
     # - guest_id: centos7_64Guest
