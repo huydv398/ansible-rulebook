@@ -7,7 +7,7 @@
     - username: "{{ lookup('ansible.builtin.env', 'VMWARE_USER') }}"
     - password: "{{ lookup('ansible.builtin.env', 'VMWARE_PASSWORD') }}"
     # - ova_validate_certs: "{{ lookup('ansible.builtin.env', 'OVA_VALIDATE_CERTS') | default('False') }}"
-    - datacenter: "{{ lookup('ansible.builtin.env', 'VMWARE_DATACENTER') | default('Datacenter') }}"
+    # - datacenter: "{{ lookup('ansible.builtin.env', 'VMWARE_DATACENTER') | default('Datacenter') }}"
     - cluster: "SUN-Cluster"
     - folder: "huydv3"
     - template: TEMP-U24 
@@ -50,7 +50,7 @@
         username: '{{ username }}'
         password: '{{ password }}'
         validate_certs: 'False'
-        datacenter: '{{ datacenter }}'
+        datacenter: 'Datacenter'
         cluster: "{{ cluster }}"
         folder: '{{ folder }}'
         template: '{{ template }}'
