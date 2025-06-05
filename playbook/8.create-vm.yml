@@ -42,33 +42,33 @@
   tasks:
     - name: test
       debug:
-        msg: "{{ hostname }} {{ username }} {{ password }}"   
+        msg: "{{ hostname }} {{ username }} {{ password }} {{ os_vm }} "   
 
-    - name: Create a New Virtual Machine
-      vmware_guest:
-        hostname: '{{ hostname }}'
-        username: '{{ username }}'
-        password: '{{ password }}'
-        validate_certs: 'False'
-        datacenter: 'Datacenter'
-        cluster: "{{ cluster }}"
-        folder: '{{ folder }}'
-        template: '{{ template }}'
-        datastore: '{{ datastore_tmp }}'
-        name: "{{ name_vm }}"
-        # guest_id: '{{ guest_id }}'
-        disk:
-          - size_gb: '{{ size_gb }}'
-            type: '{{ vm_disk_type }}'
-            datastore: '{{ vm_disk_datastore }}'
-        hardware:
-          memory_mb: '{{ memory_gb * 4 }}'
-          num_cpus: '{{ num_cpus }}'
-          scsi: '{{ vm_hardware_controller }}'
-        state: poweredon
-        # wait_for_customization: yes # tự động bật máy ảo khi hoàn thành
-      register: status
-      delegate_to: localhost
+    # - name: Create a New Virtual Machine
+    #   vmware_guest:
+    #     hostname: '{{ hostname }}'
+    #     username: '{{ username }}'
+    #     password: '{{ password }}'
+    #     validate_certs: 'False'
+    #     datacenter: 'Datacenter'
+    #     cluster: "{{ cluster }}"
+    #     folder: '{{ folder }}'
+    #     template: '{{ template }}'
+    #     datastore: '{{ datastore_tmp }}'
+    #     name: "{{ name_vm }}"
+    #     # guest_id: '{{ guest_id }}'
+    #     disk:
+    #       - size_gb: '{{ size_gb }}'
+    #         type: '{{ vm_disk_type }}'
+    #         datastore: '{{ vm_disk_datastore }}'
+    #     hardware:
+    #       memory_mb: '{{ memory_gb * 1024 }}'  # Convert GB to MB
+    #       num_cpus: '{{ num_cpus }}'
+    #       scsi: '{{ vm_hardware_controller }}'
+    #     state: poweredon
+    #     # wait_for_customization: yes # tự động bật máy ảo khi hoàn thành
+    #   register: status
+    #   delegate_to: localhost
 
 
 
