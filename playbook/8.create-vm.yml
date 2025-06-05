@@ -46,6 +46,9 @@
     - name: test
       debug:
         msg: "{{ hostname }} {{ username }} {{ password }} {{ os_vm }} {{ os_vm }} "   
+    - name: test 2
+      debug:
+        msg: "{{ template }} "   
 
     # - name: Create a New Virtual Machine
     #   vmware_guest:
