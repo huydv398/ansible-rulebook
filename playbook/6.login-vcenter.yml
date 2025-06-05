@@ -2,8 +2,8 @@
 - name: Gather cluster information for vCenter
   gather_facts: no
   hosts: localhost
-  vars_files:
-    - /root/ansible-rolebook/netbox/inventory/group_vars/all/02.vcenter.yml
+  # vars_files:
+  #   - /root/ansible-rolebook/netbox/inventory/group_vars/all/02.vcenter.yml
   vars:
     ansible_python_interpreter: "/usr/bin/env python3"
   hosts: localhost
