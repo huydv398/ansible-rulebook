@@ -12,12 +12,12 @@
     - folder: "huydv3"
     - template: TEMP-U24 
     - datastore_tmp: "DATA02"
-    - size_gb: 20
+    # - size_gb: 20
     - vm_disk_type: thin
     - vm_disk_datastore: 'DATA02'
     - vm_hardware_controller: paravirtual
-    - memory_mb: 2048
-    - num_cpus: 2
+    # - memory_mb: 2048
+    # - num_cpus: 2
 
     # - template: |-
     #     {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
@@ -55,14 +55,14 @@
         folder: '{{ folder }}'
         template: '{{ template }}'
         datastore: '{{ datastore_tmp }}'
-        name: 'huydv3-test'
+        name: "{{ name_vm }}"
         # guest_id: '{{ guest_id }}'
         disk:
           - size_gb: '{{ size_gb }}'
             type: '{{ vm_disk_type }}'
             datastore: '{{ vm_disk_datastore }}'
         hardware:
-          memory_mb: '{{ memory_mb }}'
+          memory_mb: '{{ memory_gb * 4 }}'
           num_cpus: '{{ num_cpus }}'
           scsi: '{{ vm_hardware_controller }}'
         state: poweredon
