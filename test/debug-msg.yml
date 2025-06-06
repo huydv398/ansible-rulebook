@@ -5,3 +5,6 @@
     - name: test
       debug:
         msg: "Đường Huy - Hello World"    
+    - name: test
+      debug:
+        msg: "{{ extra_vars }}"    
