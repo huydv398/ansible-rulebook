@@ -17,7 +17,7 @@
     
     - name: Set the state of a virtual machine to poweroff
       debug:
-        msg: "{{ squest }}"
+        msg: "{{ squest.instance.name }}"
         
     # - name: Push out event
     #   set_fact:
