@@ -1,7 +1,6 @@
 - name: Power Off VM
   gather_facts: 'no'
-  # vars_files:
-  #   - /root/ansible-rolebook/netbox/inventory/group_vars/all/02.vcenter.yml
+  vars:
   hosts: localhost
   tasks:
     # - name: Set the state of a virtual machine to poweroff
@@ -17,7 +16,7 @@
     
     - name: Set the state of a virtual machine to poweroff
       debug:
-        msg: "{{ squest.instance.name }}"
+        msg: "{{ squest.instance }}"
         
     # - name: Push out event
     #   set_fact:
