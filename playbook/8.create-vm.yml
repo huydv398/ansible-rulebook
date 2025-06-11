@@ -61,7 +61,7 @@
         folder: '{{ folder }}'
         template: '{{ template }}'
         datastore: '{{ datastore_tmp }}'
-        name: "{{ name_vm }}"
+        name: "{{ squest.request.instance.name }}"
         # guest_id: '{{ guest_id }}'
         disk:
           - size_gb: '{{ size_gb }}'
