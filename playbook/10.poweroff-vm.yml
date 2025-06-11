@@ -14,7 +14,9 @@
     #     state: powered-off
     #   delegate_to: localhost
     #   register: status
-    - debug:
+    
+    - name: Set the state of a virtual machine to poweroff
+      debug:
         msg: "{{ extra_vars}}"
         
     # - name: Push out event
