@@ -1,0 +1,228 @@
+- name: Create VM for vCenter
+  gather_facts: False
+  connection: local
+  hosts: localhost
+  vars:
+    - hostname: "vcenter.addc.local"
+    - username: "Administrator@VCENTER.ADDC.LOCAL"
+    - password: "Suncloud@2024!"
+    - ova_validate_certs: "false"
+    # - datacenter: "{{ lookup('ansible.builtin.env', 'VMWARE_DATACENTER') | default('Datacenter') }}"
+    - cluster: "SUN-Cluster"
+    - folder: "huydv3"
+    - datastore_tmp: "DATA02"
+    # - size_gb: 20
+    - vm_disk_type: thin
+    - vm_disk_datastore: 'DATA02'
+    - vm_hardware_controller: paravirtual
+    - vm_name: "TEMP-RHEL9"
+    # - memory_mb: 2048
+    # - num_cpus: 2
+
+    - template: |-
+        {%- if os_vm == "Centos" -%}
+        Temp-C7
+        {%- elif os_vm == "Ubuntu22.04" -%}
+        TEMP-U22 
+        {%- elif os_vm == "Ubuntu24.04" -%}
+        TEMP-U24
+        {%- elif os_vm == "Windows-Server-22" -%}
+        TEMP-WIN2019
+        {%- else -%}
+        other_value
+        {%- endif -%}
+    # - guest_id: |-
+    #     {%- if ansible_eda.event.payload.data.platform.id == 13 -%}
+    #     centos7_64Guest
+    #     {%- elif ansible_eda.event.payload.data.platform.id == 11 -%}
+    #     ubuntu64Guest
+    #     {%- else -%}
+    #     other_value
+    #     {%- endif -%}
+    
+    
+    # - guest_id: centos7_64Guest
+    
+  tasks:
+#tesst 1
+    # - name: test
+    #   debug:
+    #     msg: "{{ hostname }} {{ username }} {{ password }} {{ os_vm }} {{ os_vm }} "   
+    # - name: test 2
+    #   debug:
+    #     msg: "{{ template }} "   
+
+    # - name: Create a New Virtual Machine
+    #   vmware_guest:
+    #     hostname: '{{ hostname }}'
+    #     username: '{{ username }}'
+    #     password: '{{ password }}'
+    #     validate_certs: 'False'
+    #     datacenter: 'Datacenter'
+    #     cluster: "{{ cluster }}"
+    #     folder: '{{ folder }}'
+    #     template: '{{ template }}'
+    #     datastore: '{{ datastore_tmp }}'
+    #     name: "{{ squest.request.instance.name }}"
+    #     # guest_id: '{{ guest_id }}'
+    #     disk:
+    #       - size_gb: '{{ size_gb }}'
+    #         type: '{{ vm_disk_type }}'
+    #         datastore: '{{ vm_disk_datastore }}'
+    #     hardware:
+    #       memory_mb: '{{ memory_gb * 1024 }}'  # Convert GB to MB
+    #       num_cpus: '{{ num_cpus }}'
+    #       scsi: '{{ vm_hardware_controller }}'
+    #     state: poweredon
+    #     # wait_for_customization: yes # tự động bật máy ảo khi hoàn thành
+    #   register: status
+    #   delegate_to: localhost
+
+
+
+
+    # - name: Create a VM folder on given datacenter
+    #   # debug:
+    #   #   msg: "{{ template }} {{ guest_id }}"
+    #   community.vmware.vcenter_folder:
+    #     hostname: '{{ vcenter_server }}'
+    #     username: '{{ vcenter_user }}'
+    #     password: '{{ vcenter_pass }}'
+    #     validate_certs: '{{ ova_validate_certs }}'
+    #     datacenter: "{{ datacenter }}"
+    #     folder_name: "{{ ansible_eda.event.payload.data.tenant.name }}"
+    #     folder_type: vm
+    #     state: present
+    # - name: Create a New Virtual Machine
+    #   vmware_guest:
+    #     hostname: '{{ vcenter_server }}'
+    #     username: '{{ vcenter_user }}'
+    #     password: '{{ vcenter_pass }}'
+    #     validate_certs: '{{ ova_validate_certs }}'
+    #     datacenter: '{{ datacenter }}'
+    #     cluster: "{{ ansible_eda.event.payload.data.cluster.name }}"
+    #     folder: '{{ ansible_eda.event.payload.data.tenant.name }}'
+    #     template: '{{ template }}'
+    #     datastore: '{{ datastore_tmp }}'
+    #     name: '{{ ansible_eda.event.payload.data.name | upper }}'
+    #     guest_id: '{{ guest_id }}'
+    #     disk:
+    #       - size_gb: '{{ ansible_eda.event.payload.data.disk }}'
+    #         type: '{{ vm_disk_type }}'
+    #         datastore: '{{ vm_disk_datastore }}'
+    #     hardware:
+    #       memory_mb: '{{ ansible_eda.event.payload.data.memory }}'
+    #       num_cpus: '{{ ansible_eda.event.payload.snapshots.postchange.vcpus }}'
+    #       scsi: '{{ vm_hardware_controller }}'
+    #     state: poweredon
+    #     # wait_for_customization: yes # tự động bật máy ảo khi hoàn thành
+    #   register: status
+    #   delegate_to: localhost
+    # - name: Push out event
+    #   set_fact:
+    #     cacheable: true #phản hồi lại eda 1 event có value
+    #     output_status: "{{status}}"
+    #     eda: "{{ansible_eda.event.payload}}"
+
+# Get info_vm and Customize the VM
+  # - name: Look up the VM called test_vm1 in the inventory
+  #   register: search_result
+  #   vmware.vmware_rest.vcenter_vm_info:
+  #     vcenter_hostname: '{{ hostname }}'
+  #     vcenter_username: '{{ username }}'
+  #     vcenter_password: '{{ password }}'
+  #     vcenter_validate_certs: 'false'
+  #     # filter_names:
+  #     # - "{{vm_name}}"
+  
+  # - name: test
+  #   debug:
+  #     msg: "{{search_result}}"
+
+  # - name: Get guest OS identity info
+  #   vmware.vmware_rest.vcenter_vm_guest_vm_info:
+  #     vcenter_hostname: '{{ hostname }}'
+  #     vcenter_username: '{{ username }}'
+  #     vcenter_password: '{{ password }}'
+  #     vcenter_validate_certs: 'false'
+  #     # vm: '{{ search_result.value[0].vm }}'
+  #   register: guest_identity
+  # - name: test
+  #   debug:
+  #     msg: "{{guest_identity}}"
+
+  # - name: Customize the VM
+  #   vmware.vmware_rest.vcenter_vm_guest_customization:
+  #     vcenter_hostname: '{{ hostname }}'
+  #     vcenter_username: '{{ username }}'
+  #     vcenter_password: '{{ password }}'
+  #     vcenter_validate_certs: '{{ ova_validate_certs }}'
+  #     vm: '{{ search_result.value[0].vm }}'
+  #     global_DNS_settings:
+  #       dns_servers:
+  #         - 10.1.6.11
+  #         - 10.1.6.13
+  #     interfaces:
+  #       - adapter:
+  #           ipv4:
+  #             type: STATIC
+  #             ip_address: '172.16.66.142'
+  #             prefix: '24'
+  #             gateways: ['172.16.66.1']
+  #     configuration_spec:
+  #       windows_config:
+  #         reboot: "REBOOT"
+  #         sysprep:
+  #           domain:
+  #             workgroup: "MBGROUP"
+  #             type: "WORKGROUP"
+  #           user_data:
+  #             computer_name:
+  #               type : "FIXED"
+  #               fixed_name : "{{vm_name}}"
+  #             full_name: "{{vm_name}}"
+  #             product_key: string
+  #             organization: "MBB"
+  #           gui_run_once_commands: ["echo 123"]
+  #           gui_unattended:
+  #             password: "NhC!@#123$%^"
+  #             auto_logon_count: 1
+  #             auto_logon: true
+  #             time_zone: 1
+
+# Get VM info and guess OS family
+  # - name: Login to vCenter
+  #   vmware.vmware_rest.vmware_rest_login:
+  #     vcenter_hostname: '{{ hostname }}'
+  #     vcenter_username: '{{ username }}'
+  #     vcenter_password: '{{ password }}'
+  #     vcenter_validate_certs: 'false'
+
+  - name: Get list of all VMs
+    vmware.vmware_rest.vcenter_vm_info:
+      vcenter_hostname: '{{ hostname }}'
+      vcenter_username: '{{ username }}'
+      vcenter_password: '{{ password }}'
+      vcenter_validate_certs: '{{ ova_validate_certs }}'
+    register: vm_list
+
+  - name: Find VM info by name
+    set_fact:
+      target_vm: "{{ item }}"
+    loop: "{{ vm_list.value }}"
+    when: item.name == vm_name
+
+  - name: Guess OS family from guest_OS string
+    set_fact:
+      os_family: >-
+        {% if 'win' in target_vm.guest_OS | lower %}
+          Windows
+        {% elif 'lin' in target_vm.guest_OS | lower or 'ubuntu' in target_vm.guest_OS | lower or 'centos' in target_vm.guest_OS | lower %}
+          Linux
+        {% else %}
+          Unknown
+        {% endif %}
+
+  - name: Print VM name and OS family
+    debug:
+      msg: "VM '{{ target_vm.name }}' is a {{ os_family }} system (based on guest_OS: {{ target_vm.guest_OS }})"

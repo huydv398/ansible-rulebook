@@ -1,21 +1,24 @@
 - name: Power ON VM
   gather_facts: 'no'
-  vars_files:
-    - /root/ansible-rolebook/netbox/inventory/group_vars/all/02.vcenter.yml
+  vars:
+    - name: "{{ squest.request.instance.name }}"
+    - hostname: "{{ lookup('ansible.builtin.env', 'VMWARE_HOST') }}"
+    - username: "{{ lookup('ansible.builtin.env', 'VMWARE_USER') }}"
+    - password: "{{ lookup('ansible.builtin.env', 'VMWARE_PASSWORD') }}"
   hosts: localhost
   tasks:
     - name: Set the state of a virtual machine to powered-on
       community.vmware.vmware_guest_powerstate:
-        hostname: '{{ vcenter_server }}'
-        username: '{{ vcenter_user }}'
-        password: '{{ vcenter_pass }}'
-        validate_certs: '{{ ova_validate_certs }}'
-        name: "{{ ansible_eda.event.payload.data.name }}"
+        hostname: '{{ hostname }}'
+        username: '{{ username }}'
+        password: '{{ password }}'
+        validate_certs: 'False'
+        name: "{{ name }}"
         state: powered-on
       delegate_to: localhost
       register: status
     - debug:
-        msg: "Done! Poweron VM: {{ ansible_eda.event.payload.data.name }}"
+        msg: "Done! Poweron VM: {{ squest.request.instance.name }}"
 
     # - name: Push out event
     #   set_fact:
