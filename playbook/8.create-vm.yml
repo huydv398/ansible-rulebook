@@ -86,10 +86,6 @@
         method: PUT
         body: |
           {
-            "name": "{{ squest.request.instance.name }}",
-            "resource_type": "VMware",
-            "resource_name": "{{ status.instance.name }}"
-            "description": "Resource group for VM {{ status.instance.name }}"
             "raw_data": {
               "vmware": {
                 "datacenter": "{{ datacenter }}",
@@ -101,17 +97,15 @@
               }
             }
             "virtual_machine": {
-              "name": "{{ status.instance.name }}",
-              "power_state": "{{ status.instance.power_state }}",
+              "name": "{{ squest.request.instance.name }}",
               "hardware": {
-                "memory_mb": "{{ status.instance.hardware.memory_mb }}",
-                "num_cpus": "{{ status.instance.hardware.num_cpus }}",
+                "memory_gb": '{{ memory_gb }}',
+                "num_cpus": "{{ num_cpus }}",
                 "disk": [
                   {
-                    "size_gb": "{{ status.instance.hardware.disks[0].size_gb }}"
+                    "size_gb": "{{ size_gb }}"
                   }
-                ],
-                "scsi": "{{ status.instance.hardware.scsi }}"
+                ]
               }
             }
           }
