@@ -28,7 +28,7 @@
         # datastore: "{{ datastore }}"
         validate_certs: false
         datacenter: '{{ datacenter }}'
-        name: "{{vm_name}}"
+        name: "{{ name }}"
         schema: "vsphere"
         properties:
       delegate_to: localhost
