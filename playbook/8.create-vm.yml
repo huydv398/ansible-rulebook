@@ -3,6 +3,9 @@
   connection: local
   hosts: localhost
   vars:
+    - squest_api: "http://172.16.66.138/api/"
+    - squest_token: de7e71c199dbe810c862ecc331f7201fb2cd81dd
+    - squest_bearer_token: "Bearer {{ squest_token }}"
     - hostname: "{{ lookup('ansible.builtin.env', 'VMWARE_HOST') }}"
     - username: "{{ lookup('ansible.builtin.env', 'VMWARE_USER') }}"
     - password: "{{ lookup('ansible.builtin.env', 'VMWARE_PASSWORD') }}"
@@ -75,8 +78,49 @@
         # wait_for_customization: yes # tự động bật máy ảo khi hoàn thành
       register: status
       delegate_to: localhost
-
-
+    - name: Get all resource group
+      uri:
+        url: "{{ squest_api }}resource-tracker/resource-group/"
+        headers:
+          Authorization: "{{ squest_bearer_token }}"
+        method: PUT
+        body: |
+          {
+            "name": "{{ squest.request.instance.name }}",
+            "resource_type": "VMware",
+            "resource_id": "{{ status.instance.uuid }}",
+            "resource_name": "{{ status.instance.name }}",
+            "resource_url": "{{ squest_api }}vmware/vm/{{ status.instance.uuid }}/"
+            "description": "Resource group for VM {{ status.instance.name }}"
+            "raw_data": {
+              "vmware": {
+                "datacenter": "{{ datacenter }}",
+                "cluster": "{{ cluster }}",
+                "folder": "{{ folder }}",
+                "datastore": "{{ datastore_tmp }}",
+                "template": "{{ template }}",
+                "guest_id": "{{ guest_id }}"
+              }
+            }
+            "virtual_machine": {
+              "name": "{{ status.instance.name }}",
+              "uuid": "{{ status.instance.uuid }}",
+              "power_state": "{{ status.instance.power_state }}",
+              "hardware": {
+                "memory_mb": "{{ status.instance.hardware.memory_mb }}",
+                "num_cpus": "{{ status.instance.hardware.num_cpus }}",
+                "disk": [
+                  {
+                    "size_gb": "{{ status.instance.hardware.disks[0].size_gb }}"
+                  }
+                ],
+                "scsi": "{{ status.instance.hardware.scsi }}"
+              }
+            }
+          }
+        status_code: 200
+        body_format: json
+      register: output
 
 
     # - name: Create a VM folder on given datacenter
