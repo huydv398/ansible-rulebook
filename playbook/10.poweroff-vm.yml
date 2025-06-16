@@ -22,6 +22,7 @@
       debug:
         msg: "Power off VM : {{ squest.request.instance.name }}"
         
+        
     # - name: Push out event
     #   set_fact:
     #     cacheable: true
