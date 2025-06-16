@@ -104,7 +104,6 @@
             }
             "virtual_machine": {
               "name": "{{ status.instance.name }}",
-              "uuid": "{{ status.instance.uuid }}",
               "power_state": "{{ status.instance.power_state }}",
               "hardware": {
                 "memory_mb": "{{ status.instance.hardware.memory_mb }}",
