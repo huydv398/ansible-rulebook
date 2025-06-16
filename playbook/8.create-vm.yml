@@ -80,7 +80,7 @@
       delegate_to: localhost
     - name: Get all resource group
       uri:
-        url: "{{ squest_api }}service-catalog/instance/10/spec/"
+        url: "{{ squest_api }}service-catalog/instance/10/user-spec/"
         headers:
           Authorization: "{{ squest_bearer_token }}"
         method: PUT
@@ -94,11 +94,11 @@
                 "datastore": "{{ datastore_tmp }}",
                 "template": "{{ template }}"
               }
-            }
+            },
             "virtual_machine": {
               "name": "{{ squest.request.instance.name }}",
               "hardware": {
-                "memory_gb": '{{ memory_gb }}',
+                "memory_gb": "{{ memory_gb }}",
                 "num_cpus": "{{ num_cpus }}",
                 "disk": [
                   {

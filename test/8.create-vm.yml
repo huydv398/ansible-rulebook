@@ -191,38 +191,79 @@
   #             time_zone: 1
 
 # Get VM info and guess OS family
-  # - name: Login to vCenter
-  #   vmware.vmware_rest.vmware_rest_login:
+
+
+
+  # # - name: Login to vCenter
+  # #   vmware.vmware_rest.vmware_rest_login:
+  # #     vcenter_hostname: '{{ hostname }}'
+  # #     vcenter_username: '{{ username }}'
+  # #     vcenter_password: '{{ password }}'
+  # #     vcenter_validate_certs: 'false'
+
+  # - name: Get list of all VMs
+  #   vmware.vmware_rest.vcenter_vm_info:
   #     vcenter_hostname: '{{ hostname }}'
   #     vcenter_username: '{{ username }}'
   #     vcenter_password: '{{ password }}'
-  #     vcenter_validate_certs: 'false'
+  #     vcenter_validate_certs: '{{ ova_validate_certs }}'
+  #   register: vm_list
 
-  - name: Get list of all VMs
-    vmware.vmware_rest.vcenter_vm_info:
-      vcenter_hostname: '{{ hostname }}'
-      vcenter_username: '{{ username }}'
-      vcenter_password: '{{ password }}'
-      vcenter_validate_certs: '{{ ova_validate_certs }}'
-    register: vm_list
+  # - name: Find VM info by name
+  #   set_fact:
+  #     target_vm: "{{ item }}"
+  #   loop: "{{ vm_list.value }}"
+  #   when: item.name == vm_name
 
-  - name: Find VM info by name
-    set_fact:
-      target_vm: "{{ item }}"
-    loop: "{{ vm_list.value }}"
-    when: item.name == vm_name
+  # - name: Guess OS family from guest_OS string
+  #   set_fact:
+  #     os_family: >-
+  #       {% if 'win' in target_vm.guest_OS | lower %}
+  #         Windows
+  #       {% elif 'lin' in target_vm.guest_OS | lower or 'ubuntu' in target_vm.guest_OS | lower or 'centos' in target_vm.guest_OS | lower %}
+  #         Linux
+  #       {% else %}
+  #         Unknown
+  #       {% endif %}
 
-  - name: Guess OS family from guest_OS string
-    set_fact:
-      os_family: >-
-        {% if 'win' in target_vm.guest_OS | lower %}
-          Windows
-        {% elif 'lin' in target_vm.guest_OS | lower or 'ubuntu' in target_vm.guest_OS | lower or 'centos' in target_vm.guest_OS | lower %}
-          Linux
-        {% else %}
-          Unknown
-        {% endif %}
+  # - name: Print VM name and OS family
+  #   debug:
+  #     msg: "VM '{{ target_vm.name }}' is a {{ os_family }} system (based on guest_OS: {{ target_vm.guest_OS }})"
 
-  - name: Print VM name and OS family
-    debug:
-      msg: "VM '{{ target_vm.name }}' is a {{ os_family }} system (based on guest_OS: {{ target_vm.guest_OS }})"
+## teset
+
+
+  - name: test uro
+    uri:
+      url: "http://172.16.66.138/api/service-catalog/instance/10/spec/"
+      headers:
+        Authorization: "Bearer de7e71c199dbe810c862ecc331f7201fb2cd81dd"
+        Content-Type: "application/json"
+      method: PUT
+      body: |
+        {
+          "raw_data": {
+            "vmware": {
+              "datacenter": "Datacenter",
+              "cluster": "SUN-Cluster",
+              "folder": "huydv3",
+              "datastore": "DATA02",
+              "template": "TEMP-U24"
+            }
+          },
+          "virtual_machine": {
+            "name": "test-vmhuydv3-2",
+            "hardware": {
+              "memory_gb": "20",
+              "num_cpus": "20",
+              "disk": [
+                {
+                  "size_gb": "30"
+                }
+              ]
+            }
+          }
+        }
+      body_format: json
+      return_content: yes
+    register: put_response
