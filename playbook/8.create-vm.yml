@@ -88,9 +88,7 @@
           {
             "name": "{{ squest.request.instance.name }}",
             "resource_type": "VMware",
-            "resource_id": "{{ status.instance.uuid }}",
-            "resource_name": "{{ status.instance.name }}",
-            "resource_url": "{{ squest_api }}vmware/vm/{{ status.instance.uuid }}/"
+            "resource_name": "{{ status.instance.name }}"
             "description": "Resource group for VM {{ status.instance.name }}"
             "raw_data": {
               "vmware": {
