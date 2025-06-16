@@ -88,7 +88,7 @@
           {
             "raw_data": {
               "vmware": {
-                "datacenter": "{{ datacenter }}",
+                "datacenter": "Datacenter",
                 "cluster": "{{ cluster }}",
                 "folder": "{{ folder }}",
                 "datastore": "{{ datastore_tmp }}",
