@@ -4,6 +4,7 @@
   connection: local
   hosts: localhost
   vars:
+    - name: "{{ squest.request.instance.name }}"
     - hostname: "{{ lookup('ansible.builtin.env', 'VMWARE_HOST') }}"
     - username: "{{ lookup('ansible.builtin.env', 'VMWARE_USER') }}"
     - password: "{{ lookup('ansible.builtin.env', 'VMWARE_PASSWORD') }}"
