@@ -80,7 +80,7 @@
       delegate_to: localhost
     - name: Get all resource group
       uri:
-        url: "{{ squest_api }}resource-tracker/resource-group/"
+        url: "{{ squest_api }}service-catalog/instance/10/spec/"
         headers:
           Authorization: "{{ squest_bearer_token }}"
         method: PUT
