@@ -92,8 +92,7 @@
                 "cluster": "{{ cluster }}",
                 "folder": "{{ folder }}",
                 "datastore": "{{ datastore_tmp }}",
-                "template": "{{ template }}",
-                "guest_id": "{{ guest_id }}"
+                "template": "{{ template }}"
               }
             }
             "virtual_machine": {
